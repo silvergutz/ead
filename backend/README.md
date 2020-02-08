@@ -1,8 +1,8 @@
-### eLearning system made with Adonis and ReactJS
+# e-learning system RESTFull API made with Adonis
 
-## Backend Setup
+## Setup
 
-# Dependences
+### Dependencies
 
 Using npm: 
 
@@ -16,7 +16,7 @@ Using yarn
 yarn install
 ```
 
-# Database Migrations
+### Database Migrations
 
 Run the following command to run startup migrations.
 
@@ -24,6 +24,6 @@ Run the following command to run startup migrations.
 adonis migration:run
 ```
 
-# API RESTFull Insomnia template
+## API RESTFull Insomnia template
 
 Includes file `insomnia.json` that can be imported to Insomnia to test the API

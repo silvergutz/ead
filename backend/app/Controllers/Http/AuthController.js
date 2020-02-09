@@ -16,8 +16,9 @@ class AuthController {
         const { email, password } = request.all()
 
         const token = await auth.attempt(email, password)
+        const user = await User.findBy('email', email)
 
-        return token
+        return { ...(user.toJSON()), ...token }
     }
 }
 

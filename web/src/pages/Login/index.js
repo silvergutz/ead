@@ -12,24 +12,23 @@ function Login({ history, location }) {
     history.push('/')
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    auth.login({
-        email,
-        password,
-      })
-      .then(response => {
-        if (response !== true) {
-          setErrorMessage(String(response));
-        } else {
-          console.log(response.data);
-          const { from } = location.state || { from: { pathname: '/' } };
-          history.push(from);
-        }
-      })
-      .catch(e => console.error)
-    ;
+    try {
+      await auth.login({ email, password });
+
+      // console.log(response.data);
+      const { from } = location.state || { from: { pathname: '/' } };
+      history.push(from);
+    } catch(e) {
+      if (e.response && e.response.status === 401) {
+        setErrorMessage('Credenciais inválidas');
+      } else {
+        console.error(e.message);
+        setErrorMessage('Não foi possível autenticar o usuário, por favor, tente novamente mais tarde');
+      }
+    }
   }
 
   return (

@@ -21,16 +21,16 @@ function login(credentials) {
         localStorage.setItem('currentUser', JSON.stringify(user));
         currentUserSubject.next(user);
 
-        return user;
+        return true;
       } else {
         console.error(response.data);
         return response.data;
       }
     })
-    .catch(error => {
-      console.error(error);
-      return error;
-    })
+    // .catch(error => {
+    //   console.error(error);
+    //   return error;
+    // })
   ;
 }
 

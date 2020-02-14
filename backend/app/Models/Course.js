@@ -40,6 +40,14 @@ class Course extends Model {
       .pivotTable('course_teachers')
       .withTimestamps()
   }
+
+  modules() {
+    return this.hasMany('App/Models/Module')
+  }
+
+  lessons() {
+    return this.manyThrough('App/Models/Module', 'lessons')
+  }
 }
 
 module.exports = Course

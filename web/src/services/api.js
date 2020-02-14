@@ -1,6 +1,5 @@
 import axios from 'axios';
 import auth from './auth';
-import { history } from '../helpers/history';
 
 const api = axios.create({
   baseURL: 'http://localhost:3333'
@@ -16,14 +15,16 @@ api.interceptors.request.use(async config => {
   return config;
 });
 
-// api.interceptors.response.use(response => response, async error => {
-//     if (String(error).indexOf('401') !== -1) {
-//       auth.logout();
-//       history.push('/login');
-//       // window.location = '/login';
-//     }
-//     return error;
-//   }
-// );
+api.interceptors.response.use(response => response,
+  async error => {
+    if (error.response && [401,403].indexOf(error.response.status) !== -1) {
+      if (window.location.pathname !== '/login') {
+        auth.logout();
+        window.location = '/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default api;

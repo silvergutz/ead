@@ -1,0 +1,29 @@
+.Header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #333;
+  color: #fff;
+  border-bottom: 2px solid #000;
+  padding: .5rem 3rem;
+}
+.logo {
+  align-self: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 25px;
+  text-decoration: none;
+}
+.menu {
+  flex-grow: 1;
+  max-width: 700px;
+}
+.menu ul {
+  display: flex;
+  justify-content: space-around;
+}
+.menu ul li {
+  background-color: #fff;
+  color: #333;
+  border-radius: 3px;
+  padding: 5px 7px;
+}

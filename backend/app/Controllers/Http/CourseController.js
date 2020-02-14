@@ -7,6 +7,7 @@
 const Course = use('App/Models/Course')
 const School = use('App/Models/School')
 const Category = use('App/Models/Category')
+const User = use('App/Models/User')
 
 /**
  * Resourceful controller for interacting with courses
@@ -19,7 +20,11 @@ class CourseController {
    * @param {object} ctx
    */
   async index () {
-    const courses = await Course.all();
+    const courses = await Course.query()
+      .with('categories')
+      .with('teachers')
+      .with('lessons')
+      .fetch();
 
     return courses;
   }
@@ -34,7 +39,7 @@ class CourseController {
    */
   async store ({ request, response }) {
     const data = request.only(['name', 'description', 'cover', 'school_id', 'status'])
-    let { categories } = request.all()
+    let { categories, teachers } = request.all()
 
     const school = data.school_id ? await School.find(data.school_id) : null
     if (!school) {
@@ -42,13 +47,21 @@ class CourseController {
       return { error: 'School not found' }
     }
 
+    const course = await Course.create(data)
+
+    // Categories
     categories = await Category
       .query()
       .whereIn('id', categories)
       .pluck('id')
-
-    const course = await Course.create(data)
     await course.categories().attach(categories)
+
+    // Teachers
+    teachers = await User
+      .query()
+      .whereIn('id', teachers)
+      .pluck('id')
+    await course.teachers().attach(teachers)
 
     response.status(201)
 
@@ -67,7 +80,8 @@ class CourseController {
   async show ({ params, response }) {
     const course = await Course
       .query()
-      .with('categories')
+      .with('modules')
+      .with('modules.lessons')
       .limit(1)
       .where('id', params.id)
       .fetch()
@@ -92,7 +106,7 @@ class CourseController {
     const course = await Course.findOrFail(params.id)
 
     const data = request.only(['name', 'description', 'cover', 'school_id', 'status'])
-    let { categories } = request.all()
+    let { categories, teachers } = request.all()
 
     if (data.school_id) {
       const school = await School.find(data.school_id)
@@ -102,6 +116,7 @@ class CourseController {
       }
     }
 
+    // Categories
     if (categories !== undefined) {
       if (categories.length) {
         categories = await Category
@@ -110,6 +125,17 @@ class CourseController {
           .pluck('id')
       }
       course.categories().sync(categories)
+    }
+
+    // Teachers
+    if (teachers !== undefined) {
+      if (teachers.length) {
+        teachers = await User
+          .query()
+          .whereIn('id', teachers)
+          .pluck('id')
+      }
+      course.teachers().sync(teachers)
     }
 
     course.merge(data)

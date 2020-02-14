@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 import { auth } from './services';
 import { history } from './helpers/history';
 import Routes from './routes';
+import Header from './components/Header';
 
 import './App.css';
 
@@ -20,19 +21,12 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>EaD</h1>
-
-        {currentUser &&
-          <a onClick={logout}>Sair</a>
-        }
-      </header>
-
+    <BrowserRouter className="App" forceRefresh={true}>
+      <Header currentUser={currentUser} logout={logout} />
       <main>
         <Routes />
       </main>
-    </div>
+    </BrowserRouter>
   );
 }
 

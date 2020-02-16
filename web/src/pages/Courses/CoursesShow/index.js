@@ -15,10 +15,7 @@ function CoursesShow() {
 
   useEffect(() => {
     async function loadCourse() {
-      console.log(id);
       const course = await findCourse(id);
-
-      console.log(course);
 
       if (course.error) {
         setErrorMessage(course.error.message);
@@ -38,18 +35,13 @@ function CoursesShow() {
   }, [id]);
 
   useEffect(() => {
-    console.log(lesson);
     if (lesson && lesson.video) {
       embedVideo(lesson.video).then(setVideo);
-      // console.log(oembed);
-      // if (oembed) {
-      //   setVideo(oembed);
-      // }
     }
   }, [lesson])
 
   return (
-    <div className="Course">
+    <div className="CourseShow">
       {errorMessage &&
         <div className="error-message">
           <span>Não foi posível carregar o curso.</span>
@@ -57,7 +49,7 @@ function CoursesShow() {
         </div>
       }
 
-      <h1 className="course-name">{course.name}</h1>
+      <h1 className="page-title">{course.name}</h1>
 
       <div className="course-container">
         <div className="lesson-content" dangerouslySetInnerHTML={{ __html: video }} />

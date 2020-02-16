@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import Slider from 'react-slick';
 import * as moment from 'moment';
 
 import { getCourses } from '../../../services/courses';
 import { Link } from 'react-router-dom';
 
+import '../../../components/slick/slick.css';
+import '../../../components/slick/slick-theme.css';
+import './styles.css';
+
 function CoursesList() {
   const [ courses, setCourses] = useState([]);
   const [ errorMessage, setErrorMessage] = useState('');
+
+  const sliderSettings = {
+    dots: false,
+    arrows: true,
+    infinite: true,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+  };
 
   useEffect(() => {
     async function loadCourses() {
@@ -27,15 +40,6 @@ function CoursesList() {
   function calcDuration(lessons) {
     const duration = lessons.reduce((accumulator, current) => {
       let time = moment.duration(current.duration).asSeconds();
-
-      // let hours = current.duration.split(':');
-      // if (hours[0] && hours[1] && hours[2]) {
-      //   time.setHours(hours[0], hours[1], hours[2]);
-      //   return accumulator + time.getTime();
-      // } else {
-      //   return accumulator;
-      // }
-
       return accumulator + time;
     }, 0);
 
@@ -61,12 +65,14 @@ function CoursesList() {
       )}
 
       <section>
-        <h2>Treinamentos em andamento</h2>
+        <h1 className="section-title">Treinamentos em andamento</h1>
 
-        <div className="courses">
+        <Slider {...sliderSettings} className="courses">
           {courses.map(course => (
             <div key={course.id} className={`Course ${course.status}`}>
-              <img src={course.cover} alt={course.name} />
+              <div className="course-cover">
+                <img src={course.cover} alt={course.name} />
+              </div>
               <div className="course-name">{course.name}</div>
 
               {course.lessons.length > 0 &&
@@ -93,10 +99,10 @@ function CoursesList() {
                 </div>
               }
 
-              <Link to={`cursos/${course.id}`}>Ver Curso</Link>
+              <Link to={`cursos/${course.id}`} className="course-button">Ver Curso</Link>
             </div>
           ))}
-        </div>
+        </Slider>
       </section>
     </div>
   );

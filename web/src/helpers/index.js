@@ -1,5 +1,7 @@
-// import history from './history';
+import { history } from './history';
+import handleError from './handleError';
 
-// export {
-//   history,
-// };
+export {
+  history,
+  handleError,
+};

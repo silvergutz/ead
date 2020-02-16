@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { api } from '../services';
 
 export async function getCourses() {
@@ -20,9 +21,22 @@ export async function findCourse(id) {
   }
 }
 
+export async function embedVideo(video) {
+  try {
+    const response = await axios.get(`https://vimeo.com/api/oembed.json?url=${video}`);
+
+    if (response.data && response.data.html) {
+      return response.data.html;
+    }
+  } catch(e) {
+    console.error(e);
+    return 'Vídeo indisponível';
+  }
+}
+
 function handleError(error) {
   if (error.response) {
-    if (error.response.status == 404) {
+    if (error.response.status === 404) {
       return { error: 'Página não encontrada' };
     }
 
@@ -42,4 +56,5 @@ function handleError(error) {
 export default {
   getCourses,
   findCourse,
+  embedVideo,
 }

@@ -42,7 +42,7 @@ function CoursesList() {
     const dateTime = moment.duration(duration, 'seconds');
 
     let hours = String((dateTime.days() * 24) + dateTime.hours()).substr(-2);
-    if (hours.length == 1)
+    if (hours.length === 1)
       hours = '0' + hours;
 
     const minutes = ('0' + dateTime.minutes()).substr(-2);

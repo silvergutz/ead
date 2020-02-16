@@ -21,11 +21,13 @@ function App() {
   }
 
   return (
-    <BrowserRouter className="App" forceRefresh={true}>
+    <BrowserRouter forceRefresh={true}>
       <Header currentUser={currentUser} logout={logout} />
-      <main>
-        <Routes />
-      </main>
+      <div className="App">
+        <main>
+            <Routes />
+        </main>
+      </div>
     </BrowserRouter>
   );
 }

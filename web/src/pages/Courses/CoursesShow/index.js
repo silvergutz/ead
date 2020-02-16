@@ -1,31 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { findCourse } from '../../../services/courses';
+import { findCourse, embedVideo } from '../../../services/courses';
 import { useParams } from 'react-router-dom';
+
+import './styles.css';
 
 function CoursesShow() {
   const { id } = useParams();
 
   const [ course, setCourse ] = useState([]);
+  const [ modules, setModules ] = useState([]);
   const [ lesson, setLesson ] = useState({});
+  const [ video, setVideo ] = useState('');
   const [ errorMessage, setErrorMessage ] = useState('');
 
   useEffect(() => {
     async function loadCourse() {
+      console.log(id);
       const course = await findCourse(id);
+
+      console.log(course);
 
       if (course.error) {
         setErrorMessage(course.error.message);
       } else {
         setErrorMessage('');
         setCourse(course);
-        if (course.lessons.length) {
-          setLesson(course.lessons[0])
+        if (course.modules) {
+          setModules(course.modules);
+          if (course.modules.length > 0 && course.modules[0].lessons.length > 0) {
+            setLesson(course.modules[0].lessons[0]);
+          }
         }
       }
     }
 
     loadCourse();
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    console.log(lesson);
+    if (lesson && lesson.video) {
+      embedVideo(lesson.video).then(setVideo);
+      // console.log(oembed);
+      // if (oembed) {
+      //   setVideo(oembed);
+      // }
+    }
+  }, [lesson])
 
   return (
     <div className="Course">
@@ -36,24 +57,22 @@ function CoursesShow() {
         </div>
       }
 
-      <h1>{course.name}</h1>
+      <h1 className="course-name">{course.name}</h1>
 
       <div className="course-container">
-        <div className="lesson-content">
-          {course.video}
-        </div>
+        <div className="lesson-content" dangerouslySetInnerHTML={{ __html: video }} />
         <div className="course-lessons">
-          {course.modules && course.modules.length == 0 ? 'Nenhum modulo cadastrado' :
+          {modules.length === 0 ? 'Nenhum modulo cadastrado' :
             <ul>
-              {course.modules.map(module => (
-                <li className="module">
-                  <div className="module-name">{module.name}</div>
+              {modules.map(m => (
+                <li key={m.id} className="module">
+                  <div className="module-name">{m.name}</div>
 
-                  {module.lessons.length > 0 &&
+                  {m.lessons.length > 0 &&
                     <ul className="module-lessons">
-                      {module.lessons.map(lesson => (
-                        <li className="lesson">
-                          <a onClick={setLesson(lesson)}>{lesson.name}</a>
+                      {m.lessons.map(value => (
+                        <li key={value.id} className={`lesson${value === lesson ? ' active' : ''}`}>
+                          <button onClick={e => setLesson(value)} href="#">{value.name}</button>
                         </li>
                       ))}
                     </ul>

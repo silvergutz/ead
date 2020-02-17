@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { auth } from '../../services';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
+
+import './styles.css';
 
 function Login({ history, location }) {
   const [email, setEmail] = useState('');
@@ -33,23 +35,27 @@ function Login({ history, location }) {
 
   return (
     <div className="Login">
-      <h2>Login</h2>
 
-      <p className="error">{errorMessage}</p>
+      <div className="login-box">
+        {errorMessage &&
+          <p className="error">{errorMessage}</p>
+        }
 
-      <form onSubmit={handleSubmit}>
-        <div className="field">
-          <label htmlFor="email">E-mail</label>
-          <input id="email" type="text" onChange={e => setEmail(e.target.value)} />
-        </div>
-        <div className="field">
-          <label htmlFor="password">Senha</label>
-          <input id="password" type="password" onChange={e => setPassword(e.target.value)} />
-        </div>
-        <div className="field">
-          <button type="submit">Entrar</button>
-        </div>
-      </form>
+        <form onSubmit={handleSubmit}>
+          <div className="field">
+            <label htmlFor="email"></label>
+            <input id="email" type="text" onChange={e => setEmail(e.target.value)} value={email} placeholder="Email" />
+          </div>
+          <div className="field">
+            <input id="password" type="password" onChange={e => setPassword(e.target.value)} placeholder="Senha" />
+          </div>
+          <div className="field">
+            <button type="submit">Fazer Login</button>
+          </div>
+        </form>
+
+        <Link to="/recuperar-senha" className="lost-password">esqueceu a senha?</Link>
+      </div>
     </div>
   );
 }

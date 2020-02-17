@@ -1,17 +1,19 @@
 .Header {
   display: flex;
   justify-content: space-between;
-  background-color: #333;
+  background-color: #00000063;
   color: #fff;
-  border-bottom: 2px solid #000;
-  padding: .5rem 3rem;
+  padding: 2.5rem 3rem;
 }
+
 .logo {
+  background: #fff;
   align-self: center;
-  color: #fff;
-  font-weight: bold;
-  font-size: 25px;
+  border-radius: 7px;
+  padding: 1em 3em;
+  font-size: 20px;
   text-decoration: none;
+  color: #222;
 }
 .menu {
   flex-grow: 1;
@@ -20,10 +22,56 @@
 .menu ul {
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  height: 100%;
 }
 .menu ul li {
-  background-color: #fff;
-  color: #333;
+  list-style: none;
   border-radius: 3px;
   padding: 5px 7px;
+  font-size: 18px;
+}
+.menu li a {
+  display: block;
+  padding-bottom: .5em;
+  border-bottom: 1px solid transparent;
+  text-decoration: none;
+  color: #fff;
+  transition: all .3s;
+}
+.menu li a:hover {
+  border-bottom-color: #fff;
+}
+
+.Header .user {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+}
+.Header .user-photo {
+  margin-right: 1rem;
+}
+.Header .user-photo img {
+  border-radius: 50%;
+  border: 1px solid #fff;
+  width: 60px;
+}
+.Header .user-name {
+  margin-right: .5em;
+}
+.Header .user-name::after {
+  content: " | ";
+  display: inline-block;
+  margin-left: .5em;
+}
+
+.logout-button {
+  background: none;
+  border: 0;
+  font-size: 15px;
+  cursor: pointer;
+  color: #fff;
+}
+.logout-button:hover {
+  color: #d70808;
 }

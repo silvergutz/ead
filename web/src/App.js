@@ -22,10 +22,10 @@ function App() {
 
   return (
     <BrowserRouter forceRefresh={true}>
-      <Header currentUser={currentUser} logout={logout} />
       <div className="App">
+        <Header currentUser={currentUser} logout={logout} />
         <main>
-            <Routes />
+          <Routes />
         </main>
       </div>
     </BrowserRouter>

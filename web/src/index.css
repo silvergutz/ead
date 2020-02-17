@@ -12,7 +12,7 @@ html, body, #root {
 }
 
 body {
-  background: #eaeaea;
+  background: #eaeaea url('/images/bg.jpg');
   -webkit-font-smoothing: antialiased;
 }
 
@@ -22,13 +22,41 @@ body, input, button {
   color: #222;
 }
 
-.page-title {
-  font-size: 24px;
+#root {
+  display: flex;
+  justify-content: center;
+}
+
+.error {
   text-align: center;
-  margin-bottom: 2em;
+  color: #f00;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  margin-bottom: 1em;
+  font-size: 35px;
+  font-weight: 200;
+  text-align: center;
+  color: #303030;
 }
 .section-title {
   font-size: 20px;
   text-align: center;
   margin-bottom: 1em;
+  color: #303030;
+}
+
+.slick-arrow::before {
+  background: url('/images/arrow-right.png');
+  display: block;
+  width: 64px;
+  height: 64px;
+  font-size: 0 !important;
+}
+.slick-arrow.slick-prev::before {
+  transform: rotateY(180deg);
+}
+.slick-next {
+  right: 15px;
 }

@@ -4,6 +4,8 @@ import './styles.css';
 import { Link, withRouter } from 'react-router-dom';
 
 function Header({ logout, currentUser }) {
+  if (!currentUser) return null;
+
   return (
     <header className="Header">
       <Link className="logo" to="/">EaD</Link>
@@ -22,11 +24,17 @@ function Header({ logout, currentUser }) {
         </ul>
       </nav>
 
-      <div className="user">
-        {currentUser &&
-          <button onClick={logout}>Sair</button>
-        }
-      </div>
+      {currentUser &&
+        <div className="user">
+          <div className="user-photo">
+            <img src={currentUser.photo} alt="" />
+          </div>
+          <div className="user-name">
+            Olá, <span class="name">{currentUser.name}</span>
+          </div>
+          <button className="logout-button" onClick={logout}>Sair</button>
+        </div>
+      }
     </header>
   );
 }

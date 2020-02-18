@@ -32,6 +32,11 @@ body, input, button {
   color: #f00;
   margin-bottom: 2rem;
 }
+button.link {
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
 
 .page-title {
   margin-bottom: 1em;

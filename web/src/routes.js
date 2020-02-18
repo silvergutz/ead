@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import CoursesList from './pages/Courses/CoursesList';
 import CoursesShow from './pages/Courses/CoursesShow';
 import UsersList from './pages/Users/UsersList';
+import Profile from './pages/Profile';
 
 function Routes() {
   return (
@@ -18,7 +19,7 @@ function Routes() {
         <PrivateRoute path="/cursos" exact component={CoursesList} />
         <PrivateRoute path="/cursos/:id" component={CoursesShow} />
         <PrivateRoute path="/alunos" exact component={UsersList} />
-        <PrivateRoute path="/perfil" component={() => <h1>Perfil</h1>} />
+        <PrivateRoute path="/perfil" component={Profile} />
         <Route path="*" component={() => <h1>Page not found</h1>} />
       </Switch>
     </BrowserRouter>

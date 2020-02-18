@@ -12,7 +12,7 @@ export async function getUsers(searchTerm) {
   }
 }
 
-export async function findCourse(id) {
+export async function findUser(id) {
   try {
     const response = await api.get(`/users/${id}`)
 
@@ -22,7 +22,17 @@ export async function findCourse(id) {
   }
 }
 
+export async function updateUser(id, data) {
+  try {
+    const response = await api.put(`/users/${id}`, data);
+
+    return response.data;
+  } catch(e) {
+    return handleError(e);
+  }
+}
+
 export default {
   getUsers,
-  findCourse,
+  findUser,
 }

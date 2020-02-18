@@ -30,7 +30,7 @@ function Header({ logout, currentUser }) {
             <img src={currentUser.photo} alt="" />
           </div>
           <div className="user-name">
-            Olá, <span class="name">{currentUser.name}</span>
+            Olá, <span className="name">{currentUser.name}</span>
           </div>
           <button className="logout-button" onClick={logout}>Sair</button>
         </div>

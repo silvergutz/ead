@@ -33,8 +33,9 @@ function UsersList() {
 
   async function loadUsers() {
     const response = await getUsers(searchTerm);
+    console.log(response.errora.aee);
 
-    if (response.error) {
+    if (response.errors) {
       setErrorMessage(response.error);
     } else {
       setErrorMessage('');

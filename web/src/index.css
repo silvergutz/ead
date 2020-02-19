@@ -63,5 +63,5 @@ button.link {
   transform: rotateY(180deg);
 }
 .slick-next {
-  right: 15px;
+  right: 15px !important;
 }

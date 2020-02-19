@@ -7,6 +7,7 @@ import Routes from './routes';
 import Header from './components/Header';
 
 import './App.css';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   const [ currentUser, setCurrentUser ] = useState(null);
@@ -23,9 +24,13 @@ function App() {
   return (
     <BrowserRouter forceRefresh={true}>
       <div className="App">
-        <Header currentUser={currentUser} logout={logout} />
+        <ErrorBoundary>
+          <Header currentUser={currentUser} logout={logout} />
+        </ErrorBoundary>
         <main>
-          <Routes />
+          <ErrorBoundary>
+            <Routes />
+          </ErrorBoundary>
         </main>
       </div>
     </BrowserRouter>

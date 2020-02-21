@@ -8,10 +8,10 @@ import { Link } from 'react-router-dom';
 import '../../../components/slick/slick.css';
 import '../../../components/slick/slick-theme.css';
 import './styles.css';
+import globalNotifications from '../../../services/globalNotifications';
 
 function CoursesList() {
   const [ courses, setCourses] = useState([]);
-  const [ errorMessage, setErrorMessage] = useState('');
 
   const sliderSettings = {
     dots: false,
@@ -23,13 +23,13 @@ function CoursesList() {
 
   useEffect(() => {
     async function loadCourses() {
+      globalNotifications.clearMessages();
+
       const courses = await getCourses();
 
       if (courses.error) {
-        setErrorMessage(courses.error);
+        globalNotifications.sendErrorMessage(`Não foi posível carregar o curso. Erro: ${courses.error}`);
       } else {
-        setErrorMessage('');
-        console.log(courses);
         setCourses(courses);
       }
     }
@@ -57,13 +57,6 @@ function CoursesList() {
 
   return (
     <div className="CoursesList">
-      {errorMessage && (
-        <div className="error-message">
-          Não foi posível carregar os cursos.
-          Detalhes: {errorMessage}
-        </div>
-      )}
-
       <section>
         <h1 className="section-title">Treinamentos em andamento</h1>
 

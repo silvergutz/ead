@@ -3,6 +3,7 @@ import { findCourse, embedVideo } from '../../../services/courses';
 import { useParams } from 'react-router-dom';
 
 import './styles.css';
+import globalNotifications from '../../../services/globalNotifications';
 
 function CoursesShow() {
   const { id } = useParams();
@@ -11,16 +12,16 @@ function CoursesShow() {
   const [ modules, setModules ] = useState([]);
   const [ lesson, setLesson ] = useState({});
   const [ video, setVideo ] = useState('');
-  const [ errorMessage, setErrorMessage ] = useState('');
 
   useEffect(() => {
     async function loadCourse() {
+      globalNotifications.clearMessages();
+
       const course = await findCourse(id);
 
       if (course.error) {
-        setErrorMessage(course.error.message);
+        globalNotifications.sendErrorMessage(`Não foi posível carregar o curso. Erro: ${course.error.message}`);
       } else {
-        setErrorMessage('');
         setCourse(course);
         if (course.modules) {
           setModules(course.modules);
@@ -35,20 +36,16 @@ function CoursesShow() {
   }, [id]);
 
   useEffect(() => {
-    if (lesson && lesson.video) {
-      embedVideo(lesson.video).then(setVideo);
+    if (lesson) {
+      if (lesson.video) {
+        embedVideo(lesson.video).then(setVideo);
+      }
     }
+
   }, [lesson])
 
   return (
     <div className="CourseShow">
-      {errorMessage &&
-        <div className="error-message">
-          <span>Não foi posível carregar o curso.</span>
-          <span>Detalhes: {errorMessage.toString()}</span>
-        </div>
-      }
-
       <h1 className="page-title">{course.name}</h1>
 
       <div className="course-container">

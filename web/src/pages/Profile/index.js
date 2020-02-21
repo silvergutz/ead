@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { findUser, updateUser } from '../../services/users';
 import { auth } from '../../services';
+import { globalNotifications } from '../../services';
 
 import './styles.css';
 
@@ -9,7 +10,6 @@ function Profile() {
   const [ name, setName ] = useState('');
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
-  const [ errorMessage, setErrorMessage ] = useState('');
   const [ isUpdating, setIsUpdating ] = useState({ name: false, email: false, password: false });
   const currentUser = auth.currentUserValue;
   const fields = ['name','email','password'];
@@ -18,11 +18,11 @@ function Profile() {
     async function loadProfile() {
       const response = await findUser(currentUser.id);
 
+      globalNotifications.clearMessages();
+
       if (response.error) {
-        console.error(response.error);
-        setErrorMessage(response.error.message);
+        globalNotifications.sendErrorMessage(response.error.message);
       } else {
-        setErrorMessage('');
         setUser(response);
       }
     }
@@ -44,11 +44,10 @@ function Profile() {
     if (fields.indexOf(field) > -1) {
       data[field] = eval(field);
       if (data[field] !== eval(`user.${field}`)) {
-        console.log(data);
         const response = await updateUser(currentUser.id, data);
 
         if (response.error) {
-          setErrorMessage(response.error.message);
+          globalNotifications.sendErrorMessage(response.error.message);
         } else {
           setUser(response);
         }
@@ -63,13 +62,6 @@ function Profile() {
   return (
     <div className="Profile">
       <h1 className="page-title">Meus Dados</h1>
-
-      {errorMessage &&
-        <div className="error">
-          Ocorreu um erro ao carregar os seus dados.<br />
-          Detalhes: <div className="error-message">{errorMessage}</div>
-        </div>
-      }
 
       <div className="profile-content">
         <div className="profile-photo">

@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getSchools, deleteSchool } from '../../../services/schools';
+import { globalNotifications } from '../../../services';
 
 function SchoolsList() {
   const [ schools, setSchools ] = useState([]);
-  const [ errorMessage, setErrorMessage ] = useState('');
 
   useEffect(() => {
     async function loadSchools() {
+      globalNotifications.clearMessages();
+
       const response = await getSchools();
 
       if (response.error) {
-        console.error(response.error);
-        setErrorMessage(response.error.message);
+        globalNotifications.sendErrorMessage(`Ocorreu um erro ao processar a requisição. Detalhes: ${response.error}`);
       } else {
         setSchools(response);
       }
@@ -25,7 +26,7 @@ function SchoolsList() {
     const response = await deleteSchool(id);
 
     if (response.error) {
-      setErrorMessage(response.error.message);
+      globalNotifications.sendErrorMessage(response.error.message);
     } else {
       setSchools(schools.filter(school => school.id !== id));
     }
@@ -34,13 +35,6 @@ function SchoolsList() {
   return (
     <div className="SchoolsList">
       <h1 className="page-title">Lojas</h1>
-
-      {errorMessage &&
-        <div className="error-message">
-          Ocorreu um erro ao processar a requisição.<br />
-          Detalhes: <div class="error">{errorMessage.toString()}</div>
-        </div>
-      }
 
       <Link to="/schools/new" className="new-school button-add">Nova Loja</Link>
 

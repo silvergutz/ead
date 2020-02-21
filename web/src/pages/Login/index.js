@@ -3,11 +3,11 @@ import { auth } from '../../services';
 import { withRouter, Link } from 'react-router-dom';
 
 import './styles.css';
+import globalNotifications from '../../services/globalNotifications';
 
 function Login({ history, location }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
 
   // redirect to home if already logged in
   if (auth.currentUserValue) {
@@ -17,18 +17,19 @@ function Login({ history, location }) {
   async function handleSubmit(e) {
     e.preventDefault();
 
+    globalNotifications.clearMessages();
+
     try {
       await auth.login({ email, password });
 
-      // console.log(response.data);
       const { from } = location.state || { from: { pathname: '/' } };
       history.push(from);
     } catch(e) {
       if (e.response && e.response.status === 401) {
-        setErrorMessage('Credenciais inválidas');
+        globalNotifications.sendErrorMessage('Credenciais inválidas');
       } else {
         console.error(e.message);
-        setErrorMessage('Não foi possível autenticar o usuário, por favor, tente novamente mais tarde');
+        globalNotifications.sendErrorMessage('Não foi possível autenticar o usuário, por favor, tente novamente mais tarde');
       }
     }
   }
@@ -37,10 +38,6 @@ function Login({ history, location }) {
     <div className="Login">
 
       <div className="login-box">
-        {errorMessage &&
-          <p className="error">{errorMessage}</p>
-        }
-
         <form onSubmit={handleSubmit}>
           <div className="field">
             <label htmlFor="email"></label>

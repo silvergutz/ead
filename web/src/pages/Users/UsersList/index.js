@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import './styles.css';
 import ProgressBar from '../../../components/ProgressBar';
 import { getUsers } from '../../../services/users';
+import { globalNotifications } from '../../../services';
 
 function UsersList() {
   const [ users, setUsers ] = useState([]);
   const [ filteredUsers, setFilteredUsers ] = useState([]);
   const [ searchTerm, setSearchTerm ] = useState('');
-  const [ errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     loadUsers();
@@ -32,14 +32,13 @@ function UsersList() {
   }
 
   async function loadUsers() {
+    globalNotifications.clearMessages();
+
     const response = await getUsers(searchTerm);
-    console.log(response.errora.aee);
 
     if (response.errors) {
-      setErrorMessage(response.error);
+      globalNotifications.sendErrorMessage(response.error);
     } else {
-      setErrorMessage('');
-      console.log(response);
       setUsers(response);
       setFilteredUsers(response);
     }
@@ -47,13 +46,6 @@ function UsersList() {
 
   return (
     <div className="UsersList">
-      {errorMessage && (
-        <div className="error-message">
-          Não foi posível carregar os cursos.
-          Detalhes: {errorMessage}
-        </div>
-      )}
-
       <h1 className="page-title">Lista de Alunos</h1>
 
       <div className="search-form">

@@ -1,0 +1,38 @@
+.notifications {
+  position: absolute;
+  z-index: 500;
+  left: 50%;
+  top: 5.5rem;
+  transform: translateX(-50%);
+}
+.notifications .message {
+  position: relative;
+  padding: .7em 2.5em .7em 2em;
+  margin-bottom: 1rem;
+  min-width: 20rem;
+  text-align: center;
+  background: #535353;
+  box-shadow: 4px 4px 10px -4px rgba(0,0,0,0.58);
+  border-radius: 5px;
+  color: #fff;
+}
+.notifications .message.info {
+  background-color: #0082d8;
+}
+.notifications .message.success {
+  background-color: #209b01;
+}
+.notifications .message.warning {
+  background-color: #d8ca00;
+}
+.notifications .message.error {
+  background-color: #c40000;
+}
+.message .close {
+  position: absolute;
+  top: 0;
+  right: 1em;
+  color: #fff;
+  line-height: 2.4em;
+  font-weight: bolder;
+}

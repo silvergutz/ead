@@ -8,6 +8,7 @@ import Header from './components/Header';
 
 import './App.css';
 import ErrorBoundary from './components/ErrorBoundary';
+import GlobalNotifications from './components/GlobalNotifications';
 
 function App() {
   const [ currentUser, setCurrentUser ] = useState(null);
@@ -28,6 +29,7 @@ function App() {
           <Header currentUser={currentUser} logout={logout} />
         </ErrorBoundary>
         <main>
+          <GlobalNotifications />
           <ErrorBoundary>
             <Routes />
           </ErrorBoundary>

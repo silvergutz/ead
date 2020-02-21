@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { findSchool, updateSchool } from '../../../services/schools';
+import { globalNotifications } from '../../../services';
 
 function SchoolsShow() {
   const { id } = useParams();
@@ -13,8 +14,10 @@ function SchoolsShow() {
     async function loadSchool() {
       const response = await findSchool(id);
 
+      globalNotifications.clearMessages();
+
       if (response.error) {
-        console.error(response.error);
+        globalNotifications.sendErrorMessage(response.error);
       } else {
         setSchool(response);
       }

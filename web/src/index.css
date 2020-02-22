@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 * {
   padding: 0;
@@ -17,14 +18,57 @@ body {
 }
 
 body, input, button {
-  font-family: Roboto, sans-serif;
+  font-family: Quicksand, sans-serif;
   font-size: 16px;
   color: #222;
+}
+a {
+  text-decoration: none;
 }
 
 #root {
   display: flex;
   justify-content: center;
+}
+
+.material-icons, .mi {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+.mi-12 { font-size: 12px }
+.mi-14 { font-size: 14px }
+.mi-16 { font-size: 16px }
+.mi-18 { font-size: 18px }
+.mi-20 { font-size: 20px }
+.mi-22 { font-size: 22px }
+.mi-24 { font-size: 24px }
+.mi-26 { font-size: 26px }
+.mi-28 { font-size: 28px }
+a.mi {
+  color: #333;
+}
+a.mi:hover {
+  color: #000;
 }
 
 .error {
@@ -65,3 +109,65 @@ button.link {
 .slick-next {
   right: 15px !important;
 }
+
+.button {
+  display: inline-block;
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5em 1.8em;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 5px;
+}
+.button:hover {
+  opacity: .9;
+}
+
+.back .mi {
+  vertical-align: -3px;
+}
+
+.content-box {
+  max-width: 40rem;
+  margin: 1rem auto 0;
+  padding: 2rem 1rem 3rem;
+  border: 1px solid #7f7f7f;
+  border-radius: 5px;
+}
+
+.datatable {
+  width: 100%;
+  margin: 2rem 0;
+}
+.datatable tr .id, .datatable tr .actions {
+  width: 2em;
+}
+.datatable tr:nth-child(odd) td {
+  background: #dddddd;
+}
+.datatable tr td, .datatable tr th {
+  padding: .5em .8em;
+}
+
+.model-field {
+  display: flex;
+  justify-content: space-between;
+}
+.model-form .form-field {
+  display: flex;
+  justify-content: flex-end;
+}
+.model-form .form-field > label {
+  flex: 1;
+  padding-right: 1.5em;
+  text-align: right;
+  line-height: 2rem;
+}
+.model-form .form-field .field {
+  flex: 1;
+}
+.model-form button[type="submit"] {
+  margin-top: 2rem;
+}
+

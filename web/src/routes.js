@@ -7,6 +7,7 @@ import Home from './pages/Home';
 
 import CoursesList from './pages/Courses/CoursesList';
 import CoursesShow from './pages/Courses/CoursesShow';
+import CoursesSave from './pages/Courses/CoursesSave';
 
 import UsersList from './pages/Users/UsersList';
 import Profile from './pages/Profile';
@@ -36,6 +37,7 @@ function Routes() {
         <PrivateRoute path="/categorias/:id" component={CategoriesShow} />
 
         <PrivateRoute path="/cursos" exact component={CoursesList} />
+        <PrivateRoute path="/cursos/novo" exact component={CoursesSave} />
         <PrivateRoute path="/cursos/:id" component={CoursesShow} />
 
         <PrivateRoute path="/alunos" exact component={UsersList} />

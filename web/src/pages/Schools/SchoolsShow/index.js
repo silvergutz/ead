@@ -35,8 +35,9 @@ function SchoolsShow() {
     if (name !== school.name) {
       const response = await updateSchool(school.id, { name });
       if (response.error) {
-        console.error(response.error);
+        globalNotifications.sendErrorMessage(response.error);
       } else {
+        globalNotifications.sendSuccessMessage('Gravado com sucesso');
         setSchool(response);
       }
     }
@@ -48,11 +49,13 @@ function SchoolsShow() {
     <div className="SchoolsShow">
       <h1 className="page-title">Detalhes da Loja</h1>
 
-      <Link to="/schools">&lsaquo; voltar</Link>
+      <Link className="back button" to="/lojas">
+        <i className="mi mi-16">navigate_before</i> voltar
+      </Link>
 
-      <div className="school-content">
+      <div className="school-content model-content content-box">
         {school.name &&
-          <div className="school-name">
+          <div className="school-name model-field">
             {!isUpdating &&
               <>
                 <div className="value">{school.name}</div>

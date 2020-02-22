@@ -26,8 +26,10 @@ function SchoolsList() {
     const response = await deleteSchool(id);
 
     if (response.error) {
-      globalNotifications.sendErrorMessage(response.error.message);
+      const err = response.error.message || 'Ocorreu um erro ao excluir o registro';
+      globalNotifications.sendErrorMessage(err);
     } else {
+      globalNotifications.sendSuccessMessage('Registro excluido');
       setSchools(schools.filter(school => school.id !== id));
     }
   }
@@ -36,24 +38,24 @@ function SchoolsList() {
     <div className="SchoolsList">
       <h1 className="page-title">Lojas</h1>
 
-      <Link to="/schools/new" className="new-school button-add">Nova Loja</Link>
+      <Link to="/lojas/novo" className="new-school button-add button">Nova Loja</Link>
 
       <table className="datatable">
         <thead>
           <tr>
-            <th>#ID</th>
-            <th>NOME</th>
-            <th>AÇÕES</th>
+            <th className="id">ID</th>
+            <th className="name">NOME</th>
+            <th className="actions">AÇÕES</th>
           </tr>
         </thead>
         <tbody>
           {schools.map(school => (
             <tr key={school.id}>
-              <td>#{school.id}</td>
-              <td>{school.name}</td>
-              <td>
-                <Link to={`/schools/${school.id}`}>editar</Link>
-                <button className="button-del link" onClick={e => handleDelete(school.id)}>excluir</button>
+              <td className="id">{school.id}</td>
+              <td className="name">{school.name}</td>
+              <td className="actions">
+                <Link className="mi" to={`/lojas/${school.id}`}>edit</Link>
+                <button className="button-del link mi" onClick={e => handleDelete(school.id)}>delete</button>
               </td>
             </tr>
           ))}

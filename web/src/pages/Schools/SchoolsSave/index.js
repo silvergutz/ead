@@ -14,9 +14,10 @@ function SchoolsSave({ history }) {
     const response = await storeSchool({ name });
 
     if (response.error) {
-      globalNotifications.sendErrorMessage(response.error);
+      const err = response.error.message || 'Ocorreu um erro ao gravar os dados';
+      globalNotifications.sendErrorMessage(err);
     } else {
-      history.push('/schools');
+      history.push('/lojas');
     }
   }
 
@@ -24,13 +25,16 @@ function SchoolsSave({ history }) {
     <div className="SchoolsSave">
       <h1 className="page-title">Nova Loja</h1>
 
-      <form onSubmit={handleSubmit}>
-        <div className="field">
+      <form onSubmit={handleSubmit} className="model-form content-box">
+        <div className="form-field">
           <label htmlFor="name">Nome:</label>
-          <input id="name" type="text" value={name} onChange={e => setName(e.target.value)} />
+          <div className="field">
+            <input id="name" type="text" value={name} onChange={e => setName(e.target.value)} />
+          </div>
         </div>
-
-        <button type="submit">Gravar</button>
+        <div className="form-field">
+          <button type="submit">Gravar</button>
+        </div>
       </form>
     </div>
   )

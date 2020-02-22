@@ -19,9 +19,9 @@ function Routes() {
         <Route path="/login" component={Login} />
         <Route path="/recuperar-senha" component={() => <h1>Recuperar Senha</h1>} />
         <PrivateRoute path="/" exact component={Home} />
-        <PrivateRoute path="/schools" exact component={SchoolsList} />
-        <PrivateRoute path="/schools/new" exact component={SchoolsSave} />
-        <PrivateRoute path="/schools/:id" component={SchoolsShow} />
+        <PrivateRoute path="/lojas" exact component={SchoolsList} />
+        <PrivateRoute path="/lojas/novo" exact component={SchoolsSave} />
+        <PrivateRoute path="/lojas/:id" component={SchoolsShow} />
         <PrivateRoute path="/cursos" exact component={CoursesList} />
         <PrivateRoute path="/cursos/:id" component={CoursesShow} />
         <PrivateRoute path="/alunos" exact component={UsersList} />

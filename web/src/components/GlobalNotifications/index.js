@@ -23,6 +23,8 @@ function GlobalNotifications() {
       return;
     }
 
+    console.log(message);
+
     setNotifications([ ...notifications, message ]);
 
     if (message.autoClose) {

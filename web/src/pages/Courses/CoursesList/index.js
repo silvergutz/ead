@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import * as moment from 'moment';
 
+import ImgProtected from '../../../components/ImgProtected';
 import { getCourses } from '../../../services/courses';
-import { Link } from 'react-router-dom';
+import globalNotifications from '../../../services/globalNotifications';
 
 import '../../../components/slick/slick.css';
 import '../../../components/slick/slick-theme.css';
 import './styles.css';
-import globalNotifications from '../../../services/globalNotifications';
 
 function CoursesList() {
   const [ courses, setCourses] = useState([]);
@@ -64,7 +65,7 @@ function CoursesList() {
           {courses.map(course => (
             <div key={course.id} className={`Course ${course.status}`}>
               <div className="course-cover">
-                <img src={course.cover} alt={course.name} />
+                <ImgProtected file={course.cover} alt={course.name} />
               </div>
               <div className="course-name">{course.name}</div>
 

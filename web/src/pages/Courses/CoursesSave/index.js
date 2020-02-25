@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
+import Dropzone from 'react-dropzone';
 
 import { storeCourse } from '../../../services/courses';
 import { withRouter } from 'react-router-dom';
@@ -11,6 +12,7 @@ import { getUsers } from '../../../services/users';
 function CoursesSave({ history }) {
   const [ name, setName ] = useState('');
   const [ description, setDescription ] = useState('');
+  const [ cover, setCover ] = useState(null);
   const [ schoolId, setSchoolId ] = useState('');
   const [ categories, setCategories ] = useState([]);
   const [ teachers, setTeachers ] = useState([]);
@@ -60,14 +62,19 @@ function CoursesSave({ history }) {
     e.preventDefault();
     globalNotifications.clearMessages();
 
-    const data = {
-      name,
-      description,
-      'school_id': schoolId,
-      categories: formatMultiSelectValue(categories),
-      teachers: formatMultiSelectValue(teachers),
-      status,
-    };
+    const data = new FormData();
+
+    data.append('name', name);
+    data.append('description', description);
+    data.append('school_id', schoolId);
+    data.append('categories[]', formatMultiSelectValue(categories));
+    data.append('teachers[]', formatMultiSelectValue(teachers));
+    data.append('status', status);
+
+    if (cover) {
+      data.append('cover', cover);
+    }
+
     const response = await storeCourse(data);
 
     if (response.error) {
@@ -75,6 +82,13 @@ function CoursesSave({ history }) {
       globalNotifications.sendErrorMessage(err);
     } else {
       history.push(`/cursos/${response.id}`);
+    }
+  }
+
+  function handleFileDrop(acceptedFiles, rejectedFiles) {
+    console.log(acceptedFiles, rejectedFiles);
+    if (acceptedFiles.length) {
+      setCover(acceptedFiles[0]);
     }
   }
 
@@ -100,6 +114,21 @@ function CoursesSave({ history }) {
           <label htmlFor="description">Descrição:</label>
           <div className="field">
             <textarea id="description" value={description} onChange={e => setDescription(e.target.value)} />
+          </div>
+        </div>
+        <div className="form-field">
+          <label>Imagem de Capa:</label>
+          <div className="cover-field upload-field field">
+            <Dropzone onDrop={handleFileDrop}>
+              {({getRootProps, getInputProps}) => (
+                <section>
+                  <div {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <p>Arraste e solte um arquivo aqui, ou clique pare selecionar</p>
+                  </div>
+                </section>
+              )}
+            </Dropzone>
           </div>
         </div>
         <div className="form-field">

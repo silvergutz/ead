@@ -26,6 +26,7 @@ Route.post('authenticate', 'AuthController.authenticate')
 Route.group(() => {
 
   Route.get('app', 'AppController.index')
+  Route.get('download', 'UploadController.download').as('download')
 
   Route.resource('schools', 'SchoolController').apiOnly()
   Route.resource('users', 'UserController').apiOnly()

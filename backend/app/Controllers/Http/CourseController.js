@@ -4,6 +4,9 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
+const Helpers = use('Helpers')
+const Drive = use('Drive')
+
 const Course = use('App/Models/Course')
 const School = use('App/Models/School')
 const Category = use('App/Models/Category')
@@ -38,34 +41,82 @@ class CourseController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    const data = request.only(['name', 'description', 'cover', 'school_id', 'status'])
-    let { categories, teachers } = request.all()
+    try {
+      const data = request.only(['name', 'description', 'school_id', 'status'])
+      let { categories, teachers } = request.all()
 
-    const school = data.school_id ? await School.find(data.school_id) : null
-    if (!school) {
-      response.status(400)
-      return { error: 'School not found' }
+      const pictureCover = request.file('cover', {
+        types: ['image'],
+        size: '2mb',
+        extnames: ['jpg','jpeg','png'],
+      })
+
+      // Find School
+      data.school_id = parseInt(data.school_id)
+      const school = data.school_id ? await School.find(data.school_id) : null
+      if (!school) {
+        response.status(400)
+        return { error: 'School not found' }
+      }
+
+      if (pictureCover) {
+        // Handle cover image upload
+        const fileName = `${new Date().getTime()}.${pictureCover.extname}`
+        await pictureCover.move(Helpers.tmpPath(), {
+          name: fileName
+        })
+        // Use Drive to store images, than we can change anytime from local to cloud
+        if (pictureCover.moved()) {
+          const coverStoragePath = `courses/${fileName}`
+          await Drive.move(Helpers.tmpPath(pictureCover.fileName), coverStoragePath)
+          data.cover = coverStoragePath
+        }
+      }
+
+      // Create a register
+      const course = await Course.create(data)
+
+      // Categories
+      if (categories) {
+        // Can be passed as string representation of array (multipart-form-data)
+        if (typeof categories === 'string') {
+          categories = JSON.parse(categories)
+        }
+        // making shure that is an array
+        if (!Array.isArray(categories)) {
+          categories = [categories];
+        }
+        categories = await Category
+          .query()
+          .whereIn('id', categories)
+          .pluck('id')
+        await course.categories().attach(categories)
+      }
+
+      // Teachers
+      if (teachers) {
+        if (typeof teachers === 'string') {
+          teachers = JSON.parse(teachers)
+        }
+        if (!Array.isArray(teachers)) {
+          teachers = [teachers];
+        }
+        teachers = await User
+          .query()
+          .whereIn('id', teachers)
+          .pluck('id')
+        await course.teachers().attach(teachers)
+      }
+
+      response.status(201)
+
+      return course
+    } catch(e) {
+      if (pictureCover.moved() && Drive.exists(coverStoragePath)) {
+        await Drive.delete(coverStoragePath)
+      }
+      throw new Error(e)
     }
-
-    const course = await Course.create(data)
-
-    // Categories
-    categories = await Category
-      .query()
-      .whereIn('id', categories)
-      .pluck('id')
-    await course.categories().attach(categories)
-
-    // Teachers
-    teachers = await User
-      .query()
-      .whereIn('id', teachers)
-      .pluck('id')
-    await course.teachers().attach(teachers)
-
-    response.status(201)
-
-    return course
   }
 
   /**

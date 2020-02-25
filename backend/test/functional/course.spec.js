@@ -1,6 +1,7 @@
 'use strict'
 
 const Factory = use('Factory')
+const Helpers = use('Helpers')
 
 const { test, trait } = use('Test/Suite')('Course')
 
@@ -20,18 +21,29 @@ test('create a course', async ({ client }) => {
     .limit(3)
     .pluck('id')
 
+  const teachers = await User
+    .query()
+    .where('is_teacher', true)
+    .limit(3)
+    .pluck('id')
+
   const course = await Factory.model('App/Models/Course').make()
   const courseData = {
     name: course.name,
     description: course.description,
-    cover: course.cover,
     school_id: course.school_id,
     status: course.status,
   }
 
   const response = await client
     .post('/courses')
-    .send({ categories, ...courseData })
+    .field('name', courseData.name)
+    .field('description', courseData.description)
+    .field('school_id', courseData.school_id)
+    .field('status', courseData.status)
+    .field('categories[]', categories)
+    .field('teachers[]', teachers)
+    .attach('cover', `${Helpers.appRoot()}/test/data/images/fake.jpeg`)
     .loginVia(userToAuth, 'jwt')
     .end()
 
@@ -85,7 +97,7 @@ test('get a course', async ({ client }) => {
     .end()
 
   response.assertStatus(200)
-  response.assertJSONSubset({ categories: cats.toJSON(), ...course.toJSON()})
+  response.assertJSONSubset({...course.toJSON()})
 })
 
 test('update a course', async ({ client }) => {

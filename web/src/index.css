@@ -157,6 +157,7 @@ button.link {
 .model-form .form-field {
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 1rem;
 }
 .model-form .form-field > label {
   flex: 1;
@@ -170,4 +171,12 @@ button.link {
 .model-form button[type="submit"] {
   margin-top: 2rem;
 }
-
+.upload-field {
+  border: 2px dashed #999;
+  background: #ffffff;
+  font-size: 15px;
+  text-align: center;
+}
+.upload-field p {
+  padding: 1rem;
+}

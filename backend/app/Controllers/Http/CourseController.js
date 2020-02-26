@@ -7,10 +7,17 @@
 const Helpers = use('Helpers')
 const Drive = use('Drive')
 
+const CourseService = use('App/Services/CourseService')
 const Course = use('App/Models/Course')
 const School = use('App/Models/School')
 const Category = use('App/Models/Category')
 const User = use('App/Models/User')
+
+const coverRules = {
+  types: ['image'],
+  size: '2mb',
+  extnames: ['jpg','jpeg','png'],
+}
 
 /**
  * Resourceful controller for interacting with courses
@@ -41,82 +48,24 @@ class CourseController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    try {
-      const data = request.only(['name', 'description', 'school_id', 'status'])
-      let { categories, teachers } = request.all()
-
-      const pictureCover = request.file('cover', {
-        types: ['image'],
-        size: '2mb',
-        extnames: ['jpg','jpeg','png'],
-      })
-
-      // Find School
-      data.school_id = parseInt(data.school_id)
-      const school = data.school_id ? await School.find(data.school_id) : null
-      if (!school) {
-        response.status(400)
-        return { error: 'School not found' }
-      }
-
-      if (pictureCover) {
-        // Handle cover image upload
-        const fileName = `${new Date().getTime()}.${pictureCover.extname}`
-        await pictureCover.move(Helpers.tmpPath(), {
-          name: fileName
-        })
-        // Use Drive to store images, than we can change anytime from local to cloud
-        if (pictureCover.moved()) {
-          const coverStoragePath = `courses/${fileName}`
-          await Drive.move(Helpers.tmpPath(pictureCover.fileName), coverStoragePath)
-          data.cover = coverStoragePath
-        }
-      }
-
-      // Create a register
-      const course = await Course.create(data)
-
-      // Categories
-      if (categories) {
-        // Can be passed as string representation of array (multipart-form-data)
-        if (typeof categories === 'string') {
-          categories = JSON.parse(categories)
-        }
-        // making shure that is an array
-        if (!Array.isArray(categories)) {
-          categories = [categories];
-        }
-        categories = await Category
-          .query()
-          .whereIn('id', categories)
-          .pluck('id')
-        await course.categories().attach(categories)
-      }
-
-      // Teachers
-      if (teachers) {
-        if (typeof teachers === 'string') {
-          teachers = JSON.parse(teachers)
-        }
-        if (!Array.isArray(teachers)) {
-          teachers = [teachers];
-        }
-        teachers = await User
-          .query()
-          .whereIn('id', teachers)
-          .pluck('id')
-        await course.teachers().attach(teachers)
-      }
-
-      response.status(201)
-
-      return course
-    } catch(e) {
-      if (pictureCover.moved() && Drive.exists(coverStoragePath)) {
-        await Drive.delete(coverStoragePath)
-      }
-      throw new Error(e)
+    const { categories, teachers } = request.all()
+    const data = {
+      courseData: request.only(['name', 'description', 'school_id', 'status']),
+      coverFile: request.file('cover', coverRules),
+      categories,
+      teachers,
     }
+
+    const result = await CourseService.save(data)
+
+    if (result.error) {
+      response.status(400)
+      return result
+    }
+
+    response.status(201)
+
+    return result
   }
 
   /**
@@ -153,44 +102,18 @@ class CourseController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
-    const course = await Course.findOrFail(params.id)
-
-    const data = request.only(['name', 'description', 'cover', 'school_id', 'status'])
-    let { categories, teachers } = request.all()
-
-    if (data.school_id) {
-      const school = await School.find(data.school_id)
-      if (!school) {
-        response.status(400)
-        return { error: 'School not found' }
-      }
+  async update ({ request, params }) {
+    const { categories, teachers } = request.all()
+    const data = {
+      courseData: request.only(['name', 'description', 'status']),
+      coverFile: request.file('cover', coverRules),
+      categories,
+      teachers,
     }
 
-    // Categories
-    if (categories !== undefined) {
-      if (categories.length) {
-        categories = await Category
-          .query()
-          .whereIn('id', categories)
-          .pluck('id')
-      }
-      course.categories().sync(categories)
-    }
+    data.courseData.id = parseInt(params.id)
 
-    // Teachers
-    if (teachers !== undefined) {
-      if (teachers.length) {
-        teachers = await User
-          .query()
-          .whereIn('id', teachers)
-          .pluck('id')
-      }
-      course.teachers().sync(teachers)
-    }
-
-    course.merge(data)
-    await course.save()
+    const course = await CourseService.save(data)
 
     return course
   }

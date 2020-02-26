@@ -32,7 +32,12 @@ Route.group(() => {
   Route.resource('users', 'UserController').apiOnly()
   Route.resource('modules', 'ModuleController').apiOnly()
   Route.resource('categories', 'CategoryController').apiOnly()
-  Route.resource('courses', 'CourseController').apiOnly()
+  Route.resource('courses', 'CourseController')
+    .validator(new Map([
+      [['courses.store'], ['CourseStore']],
+      [['courses.update'], ['CourseUpdate']]
+    ]))
+    .apiOnly()
   Route.resource('lessons', 'LessonController').apiOnly()
 
 }).middleware(['auth'])

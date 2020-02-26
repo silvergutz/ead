@@ -100,7 +100,33 @@ test('get a course', async ({ client }) => {
   response.assertJSONSubset({...course.toJSON()})
 })
 
-test('update a course', async ({ client }) => {
+test('update a course sending cover', async ({ client }) => {
+  const userToAuth = await User.first()
+  const course = await Course.first()
+
+  const categories = await Category
+    .query()
+    .limit(2)
+    .pluck('id')
+
+  const teachers = await User
+    .query()
+    .where('is_teacher', true)
+    .limit(2)
+    .pluck('id')
+
+  const response = await client
+    .put(`/courses/${course.id}`)
+    .field('categories[]', categories)
+    .field('teachers[]', teachers)
+    .attach('cover', `${Helpers.appRoot()}/test/data/images/fake2.jpg`)
+    .loginVia(userToAuth, 'jwt')
+    .end()
+
+  response.assertStatus(200)
+})
+
+test('update a course not sending cover', async ({ client }) => {
   const userToAuth = await User.first()
   const course = await Course.first()
 
@@ -109,37 +135,26 @@ test('update a course', async ({ client }) => {
     .limit(3)
     .pluck('id')
 
-  const newCourseData = {
+  const teachers = await User
+    .query()
+    .where('is_teacher', true)
+    .limit(3)
+    .pluck('id')
+
+  const updatedCourseData = {
     name: 'updated name',
     description: 'updated desc',
-    cover: 'https://updated.cover.com',
     status: 'published',
   }
 
-  // School not found error
-  const responseError = await client
-    .put(`/courses/${course.id}`)
-    .send({school_id: 99999999999999999, ...newCourseData})
-    .loginVia(userToAuth, 'jwt')
-    .end()
-
-  responseError.assertStatus(400)
-  responseError.assertJSONSubset({
-    error: 'School not found'
-  })
-
-  const [ school_id ] = await School.query().limit(1).pluck('id')
-  newCourseData.school_id = school_id
-
-  // Correct updated
   const response = await client
     .put(`/courses/${course.id}`)
-    .send({ categories, ...newCourseData })
+    .send({ categories, teachers, ...updatedCourseData })
     .loginVia(userToAuth, 'jwt')
     .end()
 
   response.assertStatus(200)
-  response.assertJSONSubset(newCourseData)
+  response.assertJSONSubset(updatedCourseData)
 })
 
 test('delete a course', async ({ client }) => {

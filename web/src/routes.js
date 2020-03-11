@@ -19,6 +19,7 @@ import SchoolsSave from './pages/Schools/SchoolsSave';
 import CategoriesList from './pages/Categories/CategoriesList';
 import CategoriesSave from './pages/Categories/CategoriesSave';
 import CategoriesShow from './pages/Categories/CategoriesShow';
+import CoursesEdit from './pages/Courses/CoursesEdit';
 
 function Routes() {
   return (
@@ -38,7 +39,8 @@ function Routes() {
 
         <PrivateRoute path="/cursos" exact component={CoursesList} />
         <PrivateRoute path="/cursos/novo" exact component={CoursesSave} />
-        <PrivateRoute path="/cursos/:id" component={CoursesShow} />
+        <PrivateRoute path="/cursos/:id" exact component={CoursesShow} />
+        <PrivateRoute path="/cursos/:id/editar" component={CoursesEdit} />
 
         <PrivateRoute path="/alunos" exact component={UsersList} />
         <PrivateRoute path="/perfil" component={Profile} />

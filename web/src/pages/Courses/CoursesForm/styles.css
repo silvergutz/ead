@@ -1,0 +1,7 @@
+.current-cover img {
+  width: 350px;
+  max-width: 100%;
+}
+.current-cover .button {
+  background: #d01f1f;
+}

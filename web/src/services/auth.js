@@ -7,6 +7,7 @@ const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('
 const auth = {
   login,
   logout,
+  isAdmin,
   currentUser: currentUserSubject.asObservable(),
   get currentUserValue() { return currentUserSubject.value }
 };
@@ -23,7 +24,6 @@ function login(credentials) {
 
         return true;
       } else {
-        console.error(response.data);
         return response.data;
       }
     })
@@ -38,6 +38,15 @@ function logout() {
   // remove user from local storage to log user out
   localStorage.removeItem('currentUser');
   currentUserSubject.next(null);
+}
+
+function isAdmin() {
+  const user = auth.currentUserValue;
+  if (user && user.level === 'manager') {
+    return true;
+  }
+
+  return false;
 }
 
 export default auth;

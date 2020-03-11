@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { findCourse, embedVideo } from '../../../services/courses';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import './styles.css';
 import globalNotifications from '../../../services/globalNotifications';
+import auth from '../../../services/auth';
 
 function CoursesShow() {
   const { id } = useParams();
@@ -47,6 +48,13 @@ function CoursesShow() {
   return (
     <div className="CourseShow">
       <h1 className="page-title">{course.name}</h1>
+
+      {auth.isAdmin() &&
+        <Link className="course edit" to={`/cursos/${course.id}/editar`}>
+          <i className="mi">edit</i>
+          Editar
+        </Link>
+      }
 
       <div className="course-container">
         <div className="lesson-content" dangerouslySetInnerHTML={{ __html: video }} />

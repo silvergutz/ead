@@ -21,6 +21,9 @@ function ImgProtected(props) {
     }
   }
 
+  if (!url)
+    return '';
+
   return (
     <img {...props} src={url} onLoad={handleOnLoad} />
   )

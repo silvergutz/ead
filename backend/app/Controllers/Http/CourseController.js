@@ -80,6 +80,8 @@ class CourseController {
   async show ({ params, response }) {
     const course = await Course
       .query()
+      .with('categories')
+      .with('teachers')
       .with('modules')
       .with('modules.lessons')
       .limit(1)
@@ -107,6 +109,7 @@ class CourseController {
     const data = {
       courseData: request.only(['name', 'description', 'status']),
       coverFile: request.file('cover', coverRules),
+      removeCover: request.input('remove_cover', false),
       categories,
       teachers,
     }

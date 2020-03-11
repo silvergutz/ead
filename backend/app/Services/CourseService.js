@@ -11,7 +11,7 @@ const User = use('App/Models/User')
 class CourseService
 {
   static async save(data) {
-    let { courseData, coverFile, categories, teachers } = data
+    let { courseData, coverFile, removeCover, categories, teachers } = data
     let coverStoragePath = ''
     let course
 
@@ -33,6 +33,13 @@ class CourseService
         }
       }
 
+      // Remove current cover, if update
+      if (removeCover) {
+        console.log('removeCover');
+        courseData.cover = null;
+      }
+
+      // Process cover upload
       if (coverFile) {
         // Handle cover image upload
         const fileName = `${new Date().getTime()}.${coverFile.extname}`
@@ -68,11 +75,15 @@ class CourseService
         if (!Array.isArray(categories)) {
           categories = [categories];
         }
+        // passed vi FormData
+        if (typeof categories[0] === 'string') {
+          categories = JSON.parse(`[${categories[0]}]`)
+        }
         categories = await Category
           .query()
           .whereIn('id', categories)
           .pluck('id')
-        await course.categories().attach(categories)
+        await course.categories().sync(categories)
       }
 
       // Teachers
@@ -83,11 +94,14 @@ class CourseService
         if (!Array.isArray(teachers)) {
           teachers = [teachers];
         }
+        if (typeof teachers[0] === 'string') {
+          teachers = JSON.parse(`[${teachers[0]}]`)
+        }
         teachers = await User
           .query()
           .whereIn('id', teachers)
           .pluck('id')
-        await course.teachers().attach(teachers)
+        await course.teachers().sync(teachers)
       }
 
       return course

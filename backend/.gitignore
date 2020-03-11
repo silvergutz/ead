@@ -11,3 +11,5 @@ tmp
 database/*.sqlite
 
 storage/uploads
+public/*
+!public/.gitkeep

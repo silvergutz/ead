@@ -1,0 +1,14 @@
+.modules li {
+  list-style: none;
+  background-color: #c0c0c0;
+  border: 1px solid #f5f5f5;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.lessons li {
+  list-style: none;
+  background-color: #ccc;
+}

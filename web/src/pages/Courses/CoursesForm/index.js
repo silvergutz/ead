@@ -12,8 +12,7 @@ import Select from 'react-select';
 
 import './styles.css';
 
-function CoursesForm({ history, type, id }) {
-  const [ course, setCourse ] = useState({});
+function CoursesForm({ history, type, course, onCourseChange }) {
   const [ name, setName ] = useState('');
   const [ description, setDescription ] = useState('');
   const [ cover, setCover ] = useState(null);
@@ -65,33 +64,21 @@ function CoursesForm({ history, type, id }) {
   }, []);
 
   useEffect(() => {
-    async function loadCourse() {
-      if (type === 'update') {
-        const response = await findCourse(id);
-
-        if (response.error) {
-          const err = response.error.message || 'Ocorreu um erro ao buscar os dados do Curso';
-          globalNotifications.sendErrorMessage(err);
-        } else {
-          setCourse(response);
-          setName(response.name)
-          setDescription(response.description)
-          setSchoolId(response.school_id)
-          setCategories(response.categories.map(i => { return { value: i.id, label: i.name } }))
-          setTeachers(response.teachers.map(i => { return { value: i.id, label: i.name } }))
-          setStatus(response.status)
-        }
-      }
+    if (type === 'update' && course) {
+      setName(course.name)
+      setDescription(course.description)
+      setSchoolId(course.school_id)
+      setStatus(course.status)
+      course.categories && setCategories(course.categories.map(i => { return { value: i.id, label: i.name } }))
+      course.teachers && setTeachers(course.teachers.map(i => { return { value: i.id, label: i.name } }))
     }
-
-    loadCourse();
-  }, [id, type]);
+  }, [course, type]);
 
   useEffect(() => {
     async function updateRemoveCover() {
       if (!removeCover) return;
 
-      const response = await updateCourse(id, { remove_cover: true });
+      const response = await updateCourse(course.id, { remove_cover: true });
 
       if (response.error) {
         const err = response.error.message || 'Ocorreu um erro ao remover a imagem';
@@ -141,7 +128,7 @@ function CoursesForm({ history, type, id }) {
     }
 
     const response = (type === 'update') ?
-                      await updateCourse(id, data) :
+                      await updateCourse(course.id, data) :
                       await storeCourse(data);
 
     if (response.error) {
@@ -152,7 +139,7 @@ function CoursesForm({ history, type, id }) {
         history.push(`/cursos/${response.id}`);
       }
 
-      setCourse(response);
+      onCourseChange(response);
       setTempCover(null);
 
       globalNotifications.sendSuccessMessage('Dados gravados com sucesso');
@@ -172,7 +159,7 @@ function CoursesForm({ history, type, id }) {
   }
 
   async function handleRemoveCover() {
-    setCourse({ ...course, cover: null });
+    onCourseChange({ ...course, cover: null });
     setTempCover(null);
     setRemoveCover(true);
   }

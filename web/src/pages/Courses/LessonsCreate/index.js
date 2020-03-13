@@ -37,6 +37,10 @@ function LessonsCreate({ id, history, type, moduleObj, refreshModules }) {
     }
   }, [id]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id, moduleObj]);
+
   async function handleSubmit(e) {
     if (e) {
       e.preventDefault();
@@ -77,7 +81,7 @@ function LessonsCreate({ id, history, type, moduleObj, refreshModules }) {
         </h3>
       </hgroup>
 
-      <form onSubmit={handleSubmit} className="model-form content-box">
+      <form onSubmit={handleSubmit} className="model-form lesson-form">
         <div className="form-field">
           <label htmlFor="name">Nome:</label>
           <div className="field">
@@ -105,7 +109,7 @@ function LessonsCreate({ id, history, type, moduleObj, refreshModules }) {
             </select>
           </div>
         </div>
-        <div className="form-field">
+        <div className="form-field submit">
           <button type="submit">Gravar</button>
         </div>
       </form>

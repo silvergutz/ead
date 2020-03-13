@@ -61,6 +61,11 @@ function CoursesList() {
       <section>
         <h1 className="section-title">Treinamentos em andamento</h1>
 
+        <Link to="/cursos/novo" className="add-course button center-content">
+          Adicionar Curso
+          <i className="mi">add_circle_outline</i>
+        </Link>
+
         <Slider {...sliderSettings} className="courses">
           {courses.map(course => (
             <div key={course.id} className={`Course ${course.status}`}>

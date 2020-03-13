@@ -172,7 +172,7 @@ function CoursesForm({ history, type, course, onCourseChange }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="model-form content-box">
+    <form onSubmit={handleSubmit} className="model-form">
       <div className="form-field">
         <label htmlFor="name">Nome:</label>
         <div className="field">
@@ -260,7 +260,7 @@ function CoursesForm({ history, type, course, onCourseChange }) {
           </select>
         </div>
       </div>
-      <div className="form-field">
+      <div className="form-field submit">
         <button type="submit">Gravar</button>
       </div>
     </form>

@@ -46,34 +46,45 @@ function ModulesList({ course }) {
 
   return (
     <div className="ModulesList">
-      <div className="lesson">
-        {(activeLessonForm) &&
+      <div className="current-lesson">
+        {activeLessonForm &&
           <LessonsCreate moduleObj={currentModule} id={currentLesson ? currentLesson.id : null} type={lessonUpdate ? 'update' : 'create'} refreshModules={loadModules} />
         }
+        {!activeLessonForm &&
+          <div className="lesson-select-info">
+            Use a lista ao lado para editar ou criar uma nova aula
+          </div>
+        }
       </div>
-      <ul className="modules">
-        {modules.map(obj => (
-          <li key={obj.id} className="module">
-            <ModulesCreate course={course} obj={obj}>
-              {obj.lessons.length > 0 &&
-                <ul className="lessons">
-                  {obj.lessons.map(lesson => (
-                    <li key={lesson.id} className="lesson">
-                      {lesson.name}
-                      <button className="mi button" onClick={e => handleEditLesson(obj, lesson)}>edit</button>
-                    </li>
-                  ))}
-                </ul>
-              }
-              <button className="create-lesson mi" onClick={e => handleAddLesson(obj)}>add_circle_outline</button>
-            </ModulesCreate>
+      <div className="modules-wraper">
+        <ul className="modules">
+          <li className="module new-module">
+            <div className="new-module-title">Novo módulo</div>
+            <ModulesCreate course={course} />
           </li>
-        ))}
-
-        <li className="module new-module">
-          <ModulesCreate course={course} />
-        </li>
-      </ul>
+          {modules.map(obj => (
+            <li key={obj.id} className="module">
+              <ModulesCreate course={course} obj={obj}>
+                {obj.lessons.length > 0 &&
+                  <ul className="lessons">
+                    {obj.lessons.map(lesson => (
+                      <li key={lesson.id} className="lesson">
+                        {lesson.name}
+                        <button className="mi edit" onClick={e => handleEditLesson(obj, lesson)}>edit</button>
+                      </li>
+                    ))}
+                  </ul>
+                }
+                <div className="create-lesson">
+                  <button onClick={e => handleAddLesson(obj)}>
+                    Adicionar Aula <i className="mi">add_circle_outline</i>
+                  </button>
+                </div>
+              </ModulesCreate>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

@@ -50,7 +50,7 @@ function CoursesShow() {
       <h1 className="page-title">{course.name}</h1>
 
       {auth.isAdmin() &&
-        <Link className="course edit" to={`/cursos/${course.id}/editar`}>
+        <Link className="course edit button center-content" to={`/cursos/${course.id}/editar`}>
           <i className="mi">edit</i>
           Editar
         </Link>

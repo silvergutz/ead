@@ -35,7 +35,6 @@ class CourseService
 
       // Remove current cover, if update
       if (removeCover) {
-        console.log('removeCover');
         courseData.cover = null;
       }
 

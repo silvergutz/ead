@@ -4,14 +4,8 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-const Helpers = use('Helpers')
-const Drive = use('Drive')
-
 const CourseService = use('App/Services/CourseService')
 const Course = use('App/Models/Course')
-const School = use('App/Models/School')
-const Category = use('App/Models/Category')
-const User = use('App/Models/User')
 
 const coverRules = {
   types: ['image'],

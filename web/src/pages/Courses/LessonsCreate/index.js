@@ -46,12 +46,17 @@ function LessonsCreate({ id, history, type, moduleObj, refreshModules }) {
       e.preventDefault();
     }
 
+    // Clean error messages
+    const errorsElms = document.querySelectorAll('form .error')
+    if (errorsElms)
+      errorsElms.forEach(elm => elm.classList.remove('error'));
+
     const data = {
       module_id: moduleObj.id,
       name,
       description,
       video,
-      status,
+      status: status || 'draft',
     };
 
     const response = type === 'update' ?
@@ -59,14 +64,33 @@ function LessonsCreate({ id, history, type, moduleObj, refreshModules }) {
                       await storeLesson(data);
 
     if (response.error) {
-      globalNotifications.sendErrorMessage('Não foi possível gravar os dados');
-      console.error(response.error);
+      let errorMessage = '';
+      if (response.errors) {
+        errorMessage = 'Alguns campos não foram preenchidos corretamente:<br>';
+        errorMessage += '<ul>';
+        response.errors.map(e => {
+          errorMessage += `<li>${e.detail}</li>`;
+          if (e.source.pointer) {
+            document.getElementById(e.source.pointer).classList.add('error');
+          }
+        });
+        errorMessage += '</ul>';
+      } else {
+        errorMessage = 'Não foi possível gravar os dados da aula';
+      }
+      globalNotifications.sendErrorMessage(errorMessage);
     } else {
       if (type === 'update') {
         setLesson(response);
       }
 
-      refreshModules();
+      refreshModules(response);
+
+      setLesson(response);
+      setName(response.name);
+      setDescription(response.description || '');
+      setVideo(response.video || '');
+      setStatus(response.status);
 
       globalNotifications.sendSuccessMessage('Dados gravados com sucesso');
     }

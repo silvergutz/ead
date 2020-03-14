@@ -76,6 +76,11 @@ a.mi:hover {
   color: #f00;
   margin-bottom: 2rem;
 }
+input.error, select.error, textarea.error, select.error {
+  border-color: #f00 !important;
+  margin-bottom: inherit;
+  text-align: left;
+}
 button.link {
   background: none;
   border: 0;

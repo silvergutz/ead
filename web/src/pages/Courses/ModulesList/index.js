@@ -18,7 +18,7 @@ function ModulesList({ course }) {
     loadModules();
   }, [course]);
 
-  async function loadModules(newModule) {
+  async function loadModules(focusLesson) {
     if (course.id) {
       const response = await getModules(course.id);
 
@@ -28,8 +28,13 @@ function ModulesList({ course }) {
         setModules(response);
 
         // Active Lesson Form to add new lesson to pretty new Module
-        if (newModule) {
-          handleAddLesson(response[response.length-1]);
+        if (focusLesson) {
+          console.log(focusLesson);
+          if (focusLesson === true) {
+            handleAddLesson(response[response.length-1]);
+          } else {
+            handleEditLesson(currentModule, focusLesson);
+          }
         }
       }
     }

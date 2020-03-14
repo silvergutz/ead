@@ -22,6 +22,12 @@ body, input, textarea, button {
   font-size: 16px;
   color: #222;
 }
+button {
+  border-radius: 5px;
+  border: 1px solid #999;
+  background: #f5f5f5;
+  padding: .25em;
+}
 a {
   text-decoration: none;
 }
@@ -205,8 +211,18 @@ button {
   padding: 1rem;
 }
 
-.edit {
+button.small {
   font-size: 16px;
+}
+button.remove {
+  background: #ff2c2c;
+  border: 1px solid #a62121;
+  color: #fff;
+}
+button.send {
+  background: #1c78b6;
+  border: 1px solid #365772;
+  color: #fff;
 }
 .center-content {
   display: flex;

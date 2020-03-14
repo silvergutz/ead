@@ -77,3 +77,6 @@
   list-style: none;
   background-color: #ccc;
 }
+.button-group button {
+  margin-left: .2rem;
+}

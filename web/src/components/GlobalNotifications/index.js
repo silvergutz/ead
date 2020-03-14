@@ -23,8 +23,6 @@ function GlobalNotifications() {
       return;
     }
 
-    console.log(message);
-
     setNotifications([ ...notifications, message ]);
 
     if (message.autoClose) {
@@ -43,7 +41,7 @@ function GlobalNotifications() {
       <div className="notifications">
         {notifications.map(message => (
           <div key={message.id} className={'message ' + message.type}>
-            <span>{message.content}</span>
+            <span dangerouslySetInnerHTML={{ __html: message.content }}></span>
             <button className="close link" onClick={e => dismissMessage(message)}>x</button>
           </div>
         ))}

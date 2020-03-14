@@ -176,7 +176,7 @@ function CoursesForm({ history, type, course, onCourseChange }) {
       <div className="form-field">
         <label htmlFor="name">Nome:</label>
         <div className="field">
-          <input id="name" type="text" value={name} onChange={e => setName(e.target.value)} />
+          <textarea id="name" value={name} onChange={e => setName(e.target.value)} />
         </div>
       </div>
       <div className="form-field">

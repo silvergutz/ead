@@ -4,7 +4,7 @@ import { storeModule, updateModule } from '../../../services/modules';
 import { globalNotifications } from '../../../services';
 import { withRouter } from 'react-router-dom';
 
-function ModulesCreate({ history, course, obj, children }) {
+function ModulesCreate({ history, course, obj, refreshModules, children }) {
   const [ moduleObj, setModuleObj ] = useState({});
   const [ isEditingName, setIsEditingName ] = useState(true);
   const [ moduleName, setModuleName ] = useState('');
@@ -37,9 +37,16 @@ function ModulesCreate({ history, course, obj, children }) {
       const err = response.error.message || 'Ocorreu um error ao carregar as lojas';
       globalNotifications.sendErrorMessage(err);
     } else {
-      window.location = `/cursos/${course.id}/editar?tab=modulos`;
-      setIsEditingName(false);
-      setModuleObj(response);
+      if (!moduleObj.id) {
+        globalNotifications.sendSuccessMessage('Novo módulo cadastrado');
+        refreshModules(true);
+        setModuleName('');
+        // window.location = `/cursos/${course.id}/editar?tab=modulos`;
+      } else {
+        globalNotifications.sendSuccessMessage('Dados gravados com sucesso');
+        setIsEditingName(false);
+        setModuleObj(response);
+      }
     }
   }
 
@@ -51,13 +58,7 @@ function ModulesCreate({ history, course, obj, children }) {
           <button className="mi edit" onClick={e => setIsEditingName(true)}>edit</button>
         </div>
       }
-      {(isEditingName && !moduleObj) &&
-        <div className="module-form">
-          <input type="text" name="name" value={moduleName} onChange={e => setModuleName(e.target.value)} />
-          <button className="mi" onClick={handleSubmit}>done</button>
-        </div>
-      }
-      {(isEditingName && moduleObj) &&
+      {(isEditingName) &&
         <div className="module-form">
           <input type="text" name="name" value={moduleName} onChange={e => setModuleName(e.target.value)} />
           <button className="mi" onClick={handleSubmit}>done</button>

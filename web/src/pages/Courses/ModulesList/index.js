@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { getModules, findModule } from '../../../services/modules';
+import { getModules } from '../../../services/modules';
 import { globalNotifications } from '../../../services';
 import ModulesCreate from '../ModulesCreate';
 import LessonsCreate from '../LessonsCreate';
@@ -18,7 +18,7 @@ function ModulesList({ course }) {
     loadModules();
   }, [course]);
 
-  async function loadModules() {
+  async function loadModules(newModule) {
     if (course.id) {
       const response = await getModules(course.id);
 
@@ -26,6 +26,11 @@ function ModulesList({ course }) {
         globalNotifications.sendErrorMessage('Não foi possível carregar os módulos');
       } else {
         setModules(response);
+
+        // Active Lesson Form to add new lesson to pretty new Module
+        if (newModule) {
+          handleAddLesson(response[response.length-1]);
+        }
       }
     }
   }
@@ -60,7 +65,7 @@ function ModulesList({ course }) {
         <ul className="modules">
           <li className="module new-module">
             <div className="new-module-title">Novo módulo</div>
-            <ModulesCreate course={course} />
+            <ModulesCreate course={course} refreshModules={loadModules} />
           </li>
           {modules.map(obj => (
             <li key={obj.id} className="module">

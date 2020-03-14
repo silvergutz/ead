@@ -1,0 +1,13 @@
+.ModulesCreate .module-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding: .25rem .5rem;
+}
+.ModulesCreate .module-form input {
+  flex: 1;
+}
+.ModulesCreate .module-form button {
+  margin-left: .2rem;
+}

@@ -6,6 +6,7 @@ import ModulesCreate from '../ModulesCreate';
 import LessonsCreate from '../LessonsCreate';
 
 import './styles.css';
+import { deleteLesson } from '../../../services/lessons';
 
 function ModulesList({ course }) {
   const [ modules, setModules ] = useState([]);
@@ -54,6 +55,19 @@ function ModulesList({ course }) {
     setActiveLessonForm(true);
   }
 
+  async function handleDestroyLesson(lesson) {
+    if (window.confirm('Tem certeza que deseja excluir esta aula?')) {
+      const response = await deleteLesson(lesson.id);
+
+      if (response.error) {
+        globalNotifications.sendErrorMessage('Não foi possível excluir a aula');
+      } else {
+        globalNotifications.sendSuccessMessage('Aula excluido com sucesso');
+        loadModules();
+      }
+    }
+  }
+
   return (
     <div className="ModulesList">
       <div className="current-lesson">
@@ -74,13 +88,16 @@ function ModulesList({ course }) {
           </li>
           {modules.map(obj => (
             <li key={obj.id} className="module">
-              <ModulesCreate course={course} obj={obj}>
-                {obj.lessons.length > 0 &&
+              <ModulesCreate course={course} obj={obj} refreshModules={loadModules}>
+                {(obj.lessons && obj.lessons.length) > 0 &&
                   <ul className="lessons">
                     {obj.lessons.map(lesson => (
                       <li key={lesson.id} className="lesson">
                         {lesson.name}
-                        <button className="mi edit" onClick={e => handleEditLesson(obj, lesson)}>edit</button>
+                        <div className="button-group">
+                          <button className="mi small edit" onClick={e => handleEditLesson(obj, lesson)}>edit</button>
+                          <button className="mi small remove" onClick={e => handleDestroyLesson(lesson)}>delete</button>
+                        </div>
                       </li>
                     ))}
                   </ul>

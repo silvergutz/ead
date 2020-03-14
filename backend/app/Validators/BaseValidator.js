@@ -1,6 +1,8 @@
 'use strict'
 
 const { formatters } = use('Validator')
+const Logger = use('Logger');
+const Antl = use('Antl');
 
 class BaseValidator {
   get validateAll () {
@@ -14,6 +16,13 @@ class BaseValidator {
 
   get formatter () {
     return formatters.JsonApi
+  }
+
+  get messages() {
+    return {
+      "name.required": Antl.formatMessage('validations.required', {field: 'nome'}),
+      "status.required": Antl.formatMessage('validations.required', {field: 'status'})
+    }
   }
 }
 

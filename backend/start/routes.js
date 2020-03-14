@@ -38,6 +38,11 @@ Route.group(() => {
       [['courses.update'], ['CourseUpdate']]
     ]))
     .apiOnly()
-  Route.resource('lessons', 'LessonController').apiOnly()
+  Route.resource('lessons', 'LessonController')
+    .validator(new Map([
+      [['lessons.store'], ['LessonStore']],
+      [['lessons.update'], ['LessonUpdate']]
+    ]))
+    .apiOnly()
 
 }).middleware(['auth'])

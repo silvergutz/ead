@@ -29,7 +29,12 @@ Route.group(() => {
   Route.get('download', 'UploadController.download').as('download')
 
   Route.resource('schools', 'SchoolController').apiOnly()
-  Route.resource('users', 'UserController').apiOnly()
+  Route.resource('users', 'UserController')
+    .validator(new Map([
+      [['users.store'], ['UserStore']],
+      [['users.update'], ['UserUpdate']]
+    ]))
+    .apiOnly()
   Route.resource('modules', 'ModuleController').apiOnly()
   Route.resource('categories', 'CategoryController').apiOnly()
   Route.resource('courses', 'CourseController')

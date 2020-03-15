@@ -17,7 +17,10 @@ export function setupErrorMessages(errors) {
     errors.map(e => {
       errorMessage += `<li>${e.detail}</li>`;
       if (e.source.pointer) {
-        document.getElementById(e.source.pointer).classList.add('error');
+        const elm = document.getElementById(e.source.pointer);
+        if (elm) {
+          elm.classList.add('error');
+        }
       }
     });
     errorMessage += '</ul>';

@@ -18,6 +18,7 @@
   text-align: center;
 }
 .profile-content .profile-photo figure {
+  display: flex;
   background: #c8c8c8;
   width: 100px;
   height: 100px;

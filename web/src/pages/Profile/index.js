@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import Dropzone from 'react-dropzone';
+import ImgProtected from '../../components/ImgProtected';
 
 import { showProfile, updateProfile } from '../../services/profile';
 import { auth } from '../../services';
@@ -12,9 +14,9 @@ function Profile() {
   const [ name, setName ] = useState('');
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
-  const [ photo, setPhoto ] = useState('');
+
+  const [ tempPhoto, setTempPhoto ] = useState('');
   const [ isUpdating, setIsUpdating ] = useState({ name: false, email: false, password: false });
-  const currentUser = auth.currentUserValue;
   const fields = ['name','email','password'];
 
   useEffect(() => {
@@ -71,16 +73,78 @@ function Profile() {
     }
   }
 
+  async function handleFileDrop(acceptedFiles) {
+    if (acceptedFiles.length) {
+      var reader = new FileReader();
+      reader.onload = (e) => {
+        setTempPhoto(e.target.result);
+      };
+      reader.readAsDataURL(acceptedFiles[0]);
+
+      clearErrors();
+
+      const data = new FormData();
+      data.append('photo', acceptedFiles[0]);
+      const response = await updateProfile(data);
+
+      if (response.error) {
+        setupErrorMessages(response.errors);
+      } else {
+        globalNotifications.sendSuccessMessage('Foto alterada com sucesso');
+        setUser(response);
+        setTempPhoto(null);
+        auth.refreshUserData();
+      }
+    }
+  }
+
+  async function handleRemovePhoto() {
+    setTempPhoto(null);
+
+    const response = await updateProfile({ remove_photo: true });
+
+    if (response.error) {
+      setupErrorMessages(response.errors);
+    } else {
+      globalNotifications.sendSuccessMessage('Foto removida');
+      setUser(response);
+      auth.refreshUserData();
+    }
+  }
+
   return (
     <div className="Profile">
       <h1 className="page-title">Meus Dados</h1>
 
       <div className="profile-content">
         <div className="profile-photo">
-          <figure>
-            <img src={user.photo} alt="" />
-          </figure>
-          <button className="edit-photo link">editar foto</button>
+          {(user.photo || tempPhoto) &&
+            <div className="photo-field">
+              <figure className="current-photo field">
+                {(!tempPhoto && user.photo) &&
+                  <ImgProtected file={user.photo} />
+                }
+                {(tempPhoto && !user.photo) &&
+                  <img src={tempPhoto} alt="" />
+                }
+              </figure>
+              <div className="edit-photo link" onClick={handleRemovePhoto}>remover foto</div>
+            </div>
+          }
+          {(!user.photo && !tempPhoto) &&
+            <div className="photo-field upload-field field">
+              <Dropzone onDrop={handleFileDrop}>
+                {({getRootProps, getInputProps}) => (
+                  <section>
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      <p>Arraste e solte um arquivo aqui, ou clique pare selecionar</p>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
+            </div>
+          }
         </div>
         <div className="profile-details">
           <div className="profile-name">

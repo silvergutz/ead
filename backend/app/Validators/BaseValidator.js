@@ -28,7 +28,13 @@ class BaseValidator {
       "lesson_id.required": Antl.formatMessage('validations.required', {field: 'aula'}),
       "level.required": Antl.formatMessage('validations.required', {field: 'nível'}),
       "is_teacher.required": Antl.formatMessage('validations.required', {field: 'professor'}),
-      "status.required": Antl.formatMessage('validations.required', {field: 'status'})
+      "status.required": Antl.formatMessage('validations.required', {field: 'status'}),
+      "password.required": Antl.formatMessage('validations.required', {field: 'senha'}),
+
+      "password.min": Antl.formatMessage('validations.min', {field: 'senha', length: 6}),
+      "password.max": Antl.formatMessage('validations.max', {field: 'senha', length: 30}),
+
+      "email.email": Antl.formatMessage('validations.email', {field: 'e-mail'}),
     }
   }
 }

@@ -49,12 +49,15 @@
   font-size: 15px;
 }
 .Header .user-photo {
+  display: flex;
+  align-content: center;
+  justify-content: center;
   margin-right: 1rem;
+  width: 60px;
+  height: 60px;
 }
 .Header .user-photo img {
-  border-radius: 50%;
-  border: 1px solid #fff;
-  width: 60px;
+  max-width: 100%;
 }
 .Header .user-name {
   margin-right: .5em;

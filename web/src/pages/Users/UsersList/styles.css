@@ -23,12 +23,21 @@
   margin: 1rem 0;
 }
 
-.UsersList .User .user-cover {
+.UsersList .User .user-photo {
   flex: 0 1 90px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.user-cover img {
+.user-photo  {
+  width: 90px;
+  height: 90px;
+  overflow: hidden;
   border-radius: 50%;
+  border: 1px solid #c5c5c5;
+}
+.user-photo img {
   max-width: 100%;
 }
 
@@ -48,5 +57,9 @@
 }
 
 .UsersList .User .user-progress {
-  flex: 0 1 30%;
+  flex: 0 1 auto;
+}
+.UsersList .User .button-group {
+  margin-bottom: 0.5rem;
+  text-align: right;
 }

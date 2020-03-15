@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 import './styles.css';
 import ProgressBar from '../../../components/ProgressBar';
-import { getUsers } from '../../../services/users';
+import { getUsers, deleteUser } from '../../../services/users';
 import { globalNotifications } from '../../../services';
+import { Link } from 'react-router-dom';
+import ImgProtected from '../../../components/ImgProtected';
 
 function UsersList() {
   const [ users, setUsers ] = useState([]);
-  const [ filteredUsers, setFilteredUsers ] = useState([]);
   const [ searchTerm, setSearchTerm ] = useState('');
 
   useEffect(() => {
@@ -15,21 +16,8 @@ function UsersList() {
   }, []);
 
   useEffect(() => {
-    filterUsers();
+    loadUsers();
   }, [searchTerm]);
-
-  function filterUsers() {
-    if (searchTerm === '') {
-      setFilteredUsers(users);
-    } else {
-      const filteredUsers = users.filter(user => {
-        const regex = new RegExp(searchTerm, 'gi');
-        return user.name.search(regex) >= 0;
-      });
-
-      setFilteredUsers(filteredUsers);
-    }
-  }
 
   async function loadUsers() {
     globalNotifications.clearMessages();
@@ -38,9 +26,22 @@ function UsersList() {
 
     if (response.errors) {
       globalNotifications.sendErrorMessage(response.error);
+      setUsers([]);
     } else {
       setUsers(response);
-      setFilteredUsers(response);
+    }
+  }
+
+  async function handleDestroyUser(user) {
+    if (window.confirm('Tem certeza que deseja excluir este usuário?')) {
+      const response = await deleteUser(user.id);
+
+      if (response.error) {
+        globalNotifications.sendErrorMessage('Não foi possível excluir o usuário');
+      } else {
+        globalNotifications.sendSuccessMessage('Aluno excluido com sucesso');
+        loadUsers();
+      }
     }
   }
 
@@ -52,11 +53,21 @@ function UsersList() {
         <input className="search-input" onChange={e => setSearchTerm(e.target.value)} value={searchTerm} type="search" placeholder="Buscar nome do aluno" />
       </div>
 
+      <Link to="/alunos/novo" className="add-user button center-content">
+        Adicionar Aluno
+        <i className="mi">add_circle_outline</i>
+      </Link>
+
       <div className="users">
-        {filteredUsers.map(user => (
+        {users.map(user => (
           <div key={user.id} className="User">
-            <div className="user-cover">
-              <img src={user.cover} alt={user.name} />
+            <div className="user-photo">
+              {user.photo &&
+                <ImgProtected file={user.photo} alt={user.name} />
+              }
+              {!user.photo &&
+                <img src="/images/default-user-photo.png" alt="" />
+              }
             </div>
             <div className="user-details">
               <div className="user-name">{user.name}</div>
@@ -73,7 +84,17 @@ function UsersList() {
                 <div className="value">aula 4, aula 5</div>
               </div>
             </div>
-            <ProgressBar className="user-progress" progress="70" />
+            <div className="user-progress">
+              <div className="button-group">
+                <Link to={`/alunos/${user.id}/editar`} className="edit-user edit button small mi">
+                  edit
+                </Link>
+                <button className="remove-user remove button small mi" onClick={e => handleDestroyUser(user)}>
+                  delete
+                </button>
+              </div>
+              <ProgressBar className="user-progress-bar" progress="70" />
+            </div>
           </div>
         ))}
       </div>

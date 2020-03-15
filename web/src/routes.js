@@ -10,6 +10,7 @@ import CoursesShow from './pages/Courses/CoursesShow';
 import CoursesSave from './pages/Courses/CoursesSave';
 
 import UsersList from './pages/Users/UsersList';
+import UsersSave from './pages/Users/UsersSave';
 import Profile from './pages/Profile';
 
 import SchoolsList from './pages/Schools/SchoolsList';
@@ -43,6 +44,8 @@ function Routes() {
         <PrivateRoute path="/cursos/:id/editar" component={CoursesEdit} />
 
         <PrivateRoute path="/alunos" exact component={UsersList} />
+        <PrivateRoute path="/alunos/novo" exact component={UsersSave} />
+        <PrivateRoute path="/alunos/:id/editar" exact component={UsersSave} />
         <PrivateRoute path="/perfil" component={Profile} />
 
         <Route path="*" component={() => <h1 className="page-title">Página não encontrada</h1>} />

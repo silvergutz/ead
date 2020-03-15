@@ -1,6 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 
 import api from './api';
+import { findUser } from './users';
 
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 
@@ -8,6 +9,7 @@ const auth = {
   login,
   logout,
   isAdmin,
+  refreshUserData,
   currentUser: currentUserSubject.asObservable(),
   get currentUserValue() { return currentUserSubject.value }
 };
@@ -47,6 +49,18 @@ function isAdmin() {
   }
 
   return false;
+}
+
+async function refreshUserData() {
+  const response = await findUser(auth.currentUserValue.id);
+
+  if (!response.error) {
+    const newUserInfos = { ...response, token: auth.currentUserValue.token };
+    localStorage.setItem('currentUser', JSON.stringify(newUserInfos));
+    currentUserSubject.next(newUserInfos);
+  }
+
+  return true;
 }
 
 export default auth;

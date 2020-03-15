@@ -2,6 +2,7 @@ import React from 'react';
 
 import './styles.css';
 import { Link, withRouter } from 'react-router-dom';
+import ImgProtected from '../ImgProtected';
 
 function Header({ logout, currentUser }) {
   if (!currentUser) return null;
@@ -27,7 +28,12 @@ function Header({ logout, currentUser }) {
       {currentUser &&
         <div className="user">
           <div className="user-photo">
-            <img src={currentUser.photo} alt="" />
+            {currentUser.photo &&
+              <ImgProtected file={currentUser.photo} alt={currentUser.name} />
+            }
+            {!currentUser.photo &&
+              <img src="/images/default-user-photo.png" alt="" />
+            }
           </div>
           <div className="user-name">
             Olá, <span className="name">{currentUser.name}</span>

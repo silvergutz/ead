@@ -191,11 +191,15 @@ button {
   margin-top: 2rem;
   cursor: pointer;
 }
-.model-form input, .model-form textarea {
+.model-form input, .model-form select, .model-form textarea {
+  background-color: #fff;
   border-radius: 5px;
   border: 1px solid #7f7f7f;
   padding: .25em .5em;
   min-width: 20em;
+}
+.model-form select {
+  min-width: 21.9em;
 }
 .model-form textarea {
   height: 7.5em;
@@ -211,15 +215,21 @@ button {
   padding: 1rem;
 }
 
-button.small {
+button.small, .button.small {
   font-size: 16px;
+  padding: .5em;
 }
-button.remove {
+button.edit, .button.edit {
+  background: #e7e7e7;
+  border: 1px solid #979797;
+  color: rgb(0, 0, 0);
+}
+button.remove, .button.remove {
   background: #ff2c2c;
   border: 1px solid #a62121;
   color: #fff;
 }
-button.send {
+button.send, .button.send {
   background: #1c78b6;
   border: 1px solid #365772;
   color: #fff;
@@ -230,6 +240,9 @@ button.send {
   align-items: center;
 }
 
+.button {
+  cursor: pointer;
+}
 .button i {
   margin-left: .5em;
 }

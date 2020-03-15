@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { findUser, updateUser } from '../../services/users';
+
+import { showProfile, updateProfile } from '../../services/profile';
 import { auth } from '../../services';
 import { globalNotifications } from '../../services';
+import { clearErrors, setupErrorMessages } from '../../helpers/handleFormFieldsError';
 
 import './styles.css';
 
@@ -10,13 +12,14 @@ function Profile() {
   const [ name, setName ] = useState('');
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
+  const [ photo, setPhoto ] = useState('');
   const [ isUpdating, setIsUpdating ] = useState({ name: false, email: false, password: false });
   const currentUser = auth.currentUserValue;
   const fields = ['name','email','password'];
 
   useEffect(() => {
     async function loadProfile() {
-      const response = await findUser(currentUser.id);
+      const response = await showProfile();
 
       globalNotifications.clearMessages();
 
@@ -41,22 +44,31 @@ function Profile() {
 
   async function handleUpdate(field) {
     let data = {};
+    let updated = true;
+
     if (fields.indexOf(field) > -1) {
       data[field] = eval(field);
       if (data[field] !== eval(`user.${field}`)) {
-        const response = await updateUser(currentUser.id, data);
+        clearErrors();
+
+        const response = await updateProfile(data);
 
         if (response.error) {
-          globalNotifications.sendErrorMessage(response.error.message);
+          setupErrorMessages(response.errors);
+          updated = false;
         } else {
+          globalNotifications.sendSuccessMessage('Dados gravados com sucesso');
           setUser(response);
+          auth.refreshUserData();
         }
       }
     }
 
-    const currentIsUpdating = {...isUpdating};
-    currentIsUpdating[field] = false;
-    setIsUpdating(currentIsUpdating);
+    if (updated) {
+      const currentIsUpdating = {...isUpdating};
+      currentIsUpdating[field] = false;
+      setIsUpdating(currentIsUpdating);
+    }
   }
 
   return (
@@ -80,7 +92,7 @@ function Profile() {
             }
             {isUpdating.name &&
               <>
-                <input type="text" name="name" value={name} onChange={e => setName(e.target.value)} />
+                <input id="name" type="text" name="name" value={name} onChange={e => setName(e.target.value)} onKeyUp={e => e.which === 13 ? handleUpdate('name') : null} />
                 <button className="confirm-edit-name link" onClick={e => handleUpdate('name')}>(gravar)</button>
               </>
             }
@@ -94,7 +106,7 @@ function Profile() {
             }
             {isUpdating.email &&
               <>
-                <input type="email" name="email" value={email} onChange={e => setEmail(e.target.value)} />
+                <input id="email" type="email" name="email" value={email} onChange={e => setEmail(e.target.value)} onKeyUp={e => e.which === 13 ? handleUpdate('email') : null} />
                 <button className="confirm-edit-email link" onClick={e => handleUpdate('email')}>(gravar)</button>
               </>
             }
@@ -108,7 +120,7 @@ function Profile() {
             }
             {isUpdating.password &&
               <>
-                <input type="password" name="password" onChange={e => setPassword(e.target.value)} />
+                <input id="password" type="password" name="password" onChange={e => setPassword(e.target.value)} onKeyUp={e => e.which === 13 ? handleUpdate('password') : null} />
                 <button className="confirm-edit-email link" onClick={e => handleUpdate('password')}>(gravar)</button>
               </>
             }

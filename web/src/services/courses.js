@@ -54,10 +54,17 @@ export async function deleteCourse(id) {
 
 export async function embedVideo(video) {
   try {
-    const response = await axios.get(`https://vimeo.com/api/oembed.json?url=${video}`);
+    if (video.indexOf('vimeo.com') >= 0) {
+      const response = await axios.get(`https://vimeo.com/api/oembed.json?url=${video}`);
 
-    if (response.data && response.data.html) {
-      return response.data.html;
+      if (response.data && response.data.html) {
+        return response.data.html;
+      }
+    } else {
+      if (video.indexOf('youtube.com/watch') >= 0) {
+        video = video.replace('watch?v=', 'embed/');
+      }
+      return `<iframe width="640" height="580" src="${video}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     }
   } catch(e) {
     console.error(e);

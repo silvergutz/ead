@@ -1,4 +1,6 @@
 import axios from 'axios';
+import * as moment from 'moment';
+
 import { api } from '../services';
 import { handleError } from '../helpers';
 
@@ -50,6 +52,24 @@ export async function deleteCourse(id) {
   } catch(e) {
     return handleError(e);
   }
+}
+
+export function calcDuration(lessons) {
+  const duration = lessons.reduce((accumulator, current) => {
+    let time = moment.duration(current.duration).asSeconds();
+    return accumulator + time;
+  }, 0);
+
+  const dateTime = moment.duration(duration, 'seconds');
+
+  let hours = String((dateTime.days() * 24) + dateTime.hours()).substr(-2);
+  if (hours.length === 1)
+    hours = '0' + hours;
+
+  const minutes = ('0' + dateTime.minutes()).substr(-2);
+  const seconds = ('0' + dateTime.seconds()).substr(-2);
+
+  return hours + ':' + minutes + ':' + seconds;
 }
 
 export async function embedVideo(video) {

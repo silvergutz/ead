@@ -25,6 +25,30 @@
   align-items: center;
   height: 100%;
 }
+.menu > ul > li {
+  position: relative;
+}
+.menu li > ul {
+  position: absolute;
+  top: 2.2rem;
+  display: none;
+  z-index: 2;
+}
+.menu li:hover > ul {
+  display: block;
+}
+.menu li ul li {
+  background-color: #969696;
+  border-radius: 0;
+  display: block;
+}
+.menu li ul li a {
+  border: none;
+}
+.menu li ul li a:hover {
+  border: none;
+}
+
 .menu ul li {
   list-style: none;
   border-radius: 3px;

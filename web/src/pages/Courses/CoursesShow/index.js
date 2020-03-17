@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { findCourse, embedVideo } from '../../../services/courses';
 import { useParams, Link } from 'react-router-dom';
 
-import './styles.css';
 import globalNotifications from '../../../services/globalNotifications';
 import auth from '../../../services/auth';
+
+import './styles.css';
 
 function CoursesShow() {
   const { id } = useParams();
@@ -50,7 +51,7 @@ function CoursesShow() {
       <h1 className="page-title">{course.name}</h1>
 
       {auth.isAdmin() &&
-        <Link className="course edit button center-content" to={`/cursos/${course.id}/editar`}>
+        <Link className="course edit button center-content" to={`/admin/cursos/${course.id}/editar`}>
           <i className="mi">edit</i>
           Editar
         </Link>

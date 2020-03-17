@@ -1,8 +1,10 @@
 import React from 'react';
+import { Link, withRouter } from 'react-router-dom';
+
+import { auth } from '../../services';
+import ImgProtected from '../ImgProtected';
 
 import './styles.css';
-import { Link, withRouter } from 'react-router-dom';
-import ImgProtected from '../ImgProtected';
 
 function Header({ logout, currentUser }) {
   if (!currentUser) return null;
@@ -13,11 +15,27 @@ function Header({ logout, currentUser }) {
 
       <nav className="menu">
         <ul>
+          {auth.isAdmin() &&
+            <li>
+              <span>Admin</span>
+              <ul>
+                <li className="nav-item">
+                  <Link to={'/admin/lojas'}>Lojas</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to={'/admin/alunos'}>Alunos</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to={'/admin/cursos'}>Cursos</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to={'/admin/categorias'}>Categorias</Link>
+                </li>
+              </ul>
+            </li>
+          }
           <li>
             <Link to="/cursos">Cursos</Link>
-          </li>
-          <li>
-            <Link to="/alunos">Alunos</Link>
           </li>
           <li>
             <Link to="/perfil">Meus Dados</Link>

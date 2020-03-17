@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
-import { withRouter, useParams, useLocation } from 'react-router-dom';
+import { withRouter, Link, useParams, useLocation } from 'react-router-dom';
 import { globalNotifications } from '../../../services';
 import CoursesForm from '../CoursesForm';
 import ModulesList from '../ModulesList';
@@ -52,6 +52,12 @@ function CoursesEdit({ history }) {
   return (
     <div className="CoursesEdit">
       <h1 className="page-title">Editar Curso</h1>
+
+      <Link to={`/cursos/${id}`} className="button">
+        Ver Curso
+      </Link>
+
+      <br />
 
       {course &&
         <Tabs selectedIndex={selectedIndex} onSelect={setSelectedIndex}>

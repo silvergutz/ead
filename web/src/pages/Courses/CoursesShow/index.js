@@ -52,8 +52,8 @@ function CoursesShow() {
 
       {auth.isAdmin() &&
         <Link className="course edit button center-content" to={`/admin/cursos/${course.id}/editar`}>
-          <i className="mi">edit</i>
           Editar
+          <i className="mi">edit</i>
         </Link>
       }
 

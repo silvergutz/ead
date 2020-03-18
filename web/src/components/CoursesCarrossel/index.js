@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 
-import ImgProtected from '../../../components/ImgProtected';
-import { getCourses, calcDuration } from '../../../services/courses';
-import globalNotifications from '../../../services/globalNotifications';
-import { auth } from '../../../services';
+import ImgProtected from '../ImgProtected';
+import { getCourses, calcDuration } from '../../services/courses';
+import globalNotifications from '../../services/globalNotifications';
+import { auth } from '../../services';
 
-import '../../../components/slick/slick.css';
-import '../../../components/slick/slick-theme.css';
+import '../slick/slick.css';
+import '../slick/slick-theme.css';
 import './styles.css';
 
-function CoursesPage() {
+function CoursesCarrossel() {
   const [ courses, setCourses] = useState([]);
 
   const sliderSettings = {
@@ -39,7 +39,7 @@ function CoursesPage() {
   }, []);
 
   return (
-    <div className="CoursesPage">
+    <div className="CoursesCarrossel">
       <section>
         <h1 className="section-title">Treinamentos em andamento</h1>
 
@@ -91,4 +91,4 @@ function CoursesPage() {
   );
 }
 
-export default CoursesPage;
+export default CoursesCarrossel;

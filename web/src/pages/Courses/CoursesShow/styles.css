@@ -1,3 +1,6 @@
+.CourseShow .course.edit.button {
+  margin-bottom: 3rem;
+}
 .CourseShow .course-container {
   display: flex;
 }

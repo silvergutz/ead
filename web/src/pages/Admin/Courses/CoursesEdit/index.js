@@ -8,6 +8,8 @@ import { findCourse } from '../../../../services/courses';
 import CoursesForm from '../CoursesForm';
 import ModulesList from '../ModulesList';
 
+import './styles.css';
+
 function CoursesEdit() {
   const { id } = useParams();
   let query = useQuery();
@@ -52,7 +54,7 @@ function CoursesEdit() {
     <div className="CoursesEdit">
       <h1 className="page-title">Editar Curso</h1>
 
-      <Link to={`/cursos/${id}`} className="button">
+      <Link to={`/cursos/${id}`} className="show button">
         Ver Curso
       </Link>
 

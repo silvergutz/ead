@@ -1,12 +1,14 @@
+import querystring from 'querystring';
 import axios from 'axios';
 import * as moment from 'moment';
 
 import { api } from '../services';
 import { handleError } from '../helpers';
 
-export async function getCourses() {
+export async function getCourses(searchTerm) {
   try {
-    const response = await api.get('/courses')
+    let qs = querystring.stringify({ s: searchTerm || '' });
+    const response = await api.get('/courses/' + (qs ? `?${qs}` : ''));
 
     return response.data;
   } catch(e) {

@@ -6,10 +6,9 @@ import PrivateRoute from './components/PrivateRoute';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
-import CoursesPage from './pages/Courses/CoursesPage';
 import CoursesShow from './pages/Courses/CoursesShow';
 
-import CoursesList from './pages/Admin/Courses/CoursesList';
+import CoursesList from './components/CoursesList';
 import CoursesSave from './pages/Admin/Courses/CoursesSave';
 import CoursesEdit from './pages/Admin/Courses/CoursesEdit';
 
@@ -34,7 +33,7 @@ function Routes() {
 
         <PrivateRoute path="/perfil" component={Profile} />
 
-        <PrivateRoute path="/cursos" exact component={CoursesPage} />
+        <PrivateRoute path="/cursos" exact component={CoursesList} />
         <PrivateRoute path="/cursos/:id" exact component={CoursesShow} />
 
         <PrivateRoute path="/admin/lojas" exact component={SchoolsList} />

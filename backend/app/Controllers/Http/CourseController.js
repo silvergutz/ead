@@ -23,12 +23,20 @@ class CourseController {
    *
    * @param {object} ctx
    */
-  async index () {
-    const courses = await Course.query()
+  async index ({ request }) {
+    const { s } = request.get();
+
+    const query = Course.query()
       .with('categories')
       .with('teachers')
       .with('lessons')
-      .fetch();
+
+    if (s) {
+      const searchTerm = '%' + s.replace(/\s/g, '%') + '%'
+      query.where('name', 'like', searchTerm)
+    }
+
+    const courses = await query.fetch();
 
     return courses;
   }

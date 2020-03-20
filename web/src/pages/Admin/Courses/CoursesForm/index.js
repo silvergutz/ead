@@ -35,6 +35,9 @@ function CoursesForm({ history, type, course, onCourseChange }) {
         globalNotifications.sendErrorMessage(err);
       } else {
         setSchoolsList(response);
+        if (response.length && response[0].id && type !== 'update') {
+          setSchoolId(response[0].id);
+        }
       }
     }
     async function loadCategories() {
@@ -88,7 +91,9 @@ function CoursesForm({ history, type, course, onCourseChange }) {
       }
     }
 
-    updateRemoveCover();
+    if (type === 'update' && course) {
+      updateRemoveCover();
+    }
   }, [removeCover]);
 
   async function handleSubmit(e) {
@@ -120,7 +125,7 @@ function CoursesForm({ history, type, course, onCourseChange }) {
       data.append('school_id', schoolId);
       data.append('categories[]', formatMultiSelectValue(categories));
       data.append('teachers[]', formatMultiSelectValue(teachers));
-      data.append('status', status);
+      data.append('status', 'draft');
     }
 
     if (cover) {
@@ -137,12 +142,12 @@ function CoursesForm({ history, type, course, onCourseChange }) {
     } else {
       if (type !== 'update') {
         history.push(`/admin/cursos/${response.id}/editar`);
+      } else {
+        onCourseChange(response);
+        setTempCover(null);
+
+        globalNotifications.sendSuccessMessage('Dados gravados com sucesso');
       }
-
-      onCourseChange(response);
-      setTempCover(null);
-
-      globalNotifications.sendSuccessMessage('Dados gravados com sucesso');
     }
   }
 
@@ -159,7 +164,9 @@ function CoursesForm({ history, type, course, onCourseChange }) {
   }
 
   async function handleRemoveCover() {
-    onCourseChange({ ...course, cover: null });
+    if (type === 'update') {
+      onCourseChange({ ...course, cover: null });
+    }
     setTempCover(null);
     setRemoveCover(true);
   }
@@ -176,7 +183,7 @@ function CoursesForm({ history, type, course, onCourseChange }) {
       <div className="form-field">
         <label htmlFor="name">Nome:</label>
         <div className="field">
-          <textarea id="name" value={name} onChange={e => setName(e.target.value)} />
+          <input id="name" value={name} onChange={e => setName(e.target.value)} />
         </div>
       </div>
       <div className="form-field">
@@ -187,7 +194,7 @@ function CoursesForm({ history, type, course, onCourseChange }) {
       </div>
       <div className="form-field">
         <label>Imagem de Capa:</label>
-        {(course.cover || tempCover) &&
+        {((course && course.cover) || tempCover) &&
           <div className="current-cover field">
             {(!tempCover && course.cover) &&
               <ImgProtected file={course.cover} />
@@ -200,7 +207,7 @@ function CoursesForm({ history, type, course, onCourseChange }) {
           </div>
         }
 
-        {(type !== 'update' || (!course.cover && !tempCover)) &&
+        {(!(course && course.cover) && !tempCover) &&
           <div className="cover-field upload-field field">
             <Dropzone onDrop={handleFileDrop}>
               {({getRootProps, getInputProps}) => (
@@ -251,15 +258,19 @@ function CoursesForm({ history, type, course, onCourseChange }) {
             />
         </div>
       </div>
-      <div className="form-field">
-        <label htmlFor="status">Status:</label>
-        <div className="field">
-          <select id="status" value={status} onChange={e => setStatus(e.target.value)}>
-            <option value="draft">Rascunho</option>
-            <option value="published">Publicado</option>
-          </select>
+
+      {type === 'update' &&
+        <div className="form-field">
+          <label htmlFor="status">Status:</label>
+          <div className="field">
+            <select id="status" value={status} onChange={e => setStatus(e.target.value)}>
+              <option value="draft">Rascunho</option>
+              <option value="published">Publicado</option>
+            </select>
+          </div>
         </div>
-      </div>
+      }
+
       <div className="form-field submit">
         <button type="submit">Gravar</button>
       </div>

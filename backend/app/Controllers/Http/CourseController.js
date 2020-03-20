@@ -27,6 +27,7 @@ class CourseController {
     const { s } = request.get();
 
     const query = Course.query()
+      .with('schools')
       .with('categories')
       .with('teachers')
       .with('lessons')
@@ -50,10 +51,11 @@ class CourseController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    const { categories, teachers } = request.all()
+    const { schools, categories, teachers } = request.all()
     const data = {
       courseData: request.only(['name', 'description', 'school_id', 'status']),
       coverFile: request.file('cover', coverRules),
+      schools,
       categories,
       teachers,
     }
@@ -82,6 +84,7 @@ class CourseController {
   async show ({ params, response }) {
     const course = await Course
       .query()
+      .with('schools')
       .with('categories')
       .with('teachers')
       .with('modules')
@@ -107,11 +110,12 @@ class CourseController {
    * @param {Response} ctx.response
    */
   async update ({ request, params }) {
-    const { categories, teachers } = request.all()
+    const { schools, categories, teachers } = request.all()
     const data = {
       courseData: request.only(['name', 'description', 'status']),
       coverFile: request.file('cover', coverRules),
       removeCover: request.input('remove_cover', false),
+      schools,
       categories,
       teachers,
     }

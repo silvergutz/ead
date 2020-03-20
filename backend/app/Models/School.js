@@ -14,7 +14,10 @@ class School extends Model {
   }
 
   courses() {
-    return this.hasMany('App/Models/Course')
+    return this
+      .belongsToMany('App/Models/Course', 'school_id', 'course_id')
+      .pivotTable('course_schools')
+      .withTimestamps()
   }
 
   users() {

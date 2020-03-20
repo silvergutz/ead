@@ -16,7 +16,7 @@ function CoursesForm({ history, type, course, onCourseChange }) {
   const [ name, setName ] = useState('');
   const [ description, setDescription ] = useState('');
   const [ cover, setCover ] = useState(null);
-  const [ schoolId, setSchoolId ] = useState('');
+  const [ schools, setSchools ] = useState('');
   const [ categories, setCategories ] = useState([]);
   const [ teachers, setTeachers ] = useState([]);
   const [ status, setStatus ] = useState('');
@@ -34,10 +34,8 @@ function CoursesForm({ history, type, course, onCourseChange }) {
         const err = response.error.message || 'Ocorreu um error ao carregar as lojas';
         globalNotifications.sendErrorMessage(err);
       } else {
-        setSchoolsList(response);
-        if (response.length && response[0].id && type !== 'update') {
-          setSchoolId(response[0].id);
-        }
+        const schools = response.map(school => ({ value: school.id, label: school.name }))
+        setSchoolsList(schools);
       }
     }
     async function loadCategories() {
@@ -68,12 +66,12 @@ function CoursesForm({ history, type, course, onCourseChange }) {
 
   useEffect(() => {
     if (type === 'update' && course) {
-      setName(course.name)
-      setDescription(course.description)
-      setSchoolId(course.school_id)
-      setStatus(course.status)
-      course.categories && setCategories(course.categories.map(i => { return { value: i.id, label: i.name } }))
-      course.teachers && setTeachers(course.teachers.map(i => { return { value: i.id, label: i.name } }))
+      setName(course.name);
+      setDescription(course.description);
+      setStatus(course.status);
+      course.schools && setSchools(course.schools.map(i => { return { value: i.id, label: i.name } }));
+      course.categories && setCategories(course.categories.map(i => { return { value: i.id, label: i.name } }));
+      course.teachers && setTeachers(course.teachers.map(i => { return { value: i.id, label: i.name } }));
     }
   }, [course, type]);
 
@@ -109,8 +107,8 @@ function CoursesForm({ history, type, course, onCourseChange }) {
         data.append('name', name);
       if (description !== course.description)
         data.append('description', description);
-      if (schoolId !== course.school_id)
-        data.append('school_id', schoolId);
+      if (schools !== course.schools)
+        data.append('schools[]', [formatMultiSelectValue(schools)]);
       if (categories !== course.categories)
         data.append('categories[]', [formatMultiSelectValue(categories)]);
       if (teachers !== course.teachers)
@@ -122,7 +120,7 @@ function CoursesForm({ history, type, course, onCourseChange }) {
     } else {
       data.append('name', name);
       data.append('description', description);
-      data.append('school_id', schoolId);
+      data.append('schools[]', formatMultiSelectValue(schools));
       data.append('categories[]', formatMultiSelectValue(categories));
       data.append('teachers[]', formatMultiSelectValue(teachers));
       data.append('status', 'draft');
@@ -223,17 +221,20 @@ function CoursesForm({ history, type, course, onCourseChange }) {
         }
       </div>
       <div className="form-field">
-        <label htmlFor="schoolId">Loja:</label>
+        <label htmlFor="schools">Loja(s):</label>
         <div className="field">
-          <select id="schoolId" value={schoolId} onChange={e => setSchoolId(e.target.value)}>
-            {schoolsList.map(school => (
-              <option key={school.id} value={school.id}>{school.name}</option>
-            ))}
-          </select>
+          <Select
+            name="schools"
+            value={schools}
+            onChange={value => setSchools(value)}
+            options={schoolsList}
+            isMulti={true}
+            isSearchable={true}
+            />
         </div>
       </div>
       <div className="form-field">
-        <label htmlFor="categories">Categorias:</label>
+        <label htmlFor="categories">Categoria(s):</label>
         <div className="field">
           <Select
             name="categories"
@@ -246,7 +247,7 @@ function CoursesForm({ history, type, course, onCourseChange }) {
         </div>
       </div>
       <div className="form-field">
-        <label htmlFor="teachers">Professores:</label>
+        <label htmlFor="teachers">Professor(es):</label>
         <div className="field">
           <Select
             name="teachers"

@@ -11,7 +11,7 @@ const User = use('App/Models/User')
 class CourseService
 {
   static async save(data) {
-    let { courseData, coverFile, removeCover, categories, teachers } = data
+    let { courseData, coverFile, removeCover, schools, categories, teachers } = data
     let coverStoragePath = ''
     let course
 
@@ -21,18 +21,6 @@ class CourseService
     }
 
     try {
-      // Find School
-      if (courseData.id) {
-        // Dont allow update school_id
-        delete courseData.school_id
-      } else {
-        courseData.school_id = parseInt(courseData.school_id)
-        const school = courseData.school_id ? await School.find(courseData.school_id) : null
-        if (!school) {
-          return { error: 'School not found' }
-        }
-      }
-
       // Remove current cover, if update
       if (removeCover) {
         courseData.cover = null;
@@ -62,6 +50,27 @@ class CourseService
         await course.save()
       } else {
         course = await Course.create(courseData)
+      }
+
+      // Schools
+      if (schools) {
+        // Can be passed as string representation of array (multipart-form-data)
+        if (typeof schools === 'string') {
+          schools = JSON.parse(schools)
+        }
+        // making shure that is an array
+        if (!Array.isArray(schools)) {
+          schools = [schools];
+        }
+        // passed vi FormData
+        if (typeof schools[0] === 'string') {
+          schools = JSON.parse(`[${schools[0]}]`)
+        }
+        schools = await School
+          .query()
+          .whereIn('id', schools)
+          .pluck('id')
+        await course.schools().sync(schools)
       }
 
       // Categories

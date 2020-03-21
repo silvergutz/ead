@@ -2,7 +2,13 @@
   justify-content: space-between;
 }
 .slick-slide > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+}
+.CoursesCarrossel .slick-slider {
+  margin-bottom: 4rem;
 }
 .CoursesCarrossel .Course {
   margin: 2rem;

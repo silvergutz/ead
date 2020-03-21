@@ -6,6 +6,7 @@
 
 const CourseService = use('App/Services/CourseService')
 const Course = use('App/Models/Course')
+const User = use('App/Models/User')
 
 const coverRules = {
   types: ['image'],
@@ -23,7 +24,7 @@ class CourseController {
    *
    * @param {object} ctx
    */
-  async index ({ request }) {
+  async index ({ request, auth }) {
     const { s } = request.get();
 
     const query = Course.query()
@@ -31,10 +32,17 @@ class CourseController {
       .with('categories')
       .with('teachers')
       .with('lessons')
+      .orderBy('created_at', 'desc')
 
+    // Filter by search term
     if (s) {
       const searchTerm = '%' + s.replace(/\s/g, '%') + '%'
       query.where('name', 'like', searchTerm)
+    }
+
+    // For students show only published
+    if (auth.user.level === User.LEVEL_STUDENT) {
+      query.where('status', Course.STATUS_PUBLISHED)
     }
 
     const courses = await query.fetch();

@@ -107,20 +107,6 @@ button.link {
   color: #303030;
 }
 
-.slick-arrow::before {
-  background: url('/images/arrow-right.png');
-  display: block;
-  width: 64px;
-  height: 64px;
-  font-size: 0 !important;
-}
-.slick-arrow.slick-prev::before {
-  transform: rotateY(180deg);
-}
-.slick-next {
-  right: 15px !important;
-}
-
 .button {
   display: inline-block;
   background: #000;

@@ -16,6 +16,49 @@ export async function getCourses(searchTerm) {
   }
 }
 
+export async function getCoursesCarrossel() {
+  const response = await getCourses();
+  if (response.error) return response;
+
+  let courses = {
+    recent: [],
+    categories: [],
+  };
+
+  response.forEach((c) => {
+    if (c.categories && c.categories.length > 0) {
+      c.categories.forEach((cat) => {
+        // Find current category in array to avoid duplicates
+        let hasCat = false;
+        for (let i in courses.categories) {
+          if (courses.categories[i].category.id === cat.id) {
+            hasCat = i;
+            break;
+          }
+        }
+
+        // If not yeat has courses of this category
+        if (!hasCat) {
+          // Create an object with category and courses array
+          courses.categories.push({
+            category: cat,
+            courses: [c]
+          });
+        } else {
+          courses.categories[hasCat].courses.push(c);
+        }
+      });
+    }
+
+    // The first 12 courses will be show as recent
+    if (courses.recent.length < 12) {
+      courses.recent.push(c);
+    }
+  })
+
+  return courses;
+}
+
 export async function findCourse(id) {
   try {
     const response = await api.get(`/courses/${id}`)

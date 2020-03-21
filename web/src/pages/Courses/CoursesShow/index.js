@@ -3,6 +3,7 @@ import { findCourse, embedVideo } from '../../../services/courses';
 import { useParams, Link } from 'react-router-dom';
 
 import globalNotifications from '../../../services/globalNotifications';
+import VideoPlayer from '../../../components/VideoPlayer';
 import auth from '../../../services/auth';
 
 import './styles.css';
@@ -38,12 +39,11 @@ function CoursesShow() {
   }, [id]);
 
   useEffect(() => {
-    if (lesson) {
-      if (lesson.video) {
-        embedVideo(lesson.video).then(setVideo);
-      }
+    if (lesson.video === video) {
+      setVideo('');
     }
 
+    setVideo(lesson.video);
   }, [lesson])
 
   return (
@@ -58,7 +58,9 @@ function CoursesShow() {
       }
 
       <div className="course-container">
-        <div className="lesson-content" dangerouslySetInnerHTML={{ __html: video }} />
+        <div className="lesson-content">
+          <VideoPlayer video={video} />
+        </div>
         <div className="course-lessons">
           {modules.length === 0 ? 'Nenhum modulo cadastrado' :
             <ul>

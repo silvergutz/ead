@@ -1,7 +1,9 @@
 'use strict'
 
+const fs = require('fs')
 const Helpers = use('Helpers')
 const Drive = use('Drive')
+const Config = use('Config')
 
 const User = use('App/Models/User')
 
@@ -36,7 +38,13 @@ class UserService
           return { error: photoFile.error() };
         } else {
           photoStoragePath = `users/${fileName}`
-          await Drive.move(Helpers.tmpPath(photoFile.fileName), photoStoragePath)
+
+          if (Config.get('drive.default') === 'gcs') {
+            await Drive.put(photoStoragePath, Helpers.tmpPath(photoFile.fileName))
+          } else {
+            await Drive.put(photoStoragePath, fs.readFileSync(Helpers.tmpPath(photoFile.fileName)))
+          }
+
           userData.photo = photoStoragePath
         }
       }
@@ -51,9 +59,15 @@ class UserService
 
       return user
     } catch(e) {
-      if (photoFile && photoFile.moved() && Drive.exists(photoStoragePath)) {
-        await Drive.delete(photoStoragePath)
+      if (photoFile && photoFile.moved()) {
+        if (fs.existsSync(Helpers.tmpPath(photoFile.fileName))) {
+          fs.unlink(Helpers.tmpPath(photoFile.fileName))
+        }
+        if (Drive.exists(photoStoragePath)) {
+          Drive.delete(photoStoragePath)
+        }
       }
+      console.log(e)
       throw new Error(e)
     }
   }

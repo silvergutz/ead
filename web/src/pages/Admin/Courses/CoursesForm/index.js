@@ -86,6 +86,7 @@ function CoursesForm({ history, type, course, onCourseChange }) {
         globalNotifications.sendErrorMessage(err);
       } else {
         globalNotifications.sendSuccessMessage('Imagem removida com sucesso');
+        setCover('');
       }
     }
 
@@ -142,6 +143,7 @@ function CoursesForm({ history, type, course, onCourseChange }) {
         history.push(`/admin/cursos/${response.id}/editar`);
       } else {
         onCourseChange(response);
+        setCover(response.cover);
         setTempCover(null);
 
         globalNotifications.sendSuccessMessage('Dados gravados com sucesso');

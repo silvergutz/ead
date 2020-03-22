@@ -73,8 +73,9 @@
   font-size: 15px;
 }
 .Header .user-photo {
+  background: #f3f3f3;
   display: flex;
-  align-content: center;
+  align-items: center;
   justify-content: center;
   margin-right: 1rem;
   width: 60px;

@@ -13,7 +13,7 @@ module.exports = {
   | defining a disk name
   |
   */
-  default: 'local',
+  default: Env.get('DRIVE_DEFAULT_DISK', 'local'),
 
   disks: {
     /*
@@ -43,6 +43,12 @@ module.exports = {
       secret: Env.get('S3_SECRET'),
       bucket: Env.get('S3_BUCKET'),
       region: Env.get('S3_REGION')
+    },
+
+    gcs: {
+      driver: 'gcs',
+      keyFilename: Env.get('GCS_KEY_FILE_NAME'), // path to json file
+      bucket: Env.get('GCS_BUCKET')
     }
   }
 }

@@ -44,10 +44,9 @@ function CoursesEdit() {
   }
 
   function onCourseChange(state) {
-    // console.log('onCourseChange', state);
-    // if (state !== course) {
-    //   setCourse(state);
-    // }
+    if (state !== course) {
+      setCourse(state);
+    }
   }
 
   return (

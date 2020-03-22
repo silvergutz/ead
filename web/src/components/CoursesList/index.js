@@ -71,7 +71,7 @@ function CoursesList() {
                   <ImgProtected file={course.cover} alt={course.name} />
                 }
                 {!course.cover &&
-                  <img src="/images/default-course-cover.png" alt="" />
+                  <img src="/images/default-course-cover.jpg" alt={course.name} />
                 }
               </Link>
             </div>

@@ -19,6 +19,8 @@
 }
 .profile-content .profile-photo figure {
   display: flex;
+  justify-content: center;
+  align-items: center;
   background: #c8c8c8;
   width: 100px;
   height: 100px;

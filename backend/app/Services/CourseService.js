@@ -1,7 +1,9 @@
 'use strict'
 
+const fs = require('fs')
 const Helpers = use('Helpers')
 const Drive = use('Drive')
+const Config = use('Config')
 
 const Course = use('App/Models/Course')
 const School = use('App/Models/School')
@@ -39,7 +41,12 @@ class CourseService
           return { error: coverFile.error() };
         } else {
           coverStoragePath = `courses/${fileName}`
-          await Drive.move(Helpers.tmpPath(coverFile.fileName), coverStoragePath)
+
+          if (Config.get('drive.default') === 'gcs') {
+            await Drive.put(coverStoragePath, Helpers.tmpPath(coverFile.fileName))
+          } else {
+            await Drive.put(coverStoragePath, fs.readFileSync(Helpers.tmpPath(coverFile.fileName)))
+          }
           courseData.cover = coverStoragePath
         }
       }
@@ -114,8 +121,13 @@ class CourseService
 
       return course
     } catch(e) {
-      if (coverFile && coverFile.moved() && Drive.exists(coverStoragePath)) {
-        await Drive.delete(coverStoragePath)
+      if (coverFile && coverFile.moved()) {
+        if (fs.existsSync(Helpers.tmpPath(coverFile.fileName))) {
+          fs.unlink(Helpers.tmpPath(coverFile.fileName))
+        }
+        if (Drive.exists(coverStoragePath)) {
+          Drive.delete(coverStoragePath)
+        }
       }
       throw new Error(e)
     }

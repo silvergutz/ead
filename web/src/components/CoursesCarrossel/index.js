@@ -57,7 +57,12 @@ function CoursesCarrossel() {
                 {courses.recent.map(course => (
                   <div key={course.id} className={`Course ${course.status}`}>
                     <div className="course-cover">
-                      <ImgProtected file={course.cover} alt={course.name} />
+                      {course.cover &&
+                        <ImgProtected file={course.cover} alt={course.name} />
+                      }
+                      {!course.cover &&
+                        <img src="/images/default-course-cover.jpg" alt={course.name} />
+                      }
                     </div>
                     <div className="course-name">{course.name}</div>
 

@@ -19,8 +19,13 @@ function sendMessage(message) {
   if (!message.id) {
     message.id = v1();
   }
-  if (['info','success'].indexOf(message.type) > -1) {
+  if (message.type !== 'debug') {
     message.autoClose = true;
+    if (['info','success'].indexOf(message.type) > -1) {
+      message.autoCloseTime = 3000;
+    } else {
+      message.autoCloseTime = 7000;
+    }
   }
   subject.next(message);
 }

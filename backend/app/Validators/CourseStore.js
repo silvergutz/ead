@@ -6,7 +6,6 @@ class CourseStore extends BaseValidator {
   get rules () {
     return {
       name: 'required',
-      school_id: 'required|exists:schools,id',
       status: 'in:draft,published',
     }
   }

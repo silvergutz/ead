@@ -1,0 +1,48 @@
+.courses {
+  justify-content: space-between;
+}
+.slick-slide > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.CoursesCarrossel .slick-slider {
+  margin-bottom: 4rem;
+}
+.CoursesCarrossel .Course {
+  margin: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 30px 0px rgba(0,0,0,0.3);
+  text-align: center;
+  max-width: 16rem;
+  min-height: 19.9rem;
+  font-size: 14px;
+}
+.CoursesCarrossel .Course .course-cover {
+  text-align: center;
+  margin: 0 0 1rem;
+  height: 10rem;
+  overflow: hidden;
+  border-radius: 10px;
+}
+.CoursesCarrossel .Course .course-cover img {
+  margin: 0 auto;
+  max-width: 100%;
+  border-radius: 10px;
+}
+.CoursesCarrossel .Course > div, .CoursesCarrossel .Course > a {
+  margin-bottom: .5rem;
+}
+.CoursesCarrossel .Course .key {
+  margin-right: .2em;
+}
+.CoursesCarrossel .Course .course-button {
+  display: inline-block;
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.2em 2.3em;
+  font-size: 13px;
+  border-radius: 5px;
+}

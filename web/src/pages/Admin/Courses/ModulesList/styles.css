@@ -1,0 +1,82 @@
+.ModulesList {
+  display: flex;
+}
+.new-module .module-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.new-module .module-form input {
+  flex: 1;
+}
+.new-module-title {
+  font-weight: bold;
+}
+.ModulesCreate {
+  width: 100%;
+}
+.current-lesson {
+  flex: 1;
+}
+.current-lesson .lesson-form-title {
+  margin-bottom: 2em;
+}
+.CoursesEdit .model-form .form-field > label {
+  flex: 0;
+  text-align: left;
+  width: auto;
+  min-width: 8em;
+}
+.form-field.submit {
+  justify-content: start;
+}
+.modules-wraper {
+  flex: 0;
+  min-width: 35%;
+}
+.modules li {
+  list-style: none;
+  border-bottom: 1px solid #f5f5f5;
+  display: flex;
+  justify-content: space-between;
+}
+.modules .module {
+  display: flex;
+  flex-wrap: wrap;
+  background: #e5e5e5;
+  margin-bottom: 2.5rem;
+  border-radius: 5px;
+  padding: .25rem;
+  justify-content: space-between;
+  align-items: center;
+}
+.module-name {
+  font-weight: bold;
+}
+.modules .lesson {
+
+  padding: .5rem;
+}
+.create-lesson {
+  display: flex;
+  justify-content: center;
+  margin: .5rem 0
+}
+.create-lesson button {
+  display: flex;
+  align-items: center;
+  padding: .25em .5em;
+  font-size: 15px;
+  font-weight: bold;
+}
+.create-lesson button i {
+	margin-left: .5em;
+	font-size: 18px;
+}
+.lessons li {
+  list-style: none;
+  background-color: #ccc;
+}
+.button-group button {
+  margin-left: .2rem;
+}

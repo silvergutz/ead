@@ -25,6 +25,30 @@
   align-items: center;
   height: 100%;
 }
+.menu > ul > li {
+  position: relative;
+}
+.menu li > ul {
+  position: absolute;
+  top: 2.2rem;
+  display: none;
+  z-index: 2;
+}
+.menu li:hover > ul {
+  display: block;
+}
+.menu li ul li {
+  background-color: #969696;
+  border-radius: 0;
+  display: block;
+}
+.menu li ul li a {
+  border: none;
+}
+.menu li ul li a:hover {
+  border: none;
+}
+
 .menu ul li {
   list-style: none;
   border-radius: 3px;
@@ -49,12 +73,16 @@
   font-size: 15px;
 }
 .Header .user-photo {
+  background: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-right: 1rem;
+  width: 60px;
+  height: 60px;
 }
 .Header .user-photo img {
-  border-radius: 50%;
-  border: 1px solid #fff;
-  width: 60px;
+  max-width: 100%;
 }
 .Header .user-name {
   margin-right: .5em;

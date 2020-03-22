@@ -19,9 +19,11 @@ const providers = [
   '@adonisjs/cors/providers/CorsProvider',
   '@adonisjs/drive/providers/DriveProvider',
   '@adonisjs/validator/providers/ValidatorProvider',
+  '@adonisjs/antl/providers/AntlProvider',
 
   'adonis-lucid-polymorphic/providers/PolymorphicProvider',
-  '@radmen/adonis-lucid-soft-deletes/providers/SoftDeletesProvider'
+  '@radmen/adonis-lucid-soft-deletes/providers/SoftDeletesProvider',
+  'adonis-drive-google/providers/DriveProvider',
 ]
 
 /*

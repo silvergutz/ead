@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { findCourse, embedVideo } from '../../../services/courses';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+
+import globalNotifications from '../../../services/globalNotifications';
+import VideoPlayer from '../../../components/VideoPlayer';
+import auth from '../../../services/auth';
 
 import './styles.css';
-import globalNotifications from '../../../services/globalNotifications';
 
 function CoursesShow() {
   const { id } = useParams();
@@ -36,20 +39,28 @@ function CoursesShow() {
   }, [id]);
 
   useEffect(() => {
-    if (lesson) {
-      if (lesson.video) {
-        embedVideo(lesson.video).then(setVideo);
-      }
+    if (lesson.video === video) {
+      setVideo('');
     }
 
+    setVideo(lesson.video);
   }, [lesson])
 
   return (
     <div className="CourseShow">
       <h1 className="page-title">{course.name}</h1>
 
+      {auth.isAdmin() &&
+        <Link className="course edit button center-content" to={`/admin/cursos/${course.id}/editar`}>
+          Editar
+          <i className="mi">edit</i>
+        </Link>
+      }
+
       <div className="course-container">
-        <div className="lesson-content" dangerouslySetInnerHTML={{ __html: video }} />
+        <div className="lesson-content">
+          <VideoPlayer video={video} />
+        </div>
         <div className="course-lessons">
           {modules.length === 0 ? 'Nenhum modulo cadastrado' :
             <ul>

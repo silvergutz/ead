@@ -12,7 +12,11 @@ database/*.sqlite
 
 # uploads dir
 storage/uploads
+<<<<<<< HEAD
 
 # public dir
 public
+=======
+public/*
+>>>>>>> master
 !public/.gitkeep

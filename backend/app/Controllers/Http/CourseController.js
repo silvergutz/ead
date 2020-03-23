@@ -6,6 +6,7 @@
 
 const CourseService = use('App/Services/CourseService')
 const Course = use('App/Models/Course')
+const Lesson = use('App/Models/Lesson')
 const User = use('App/Models/User')
 
 const coverRules = {
@@ -89,17 +90,28 @@ class CourseController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, response }) {
-    const course = await Course
+  async show ({ params, response, auth }) {
+    const query = Course
       .query()
       .with('schools')
       .with('categories')
       .with('teachers')
       .with('modules')
-      .with('modules.lessons')
       .limit(1)
       .where('id', params.id)
-      .fetch()
+
+
+    // For students show only published
+    if (auth.user.level === User.LEVEL_STUDENT) {
+      query
+        .with('modules.lessons', (builder) => {
+          builder.where('status', Lesson.STATUS_PUBLISHED)
+        })
+    } else {
+      query.with('modules.lessons')
+    }
+
+    const course = await query.fetch()
 
     if (!course.rows.length) {
       response.status(404)

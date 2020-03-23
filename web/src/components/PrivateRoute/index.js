@@ -3,11 +3,11 @@ import { Route, Redirect } from 'react-router-dom';
 
 import { auth } from '../../services';
 
-function PrivateRoute({ component: Component, ...rest }) {
+function PrivateRoute({ component: Component, onlyAdmin, ...rest }) {
   return (
     <Route {...rest} render={props => {
         const currentUser = auth.currentUserValue;
-        if (!currentUser) {
+        if (!currentUser || (onlyAdmin && !auth.isAdmin())) {
           // not logged in, redirect user to login page
           return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
         }

@@ -36,21 +36,21 @@ function Routes() {
         <PrivateRoute path="/cursos" exact component={CoursesList} />
         <PrivateRoute path="/cursos/:id" exact component={CoursesShow} />
 
-        <PrivateRoute path="/admin/lojas" exact component={SchoolsList} />
-        <PrivateRoute path="/admin/lojas/novo" exact component={SchoolsSave} />
-        <PrivateRoute path="/admin/lojas/:id" component={SchoolsShow} />
+        <PrivateRoute path="/admin/lojas" exact component={SchoolsList} onlyAdmin={true} />
+        <PrivateRoute path="/admin/lojas/novo" exact component={SchoolsSave} onlyAdmin={true} />
+        <PrivateRoute path="/admin/lojas/:id" component={SchoolsShow} onlyAdmin={true} />
 
-        <PrivateRoute path="/admin/categorias" exact component={CategoriesList} />
-        <PrivateRoute path="/admin/categorias/novo" exact component={CategoriesSave} />
-        <PrivateRoute path="/admin/categorias/:id" component={CategoriesShow} />
+        <PrivateRoute path="/admin/categorias" exact component={CategoriesList} onlyAdmin={true} />
+        <PrivateRoute path="/admin/categorias/novo" exact component={CategoriesSave} onlyAdmin={true} />
+        <PrivateRoute path="/admin/categorias/:id" component={CategoriesShow} onlyAdmin={true} />
 
-        <PrivateRoute path="/admin/cursos" exact component={CoursesList} />
-        <PrivateRoute path="/admin/cursos/novo" exact component={CoursesSave} />
-        <PrivateRoute path="/admin/cursos/:id/editar" component={CoursesEdit} />
+        <PrivateRoute path="/admin/cursos" exact component={CoursesList} onlyAdmin={true} />
+        <PrivateRoute path="/admin/cursos/novo" exact component={CoursesSave} onlyAdmin={true} />
+        <PrivateRoute path="/admin/cursos/:id/editar" component={CoursesEdit} onlyAdmin={true} />
 
-        <PrivateRoute path="/admin/alunos" exact component={UsersList} />
-        <PrivateRoute path="/admin/alunos/novo" exact component={UsersSave} />
-        <PrivateRoute path="/admin/alunos/:id/editar" exact component={UsersSave} />
+        <PrivateRoute path="/admin/alunos" exact component={UsersList} onlyAdmin={true} />
+        <PrivateRoute path="/admin/alunos/novo" exact component={UsersSave} onlyAdmin={true} />
+        <PrivateRoute path="/admin/alunos/:id/editar" exact component={UsersSave} onlyAdmin={true} />
 
         <Route path="*" component={() => <h1 className="page-title">Página não encontrada</h1>} />
       </Switch>

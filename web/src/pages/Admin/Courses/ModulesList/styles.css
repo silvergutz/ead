@@ -15,6 +15,9 @@
 .ModulesCreate {
   width: 100%;
 }
+.ModulesCreate .lesson-name {
+  cursor: pointer;
+}
 .current-lesson {
   flex: 1;
 }

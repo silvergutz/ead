@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import YouTube from 'react-youtube';
 
+import './styles.css';
+
 function VideoPlayer({ video }) {
   const [ videoId, setVideoId ] = useState('');
   const [ videoType, setVideoType ] = useState('');
@@ -17,20 +19,10 @@ function VideoPlayer({ video }) {
   };
 
   useEffect(() => {
-    console.log(video);
     loadVideo();
-
-    return () => {
-      if (videoType === 'youtube' && youtubePlayer && youtubePlayer.destroy) {
-        youtubePlayer.destroy();
-      }
-    }
   }, [video]);
 
   async function loadVideo() {
-    // setVideoType(null);
-    // setYoutubeVideoId(null);
-
     if (video) {
       // Vimeo
       if (video.indexOf('vimeo.com') >= 0) {
@@ -105,7 +97,7 @@ function VideoPlayer({ video }) {
   }
 
   if (!video) {
-    return ('Vídeo não disponível');
+    return (<div id="player" className="VideoPlayer">Vídeo não disponível</div>);
   }
 
   return (

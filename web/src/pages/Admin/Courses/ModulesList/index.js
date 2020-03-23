@@ -92,7 +92,9 @@ function ModulesList({ course }) {
                   <ul className="lessons">
                     {obj.lessons.map(lesson => (
                       <li key={lesson.id} className="lesson">
-                        {lesson.name}
+                        <span className="lesson-name" onClick={e => handleEditLesson(obj, lesson)}>
+                          {lesson.name}
+                        </span>
                         <div className="button-group">
                           <button className="mi small edit" onClick={e => handleEditLesson(obj, lesson)}>edit</button>
                           <button className="mi small remove" onClick={e => handleDestroyLesson(lesson)}>delete</button>

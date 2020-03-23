@@ -39,7 +39,8 @@ function LessonsCreate({ id, type, moduleObj, refreshModules }) {
   }, [id]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const top = document.getElementById('LessonsCreate').offsetTop;
+    window.scrollTo(0, top);
   }, [id, moduleObj]);
 
   async function handleSubmit(e) {
@@ -98,7 +99,7 @@ function LessonsCreate({ id, type, moduleObj, refreshModules }) {
   }
 
   return (
-    <div className="LessonsCreate">
+    <div id="LessonsCreate" className="LessonsCreate">
       <hgroup className="lesson-form-title">
         <h2 className="title">Módulo: {moduleObj.name}</h2>
         <h3 className="subtitle">

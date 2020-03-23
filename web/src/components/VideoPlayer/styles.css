@@ -1,0 +1,6 @@
+.VideoPlayer {
+  padding-right: 3rem;
+}
+.VideoPlayer iframe {
+  width: 100%;
+}

@@ -7,6 +7,7 @@ import VideoPlayer from '../../../components/VideoPlayer';
 import auth from '../../../services/auth';
 
 import './styles.css';
+import ProgressBar from '../../../components/ProgressBar';
 
 function CoursesShow() {
   const { id } = useParams();
@@ -62,17 +63,26 @@ function CoursesShow() {
           <VideoPlayer video={video} />
         </div>
         <div className="course-lessons">
+          <ProgressBar progress={80} />
+
           {modules.length === 0 ? 'Nenhum modulo cadastrado' :
             <ul>
-              {modules.map(m => (
+              {modules.map((m, i) => (
                 <li key={m.id} className="module">
-                  <div className="module-name">{m.name}</div>
+                  <div className="module-name-wraper name-wraper">
+                    <span className="module-number number">{i+1}</span>
+                    <span className="module-name name">{m.name}</span>
+                  </div>
 
                   {m.lessons.length > 0 &&
                     <ul className="module-lessons">
-                      {m.lessons.map(value => (
-                        <li key={value.id} className={`lesson${value === lesson ? ' active' : ''}`}>
-                          <button onClick={e => setLesson(value)} href="#">{value.name}</button>
+                      {m.lessons.map((value, i) => (
+                        <li key={value.id} className={`lesson name-wraper${value === lesson ? ' active' : ''}`}>
+                          <span className="lesson-number number">{i+1}</span>
+                          <button className="lesson-name name" onClick={e => setLesson(value)} href="#">{value.name}</button>
+                          <span className="lesson-view-status finished">
+                            <i className="mi">clear</i>
+                          </span>
                         </li>
                       ))}
                     </ul>

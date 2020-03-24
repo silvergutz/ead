@@ -6,6 +6,7 @@
 
 const Lesson = use('App/Models/Lesson')
 const Module = use('App/Models/Module')
+const LessonService = use('App/Services/LessonService')
 
 /**
  * Resourceful controller for interacting with lessons
@@ -34,13 +35,7 @@ class LessonController {
   async store ({ request, response }) {
     const data = request.only(['name', 'description', 'video', 'duration', 'module_id', 'order', 'status'])
 
-    const moduleModel = data.module_id ? await Module.find(data.module_id) : null
-    if (!moduleModel) {
-      response.status(400)
-      return { error: 'Module not found' }
-    }
-
-    const lesson = await Lesson.create(data)
+    const lesson = await LessonService.save(data)
 
     response.status(201)
 
@@ -71,19 +66,10 @@ class LessonController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
-    const lesson = await Lesson.findOrFail(params.id)
-    const data = request.only(['name', 'description', 'video', 'duration', 'module_id', 'order', 'status'])
+    let data = request.only(['name', 'description', 'video', 'duration', 'module_id', 'order', 'status'])
 
-    if (data.module_id) {
-      const moduleModel = await Module.find(data.module_id)
-      if (!moduleModel) {
-        response.status(400)
-        return { error: 'Module not found' }
-      }
-    }
-
-    lesson.merge(data)
-    await lesson.save()
+    data.id = params.id
+    const lesson = await LessonService.save(data)
 
     return lesson
   }

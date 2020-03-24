@@ -16,9 +16,18 @@ class ModuleController {
    * GET modules
    *
    * @param {object} ctx
+   * @param {Request} ctx.request
    */
-  async index () {
-    const modules = await Module.all();
+  async index ({ request }) {
+    const { course } = request.get();
+
+    const query = Module.query().with('lessons');
+
+    if (course) {
+      query.where('course_id', course);
+    }
+
+    const modules = await query.fetch();
 
     return modules;
   }

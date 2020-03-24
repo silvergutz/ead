@@ -173,7 +173,7 @@ module.exports = {
     | based on HTTP headers/query string.
     |
     */
-    locale: 'en'
+    locale: Env.get('LOCALE', 'en')
   },
 
   logger: {

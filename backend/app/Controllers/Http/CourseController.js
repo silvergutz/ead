@@ -4,13 +4,8 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-const Helpers = use('Helpers')
-const Drive = use('Drive')
-
 const CourseService = use('App/Services/CourseService')
 const Course = use('App/Models/Course')
-const School = use('App/Models/School')
-const Category = use('App/Models/Category')
 const User = use('App/Models/User')
 
 const coverRules = {
@@ -29,12 +24,28 @@ class CourseController {
    *
    * @param {object} ctx
    */
-  async index () {
-    const courses = await Course.query()
+  async index ({ request, auth }) {
+    const { s } = request.get();
+
+    const query = Course.query()
+      .with('schools')
       .with('categories')
       .with('teachers')
       .with('lessons')
-      .fetch();
+      .orderBy('created_at', 'desc')
+
+    // Filter by search term
+    if (s) {
+      const searchTerm = '%' + s.replace(/\s/g, '%') + '%'
+      query.where('name', 'like', searchTerm)
+    }
+
+    // For students show only published
+    if (auth.user.level === User.LEVEL_STUDENT) {
+      query.where('status', Course.STATUS_PUBLISHED)
+    }
+
+    const courses = await query.fetch();
 
     return courses;
   }
@@ -48,10 +59,11 @@ class CourseController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    const { categories, teachers } = request.all()
+    const { schools, categories, teachers } = request.all()
     const data = {
       courseData: request.only(['name', 'description', 'school_id', 'status']),
       coverFile: request.file('cover', coverRules),
+      schools,
       categories,
       teachers,
     }
@@ -80,6 +92,9 @@ class CourseController {
   async show ({ params, response }) {
     const course = await Course
       .query()
+      .with('schools')
+      .with('categories')
+      .with('teachers')
       .with('modules')
       .with('modules.lessons')
       .limit(1)
@@ -103,10 +118,12 @@ class CourseController {
    * @param {Response} ctx.response
    */
   async update ({ request, params }) {
-    const { categories, teachers } = request.all()
+    const { schools, categories, teachers } = request.all()
     const data = {
       courseData: request.only(['name', 'description', 'status']),
       coverFile: request.file('cover', coverRules),
+      removeCover: request.input('remove_cover', false),
+      schools,
       categories,
       teachers,
     }

@@ -14,5 +14,5 @@ database/*.sqlite
 storage/uploads
 
 # public dir
-public
+public/*
 !public/.gitkeep

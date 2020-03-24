@@ -1,7 +1,9 @@
 'use strict'
 
+const fs = require('fs')
 const Helpers = use('Helpers')
 const Drive = use('Drive')
+const Config = use('Config')
 
 const Course = use('App/Models/Course')
 const School = use('App/Models/School')
@@ -11,7 +13,7 @@ const User = use('App/Models/User')
 class CourseService
 {
   static async save(data) {
-    let { courseData, coverFile, categories, teachers } = data
+    let { courseData, coverFile, removeCover, schools, categories, teachers } = data
     let coverStoragePath = ''
     let course
 
@@ -21,18 +23,12 @@ class CourseService
     }
 
     try {
-      // Find School
-      if (courseData.id) {
-        // Dont allow update school_id
-        delete courseData.school_id
-      } else {
-        courseData.school_id = parseInt(courseData.school_id)
-        const school = courseData.school_id ? await School.find(courseData.school_id) : null
-        if (!school) {
-          return { error: 'School not found' }
-        }
+      // Remove current cover, if update
+      if (removeCover) {
+        courseData.cover = null;
       }
 
+      // Process cover upload
       if (coverFile) {
         // Handle cover image upload
         const fileName = `${new Date().getTime()}.${coverFile.extname}`
@@ -45,7 +41,12 @@ class CourseService
           return { error: coverFile.error() };
         } else {
           coverStoragePath = `courses/${fileName}`
-          await Drive.move(Helpers.tmpPath(coverFile.fileName), coverStoragePath)
+
+          if (Config.get('drive.default') === 'gcs') {
+            await Drive.put(coverStoragePath, Helpers.tmpPath(coverFile.fileName))
+          } else {
+            await Drive.put(coverStoragePath, fs.readFileSync(Helpers.tmpPath(coverFile.fileName)))
+          }
           courseData.cover = coverStoragePath
         }
       }
@@ -58,6 +59,27 @@ class CourseService
         course = await Course.create(courseData)
       }
 
+      // Schools
+      if (schools) {
+        // Can be passed as string representation of array (multipart-form-data)
+        if (typeof schools === 'string') {
+          schools = JSON.parse(schools)
+        }
+        // making shure that is an array
+        if (!Array.isArray(schools)) {
+          schools = [schools];
+        }
+        // passed vi FormData
+        if (typeof schools[0] === 'string') {
+          schools = JSON.parse(`[${schools[0]}]`)
+        }
+        schools = await School
+          .query()
+          .whereIn('id', schools)
+          .pluck('id')
+        await course.schools().sync(schools)
+      }
+
       // Categories
       if (categories) {
         // Can be passed as string representation of array (multipart-form-data)
@@ -68,11 +90,15 @@ class CourseService
         if (!Array.isArray(categories)) {
           categories = [categories];
         }
+        // passed vi FormData
+        if (typeof categories[0] === 'string') {
+          categories = JSON.parse(`[${categories[0]}]`)
+        }
         categories = await Category
           .query()
           .whereIn('id', categories)
           .pluck('id')
-        await course.categories().attach(categories)
+        await course.categories().sync(categories)
       }
 
       // Teachers
@@ -83,17 +109,25 @@ class CourseService
         if (!Array.isArray(teachers)) {
           teachers = [teachers];
         }
+        if (typeof teachers[0] === 'string') {
+          teachers = JSON.parse(`[${teachers[0]}]`)
+        }
         teachers = await User
           .query()
           .whereIn('id', teachers)
           .pluck('id')
-        await course.teachers().attach(teachers)
+        await course.teachers().sync(teachers)
       }
 
       return course
     } catch(e) {
-      if (coverFile && coverFile.moved() && Drive.exists(coverStoragePath)) {
-        await Drive.delete(coverStoragePath)
+      if (coverFile && coverFile.moved()) {
+        if (fs.existsSync(Helpers.tmpPath(coverFile.fileName))) {
+          fs.unlink(Helpers.tmpPath(coverFile.fileName))
+        }
+        if (Drive.exists(coverStoragePath)) {
+          Drive.delete(coverStoragePath)
+        }
       }
       throw new Error(e)
     }

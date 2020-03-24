@@ -36,8 +36,19 @@ Route.group(() => {
   Route.get('app', 'AppController.index')
   Route.get('download', 'UploadController.download').as('download')
 
+  Route.get('profile', 'ProfileController.show')
+    .as('profile.show')
+  Route.put('profile', 'ProfileController.update')
+    .validator('ProfileUpdate')
+    .as('profile.update')
+
   Route.resource('schools', 'SchoolController').apiOnly()
-  Route.resource('users', 'UserController').apiOnly()
+  Route.resource('users', 'UserController')
+    .validator(new Map([
+      [['users.store'], ['UserStore']],
+      [['users.update'], ['UserUpdate']]
+    ]))
+    .apiOnly()
   Route.resource('modules', 'ModuleController').apiOnly()
   Route.resource('categories', 'CategoryController').apiOnly()
   Route.resource('courses', 'CourseController')
@@ -46,7 +57,12 @@ Route.group(() => {
       [['courses.update'], ['CourseUpdate']]
     ]))
     .apiOnly()
-  Route.resource('lessons', 'LessonController').apiOnly()
+  Route.resource('lessons', 'LessonController')
+    .validator(new Map([
+      [['lessons.store'], ['LessonStore']],
+      [['lessons.update'], ['LessonUpdate']]
+    ]))
+    .apiOnly()
 
 }).middleware(['auth']).prefix('/api/v1')
 

@@ -23,8 +23,11 @@ class Course extends Model {
     ]
   }
 
-  school() {
-    return this.belongsTo('App/Models/School')
+  schools() {
+    return this
+      .belongsToMany('App/Models/School', 'course_id', 'school_id')
+      .pivotTable('course_schools')
+      .withTimestamps()
   }
 
   categories() {

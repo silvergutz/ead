@@ -9,7 +9,7 @@
 }
 
 html, body, #root {
-  height: 100%;
+  min-height: 100vh;
 }
 
 body {
@@ -17,10 +17,16 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-body, input, button {
+body, input, textarea, button {
   font-family: Quicksand, sans-serif;
   font-size: 16px;
   color: #222;
+}
+button {
+  border-radius: 5px;
+  border: 1px solid #999;
+  background: #f5f5f5;
+  padding: .25em;
 }
 a {
   text-decoration: none;
@@ -76,6 +82,11 @@ a.mi:hover {
   color: #f00;
   margin-bottom: 2rem;
 }
+input.error, select.error, textarea.error, select.error {
+  border-color: #f00 !important;
+  margin-bottom: inherit;
+  text-align: left;
+}
 button.link {
   background: none;
   border: 0;
@@ -96,20 +107,6 @@ button.link {
   color: #303030;
 }
 
-.slick-arrow::before {
-  background: url('/images/arrow-right.png');
-  display: block;
-  width: 64px;
-  height: 64px;
-  font-size: 0 !important;
-}
-.slick-arrow.slick-prev::before {
-  transform: rotateY(180deg);
-}
-.slick-next {
-  right: 15px !important;
-}
-
 .button {
   display: inline-block;
   background: #000;
@@ -118,10 +115,14 @@ button.link {
   padding: 0.5em 1.8em;
   font-size: 14px;
   font-weight: 500;
+  border: 0;
   border-radius: 5px;
 }
 .button:hover {
   opacity: .9;
+}
+button {
+  cursor: pointer;
 }
 
 .back .mi {
@@ -134,6 +135,9 @@ button.link {
   padding: 2rem 1rem 3rem;
   border: 1px solid #7f7f7f;
   border-radius: 5px;
+}
+.model-form.content-box {
+  max-width: 60rem;
 }
 
 .datatable {
@@ -164,13 +168,29 @@ button.link {
   padding-right: 1.5em;
   text-align: right;
   line-height: 2rem;
+  max-width: 15em;
 }
 .model-form .form-field .field {
   flex: 1;
 }
 .model-form button[type="submit"] {
   margin-top: 2rem;
+  cursor: pointer;
 }
+.model-form input, .model-form select, .model-form textarea {
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #7f7f7f;
+  padding: .25em .5em;
+  min-width: 20em;
+}
+.model-form select {
+  min-width: 21.9em;
+}
+.model-form textarea {
+  height: 7.5em;
+}
+
 .upload-field {
   border: 2px dashed #999;
   background: #ffffff;
@@ -179,4 +199,42 @@ button.link {
 }
 .upload-field p {
   padding: 1rem;
+}
+
+button.small, .button.small {
+  font-size: 16px;
+  padding: .5em;
+}
+button.edit, .button.edit {
+  background: #e7e7e7;
+  border: 1px solid #979797;
+  color: rgb(0, 0, 0);
+}
+button.remove, .button.remove {
+  background: #ff2c2c;
+  border: 1px solid #a62121;
+  color: #fff;
+}
+button.send, .button.send {
+  background: #1c78b6;
+  border: 1px solid #365772;
+  color: #fff;
+}
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button {
+  cursor: pointer;
+}
+.button i {
+  margin-left: .5em;
+}
+.button.center-content {
+  width: 150px;
+  font-size: 17px;
+  line-height: 1;
+  margin-bottom: 1rem;
 }

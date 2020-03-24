@@ -1,5 +1,13 @@
 'use strict'
 
+const UserService = require('../../Services/UserService')
+
+const photoRules = {
+  types: ['image'],
+  size: '2mb',
+  extnames: ['jpg','jpeg','png'],
+}
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -19,8 +27,17 @@ class UserController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index () {
-    const users = await User.all()
+  async index ({ request }) {
+    const { s } = request.get();
+
+    const query = User.query()
+
+    if (s) {
+      const searchTerm = '%' + s.replace(/\s/g, '%') + '%'
+      query.where('name', 'like', searchTerm)
+    }
+
+    const users = await query.fetch()
 
     return users
   }
@@ -34,13 +51,21 @@ class UserController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    const userData = request.only(['name', 'email', 'password', 'photo', 'school_id', 'level', 'is_teacher'])
+    const data = {
+      userData: request.only(['name', 'email', 'password', 'level', 'is_teacher', 'school_id']),
+      photoFile: request.file('photo', photoRules),
+    }
 
-    const user = await User.create(userData)
+    const result = await UserService.save(data)
+
+    if (result.error) {
+      response.status(400)
+      return result
+    }
 
     response.status(201)
 
-    return user
+    return result
   }
 
   /**
@@ -66,11 +91,15 @@ class UserController {
    * @param {Request} ctx.request
    */
   async update ({ params, request }) {
-    const user = await User.findOrFail(params.id)
-    const data = request.only(['name', 'email', 'password', 'photo', 'school_id', 'level', 'is_teacher'])
+    const data = {
+      userData: request.only(['name', 'email', 'password', 'level', 'is_teacher', 'school_id']),
+      photoFile: request.file('photo', photoRules),
+      removePhoto: request.input('remove_photo', false),
+    }
 
-    user.merge(data)
-    await user.save()
+    data.userData.id = parseInt(params.id)
+
+    const user = await UserService.save(data)
 
     return user
   }

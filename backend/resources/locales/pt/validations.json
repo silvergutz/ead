@@ -1,0 +1,6 @@
+{
+  "required": "O campo {field} é obrigatório",
+  "min": "O campo {field} deve ter pelo menos {length} caracteres",
+  "max": "O campo {field} deve ter no máximo {length} caracteres",
+  "email": "O campo {field} deve ser um endereço de e-mail válido"
+}

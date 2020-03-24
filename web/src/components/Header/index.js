@@ -1,7 +1,10 @@
 import React from 'react';
+import { Link, withRouter } from 'react-router-dom';
+
+import { auth } from '../../services';
+import ImgProtected from '../ImgProtected';
 
 import './styles.css';
-import { Link, withRouter } from 'react-router-dom';
 
 function Header({ logout, currentUser }) {
   if (!currentUser) return null;
@@ -12,11 +15,27 @@ function Header({ logout, currentUser }) {
 
       <nav className="menu">
         <ul>
+          {auth.isAdmin() &&
+            <li>
+              <span>Admin</span>
+              <ul>
+                <li className="nav-item">
+                  <Link to={'/admin/lojas'}>Lojas</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to={'/admin/alunos'}>Alunos</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to={'/admin/cursos'}>Cursos</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to={'/admin/categorias'}>Categorias</Link>
+                </li>
+              </ul>
+            </li>
+          }
           <li>
             <Link to="/cursos">Cursos</Link>
-          </li>
-          <li>
-            <Link to="/alunos">Alunos</Link>
           </li>
           <li>
             <Link to="/perfil">Meus Dados</Link>
@@ -27,7 +46,12 @@ function Header({ logout, currentUser }) {
       {currentUser &&
         <div className="user">
           <div className="user-photo">
-            <img src={currentUser.photo} alt="" />
+            {currentUser.photo &&
+              <ImgProtected file={currentUser.photo} alt={currentUser.name} />
+            }
+            {!currentUser.photo &&
+              <img src="/images/default-user-photo.png" alt="" />
+            }
           </div>
           <div className="user-name">
             Olá, <span className="name">{currentUser.name}</span>

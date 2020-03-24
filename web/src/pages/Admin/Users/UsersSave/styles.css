@@ -1,0 +1,57 @@
+.UsersSave .model-form {
+  display: flex;
+  justify-content: flex-start;
+}
+.UsersSave .model-form .form-field > label {
+  flex: 0;
+	text-align: left;
+  min-width: 7rem;
+}
+.UsersSave .model-form .form-field {
+  justify-content: start;
+  align-items: center;
+}
+.UsersSave .photo-field {
+  display: block;
+  text-align: center;
+}
+.UsersSave .upload-field {
+  border-radius: 50%;
+}
+.UsersSave .upload-field section {
+  display: flex;
+  align-items: center;
+  width: 180px;
+  height: 180px;
+}
+.UsersSave .photo-field .button {
+  font-size: 12px;
+  background: #c00;
+}
+.UsersSave .user-photo-wraper {
+  padding-right: 3rem;
+  flex: 0;
+  min-width: 15rem;
+}
+.UsersSave .user-photo-wraper label {
+  margin-bottom: .5em;
+}
+.UsersSave .user-photo-wraper > .form-field {
+  flex-direction: column;
+}
+.UsersSave .current-photo {
+  display: flex;
+  align-items: center;
+  width: 180px;
+  height: 180px;
+  margin: 0 0 1rem;
+  border-radius: 50%;
+  border: 1px solid #999;
+  overflow: hidden;
+}
+.current-photo img {
+  max-width: 100%;
+}
+input[type="checkbox"] {
+  min-width: auto;
+}

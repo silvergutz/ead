@@ -61,7 +61,6 @@ Factory.blueprint('App/Models/Course', async (faker) => {
     name: faker.name(),
     description: faker.paragraph({ sentences: 1 }),
     cover: faker.avatar({ protocol: 'https' }),
-    school_id: id,
     status: faker.shuffle(Course.availableStatus())[0],
   }
 })

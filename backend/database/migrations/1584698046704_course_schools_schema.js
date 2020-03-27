@@ -41,10 +41,6 @@ class CourseSchoolsSchema extends Schema {
         .unsigned()
         .notNullable()
         .after('cover')
-        .references('id')
-        .inTable('schools')
-        .onUpdate('CASCADE')
-        .onDelete('RESTRICT')
     })
   }
 }

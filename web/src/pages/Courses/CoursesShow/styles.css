@@ -6,10 +6,17 @@
 }
 .CourseShow .lesson-content {
   flex-grow: 1;
+  padding-right: 3rem;
+}
+.CourseShow .lesson-content .VideoPlayer {
+  margin-bottom: 1.8rem;
+}
+.CourseShow .LessonComments > .CommentsForm {
+  margin-bottom: 1.8rem;
 }
 
 .CourseShow .course-lessons {
-  flex-shrink: 1;
+  flex-shrink: 0;
   width: 300px;
 }
 .CourseShow .course-lessons .progress-bar {

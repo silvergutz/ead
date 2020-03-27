@@ -4,6 +4,8 @@ import auth from '../../services/auth';
 import { globalNotifications } from '../../services';
 import { storeComment } from '../../services/comments';
 
+import './styles.css';
+
 function CommentsForm({ lesson, parent, refreshComments }) {
   const [ enabled, setEnabled ] = useState(true);
   const [ content, setContent ] = useState('');
@@ -43,11 +45,11 @@ function CommentsForm({ lesson, parent, refreshComments }) {
   }
 
   return (
-    <form className={(type === 'reply' ? 'comment-reply' : 'comment-new') + ' comment-form'} onSubmit={handleSubmit}>
+    <form className={(type === 'reply' ? 'comment-reply' : 'comment-new') + ' CommentsForm'} onSubmit={handleSubmit}>
       <div className="form-field">
         <div className="field">
           <textarea
-            id="content"
+            className="content-field"
             value={content}
             onChange={e => setContent(e.target.value)}
             placeholder={type === 'reply' ? 'Escreva a sua resposta' : 'Dúvidas sobre a aula?'}
@@ -55,7 +57,7 @@ function CommentsForm({ lesson, parent, refreshComments }) {
         </div>
       </div>
       <div className="form-field submit">
-        <button type="submit">enviar {type === 'reply' ? 'resposta' : 'dúvida'}</button>
+        <button className="button" type="submit">enviar {type === 'reply' ? 'resposta' : 'dúvida'}</button>
       </div>
     </form>
   )

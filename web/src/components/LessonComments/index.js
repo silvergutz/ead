@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-import auth from '../../services/auth';
 import { globalNotifications } from '../../services';
-import { storeComment, getComments } from '../../services/comments';
-import ImgProtected from '../ImgProtected';
+import { getComments } from '../../services/comments';
+import CommentsForm from '../CommentsForm';
+import CommentsList from '../CommentsList';
 
 function LessonComments({ lesson }) {
+  const [ enabledReplyForm, setEnabledReplyForm ] = useState([]);
   const [ comments, setComments ] = useState([]);
-  const [ content, setContent ] = useState('');
 
   useEffect(() => {
     if (lesson.comments && lesson.comments.length) {
@@ -23,65 +23,41 @@ function LessonComments({ lesson }) {
     if (response.error) {
       globalNotifications.sendErrorMessage('Não foi possível carregar as dúvidas');
     } else {
-      setComments(response);
-    }
-  }
+      let data = response.filter(e => !e.parent_id);
+      let hasParent = response.filter(e => e.parent_id > 0);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+      console.log('comments that not has parent', data);
+      console.log('has parent', hasParent);
 
-    const data = {
-      content,
-      lesson_id: lesson.id,
-      status: (auth.isAdmin() ? 'approved' : 'pending'),
-    }
+      while (hasParent.length) {
+        hasParent.forEach((comment, i) => {
+          data.map((parent) => {
+            if (parent.id === comment.parent_id) {
+              if (!parent.children) parent.children = [];
+              parent.children.push(comment);
+              hasParent.splice(i, 1);
+            }
 
-    const response = await storeComment(data);
-
-    if (response.error) {
-      globalNotifications.sendErrorMessage('Não foi possível gravar os dados');
-    } else {
-      if (auth.isAdmin()) {
-        globalNotifications.sendSuccessMessage('Dados gravados com sucesso');
-        setContent('');
-        loadComments();
-      } else {
-        globalNotifications.sendErrorMessage('Sua dúvida foi enviada, em breve o professor responderá');
+            return parent;
+          });
+        });
       }
+      setComments(data);
     }
   }
 
   return (
     <div className="LessonComments">
-      <form className="comment-form" onSubmit={handleSubmit}>
-        <div className="form-field">
-          <div className="field">
-            <textarea id="content" value={content} onChange={e => setContent(e.target.value)} placeholder="Dúvidas sobre a aula?" />
-          </div>
-        </div>
-        <div className="form-field submit">
-          <button type="submit">enviar dúvida</button>
-        </div>
-      </form>
+      <CommentsForm refreshComments={loadComments} lesson={lesson.id} />
 
       {comments.length > 0 &&
-        <div className="comments">
-          {comments.map(comment => (
-            <div key={comment.id} className="comment">
-              <div className="comment-user-photo">
-                <ImgProtected file={comment.user.photo} />
-              </div>
-
-              <div className="comment-data">
-                <div className="comment-user">{comment.user.name}</div>
-                <div className="comment-content">{comment.content}</div>
-              </div>
-
-              <div className="comment-date">{comment.created_at}</div>
-              <div className="comment-reply-button">Responder &raquo;</div>
-            </div>
-          ))}
-        </div>
+        <CommentsList
+          comments={comments}
+          enabledReplyForm={enabledReplyForm}
+          setEnabledReplyForm={setEnabledReplyForm}
+          lesson={lesson.id}
+          loadComments={loadComments}
+        />
       }
     </div>
   )

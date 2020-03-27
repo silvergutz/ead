@@ -24,7 +24,6 @@ class CommentController {
     const query = Comment.query()
       .with('lesson')
       .with('user')
-      .with('children')
       .orderBy('created_at', 'desc')
 
 

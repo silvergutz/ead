@@ -55,5 +55,11 @@ Route.group(() => {
       [['lessons.update'], ['LessonUpdate']]
     ]))
     .apiOnly()
+  Route.resource('comments', 'CommentController')
+    .validator(new Map([
+      [['comments.store'], ['CommentStore']],
+      [['comments.update'], ['CommentUpdate']]
+    ]))
+    .apiOnly()
 
 }).middleware(['auth'])

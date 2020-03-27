@@ -9,7 +9,7 @@ class CommentStore extends BaseValidator {
       content: 'required',
       lesson_id: 'required|exists:lessons,id',
       parent_id: 'exists:comments,id',
-      status: `required|in:${Comment.availableStatus().join(',')}`,
+      status: `in:${Comment.availableStatus().join(',')}`,
     }
   }
 

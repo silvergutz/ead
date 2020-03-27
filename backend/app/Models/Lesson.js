@@ -27,6 +27,10 @@ class Lesson extends Model {
     return this.belongsTo('App/Models/Module')
   }
 
+  comments() {
+    return this.hasMany('App/Models/Comment')
+  }
+
   attachments() {
     return this
       .morphMany('App/Models/Attachment', 'id', 'attachmentable_id', 'attachmentable_type')

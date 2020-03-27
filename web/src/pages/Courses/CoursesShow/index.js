@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { findCourse, embedVideo } from '../../../services/courses';
 import { useParams, Link } from 'react-router-dom';
 
 import globalNotifications from '../../../services/globalNotifications';
-import VideoPlayer from '../../../components/VideoPlayer';
 import auth from '../../../services/auth';
+import { findCourse } from '../../../services/courses';
+import { findLesson } from '../../../services/lessons';
+import VideoPlayer from '../../../components/VideoPlayer';
+import LessonComments from '../../../components/LessonComments';
+import ProgressBar from '../../../components/ProgressBar';
 
 import './styles.css';
-import ProgressBar from '../../../components/ProgressBar';
 
 function CoursesShow() {
   const { id } = useParams();
@@ -61,6 +63,8 @@ function CoursesShow() {
       <div className="course-container">
         <div className="lesson-content">
           <VideoPlayer video={video} />
+
+          <LessonComments lesson={lesson} />
         </div>
         <div className="course-lessons">
           <ProgressBar progress={80} />

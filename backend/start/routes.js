@@ -16,13 +16,21 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
-})
+const Helpers = use('Helpers')
+const fs = use('fs')
 
-Route.post('register', 'AuthController.register')
-Route.post('authenticate', 'AuthController.authenticate')
+// API Routes
+// NOT protected routes
+Route.group(() => {
+  Route.get('/', () => {
+    return { greeting: 'Welcome to API' }
+  })
 
+  // Route.post('register', 'AuthController.register')
+  Route.post('authenticate', 'AuthController.authenticate')
+}).prefix('/api/v1')
+
+// protected routes
 Route.group(() => {
 
   Route.get('app', 'AppController.index')
@@ -62,4 +70,15 @@ Route.group(() => {
     ]))
     .apiOnly()
 
-}).middleware(['auth'])
+}).middleware(['auth']).prefix('/api/v1')
+
+// Frontend with React
+Route.get('*', ({ request, response }) => {
+  const path = request.url()
+  if (path === '/' || !fs.existsSync(Helpers.publicPath(path))) {
+    response.download(Helpers.publicPath('app.html'))
+  } else {
+    response.download(Helpers.publicPath(path));
+  }
+})
+

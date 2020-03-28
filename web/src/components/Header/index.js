@@ -14,7 +14,7 @@ function Header({ logout, currentUser }) {
   return (
     <header className="Header">
       <Link className="logo" to="/">
-        <img src='/images/arrow-right.png' />
+        <img src='/images/logo-academy-preto.png' />
       </Link>
 
       <nav className="menu">

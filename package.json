@@ -1,0 +1,10 @@
+{
+  "name": "EaD",
+  "version": "0.1.0",
+  "description": "e-Learning Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "yarn install --cwd=./web && yarn run --cwd=./web build && rm -rf backend/public/* && mv -v web/build/* backend/public/ && rm -rf web/build && mv backend/public/index.html backend/public/app.html && yarn install --cwd=./backend && mv -vf backend/* . && ENV_SILENT=true node server.js"
+  }
+}
+

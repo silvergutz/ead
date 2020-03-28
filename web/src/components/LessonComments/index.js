@@ -23,25 +23,19 @@ function LessonComments({ lesson }) {
     if (response.error) {
       globalNotifications.sendErrorMessage('Não foi possível carregar as dúvidas');
     } else {
-      let data = response.filter(e => !e.parent_id);
-      let hasParent = response.filter(e => e.parent_id > 0);
-
-      console.log('comments that not has parent', data);
-      console.log('has parent', hasParent);
-
-      while (hasParent.length) {
-        hasParent.forEach((comment, i) => {
-          data.map((parent) => {
-            if (parent.id === comment.parent_id) {
-              if (!parent.children) parent.children = [];
-              parent.children.push(comment);
-              hasParent.splice(i, 1);
+      const data = response.map(parent => {
+        response
+          .filter(e => e.parent_id > 0)
+          .map(comment => {
+            if (comment.parent_id === parent.id) {
+              if (!parent.children) parent.children = [comment]
+              else parent.children.push(comment)
             }
+          })
 
-            return parent;
-          });
-        });
-      }
+        return parent;
+      }).filter(e => !e.parent_id)
+
       setComments(data);
     }
   }

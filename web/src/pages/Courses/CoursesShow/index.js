@@ -4,17 +4,17 @@ import { useParams, Link } from 'react-router-dom';
 import globalNotifications from '../../../services/globalNotifications';
 import auth from '../../../services/auth';
 import { findCourse } from '../../../services/courses';
-import { findLesson } from '../../../services/lessons';
 import VideoPlayer from '../../../components/VideoPlayer';
 import LessonComments from '../../../components/LessonComments';
 import ProgressBar from '../../../components/ProgressBar';
 
 import './styles.css';
+import PageNotFound from '../../PageNotFound';
 
 function CoursesShow() {
   const { id } = useParams();
 
-  const [ course, setCourse ] = useState([]);
+  const [ course, setCourse ] = useState({});
   const [ modules, setModules ] = useState([]);
   const [ lesson, setLesson ] = useState({});
   const [ video, setVideo ] = useState('');
@@ -26,7 +26,12 @@ function CoursesShow() {
       const course = await findCourse(id);
 
       if (course.error) {
-        globalNotifications.sendErrorMessage(`Não foi posível carregar o curso. Erro: ${course.error.message}`);
+        if (course.response.status === 404) {
+          globalNotifications.sendErrorMessage(course.error);
+          setCourse(false);
+        } else {
+          globalNotifications.sendErrorMessage(`Não foi posível carregar o curso. Erro: ${course.error.message}`);
+        }
       } else {
         setCourse(course);
         if (course.modules) {
@@ -49,6 +54,12 @@ function CoursesShow() {
     setVideo(lesson.video);
   }, [lesson])
 
+  if (course === false) {
+    return (
+      <PageNotFound />
+    )
+  }
+
   return (
     <div className="CourseShow">
       <h1 className="page-title">{course.name}</h1>
@@ -62,38 +73,43 @@ function CoursesShow() {
 
       <div className="course-container">
         <div className="lesson-content">
-          <VideoPlayer video={video} />
+          {(!lesson.id || modules.length === 0) ? 'Nenhum modulo cadastrado' :
+            <>
+              <VideoPlayer video={video} />
 
-          <LessonComments lesson={lesson} />
+              <LessonComments lesson={lesson} />
+            </>
+          }
         </div>
         <div className="course-lessons">
-          <ProgressBar progress={80} />
+          {modules.length > 0 &&
+            <>
+              <ProgressBar progress={80} />
+              <ul>
+                {modules.map((m, i) => (
+                  <li key={m.id} className="module">
+                    <div className="module-name-wraper name-wraper">
+                      <span className="module-number number">{i+1}</span>
+                      <span className="module-name name">{m.name}</span>
+                    </div>
 
-          {modules.length === 0 ? 'Nenhum modulo cadastrado' :
-            <ul>
-              {modules.map((m, i) => (
-                <li key={m.id} className="module">
-                  <div className="module-name-wraper name-wraper">
-                    <span className="module-number number">{i+1}</span>
-                    <span className="module-name name">{m.name}</span>
-                  </div>
-
-                  {m.lessons.length > 0 &&
-                    <ul className="module-lessons">
-                      {m.lessons.map((value, i) => (
-                        <li key={value.id} className={`lesson name-wraper${value === lesson ? ' active' : ''}`}>
-                          <span className="lesson-number number">{i+1}</span>
-                          <button className="lesson-name name" onClick={e => setLesson(value)} href="#">{value.name}</button>
-                          <span className="lesson-view-status finished">
-                            <i className="mi">clear</i>
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  }
-                </li>
-              ))}
-            </ul>
+                    {m.lessons.length > 0 &&
+                      <ul className="module-lessons">
+                        {m.lessons.map((value, i) => (
+                          <li key={value.id} className={`lesson name-wraper${value === lesson ? ' active' : ''}`}>
+                            <span className="lesson-number number">{i+1}</span>
+                            <button className="lesson-name name" onClick={e => setLesson(value)} href="#">{value.name}</button>
+                            <span className="lesson-view-status finished">
+                              <i className="mi">clear</i>
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    }
+                  </li>
+                ))}
+              </ul>
+            </>
           }
         </div>
       </div>

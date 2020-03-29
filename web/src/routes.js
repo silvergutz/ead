@@ -36,6 +36,7 @@ function Routes() {
 
         <PrivateRoute path="/cursos" exact component={CoursesList} />
         <PrivateRoute path="/cursos/:id" exact component={CoursesShow} />
+        <PrivateRoute path="/cursos/:id/aula/:lessonId" exact component={CoursesShow} />
 
         <PrivateRoute path="/admin/lojas" exact component={SchoolsList} onlyAdmin={true} />
         <PrivateRoute path="/admin/lojas/novo" exact component={SchoolsSave} onlyAdmin={true} />

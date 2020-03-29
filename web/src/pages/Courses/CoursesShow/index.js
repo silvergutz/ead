@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, withRouter, useLocation } from 'react-router-dom';
 
 import globalNotifications from '../../../services/globalNotifications';
 import auth from '../../../services/auth';
@@ -11,8 +11,8 @@ import ProgressBar from '../../../components/ProgressBar';
 import './styles.css';
 import PageNotFound from '../../PageNotFound';
 
-function CoursesShow() {
-  const { id } = useParams();
+function CoursesShow({ history, location }) {
+  const { id, lessonId } = useParams();
 
   const [ activeModules, setActiveModules ] = useState([]);
   const [ course, setCourse ] = useState({});
@@ -38,15 +38,32 @@ function CoursesShow() {
         if (course.modules) {
           setModules(course.modules);
           if (course.modules.length > 0 && course.modules[0].lessons.length > 0) {
-            setLesson(course.modules[0].lessons[0]);
-            setActiveModules([course.modules[0].id]);
+            if (lessonId) {
+              for (let m of course.modules) {
+                if (!m.lessons.length) continue;
+                for (let l of m.lessons) {
+                  if (l.id === parseInt(lessonId)) {
+                    setLesson(l);
+                    setActiveModules([m.id]);
+                    break;
+                  }
+                }
+              }
+              if (!lesson) {
+                setLesson(false);
+                globalNotifications.sendErrorMessage('Aula não encontrada');
+              }
+            } else {
+              setLesson(course.modules[0].lessons[0]);
+              setActiveModules([course.modules[0].id]);
+            }
           }
         }
       }
     }
 
     loadCourse();
-  }, [id]);
+  }, [id, location]);
 
   useEffect(() => {
     if (lesson.video === video) {
@@ -68,6 +85,11 @@ function CoursesShow() {
     }
   }
 
+  function changeActiveLesson(lesson) {
+    history.push(`/cursos/${course.id}/aula/${lesson.id}`);
+    setLesson(lesson);
+  }
+
   if (course === false) {
     return (
       <PageNotFound />
@@ -87,7 +109,8 @@ function CoursesShow() {
 
       <div className="course-container">
         <div className="lesson-content">
-          {(!lesson.id || modules.length === 0) ? 'Nenhum modulo cadastrado' :
+          {lesson === false && 'Aula não encontrada'}
+          {(!lesson.id || modules.length === 0) ? (lesson === false ? '' : 'Nenhum modulo cadastrado') :
             <>
               <VideoPlayer video={video} />
 
@@ -115,7 +138,7 @@ function CoursesShow() {
                         {m.lessons.map((value, i) => (
                           <li key={value.id} className={`lesson name-wraper${value === lesson ? ' active' : ''}`}>
                             <span className="lesson-number number">{i+1}</span>
-                            <button className="lesson-name name" onClick={e => setLesson(value)} href="#">{value.name}</button>
+                            <button className="lesson-name name" onClick={e => changeActiveLesson(value)} href="#">{value.name}</button>
                             <span className="lesson-view-status finished">
                               <i className="mi">clear</i>
                             </span>
@@ -134,4 +157,4 @@ function CoursesShow() {
   );
 }
 
-export default CoursesShow;
+export default withRouter(CoursesShow);

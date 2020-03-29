@@ -27,6 +27,13 @@
 .CourseShow .course-lessons ul {
   list-style: none;
 }
+.CourseShow .module-name-wraper {
+  cursor: pointer;
+}
+.CourseShow .module-name-wraper .toggle {
+  flex: 1 0 auto;
+  text-align: right;
+}
 .CourseShow .name-wraper {
   display: flex;
   align-items: center;
@@ -49,7 +56,14 @@
   line-height: 1.1;
 }
 .CourseShow .module-lessons {
+  overflow: hidden;
+  max-height: 0;
   padding: 0 1rem;
+  transition: max-height .15s ease-out;
+}
+.CourseShow .module-lessons.active {
+  max-height: 999px;
+  transition: max-height .25s ease-in;
 }
 .CourseShow .lesson {
   background-color: #8f8f8f;

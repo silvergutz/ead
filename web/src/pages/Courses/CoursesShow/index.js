@@ -24,7 +24,7 @@ function CoursesShow({ history, location }) {
     async function loadCourse() {
       globalNotifications.clearMessages();
 
-      const course = await findCourse(id);
+      const course = await findCourse(id, true);
 
       if (course.error) {
         if (course.response.status === 404) {
@@ -37,23 +37,42 @@ function CoursesShow({ history, location }) {
         setCourse(course);
         if (course.modules) {
           setModules(course.modules);
-          if (course.modules.length > 0 && course.modules[0].lessons.length > 0) {
-            if (lessonId) {
-              for (let m of course.modules) {
-                if (!m.lessons.length) continue;
-                for (let l of m.lessons) {
+
+          if (course.modules.length > 0) {
+            const formatedModules = course.modules.map(m => {
+              if (!m.lessons.length) return m;
+
+              m.lessons = m.lessons.map(l => {
+                // Set the actual progress of every lesson
+                if (l.history && l.history.length) {
+                  const actions = l.history.reduce((p, c) => {
+                    p && p.push(c.action);
+                    return p;
+                  }, []);
+
+                  if (actions.indexOf('done') >= 0) l.progress = 'done';
+                  else if (actions.indexOf('start') >= 0) l.progress = 'start';
+                  else if (actions.indexOf('open') >= 0) l.progress = 'open';
+                  else l.progress = 'nothing';
+                }
+
+                // Set active Lesson based on URL
+                if (lessonId) {
                   if (l.id === parseInt(lessonId)) {
                     setLesson(l);
                     setActiveModules([m.id]);
-                    break;
                   }
                 }
-              }
-              if (!lesson) {
-                setLesson(false);
-                globalNotifications.sendErrorMessage('Aula não encontrada');
-              }
-            } else {
+
+                return l;
+              });
+
+              return m;
+            });
+
+            setModules(formatedModules);
+
+            if (!lessonId) {
               setLesson(course.modules[0].lessons[0]);
               setActiveModules([course.modules[0].id]);
             }
@@ -121,7 +140,7 @@ function CoursesShow({ history, location }) {
         <div className="course-lessons">
           {modules.length > 0 &&
             <>
-              <ProgressBar progress={80} />
+              <ProgressBar progress={course.progress || 0} />
               <ul>
                 {modules.map((m, i) => (
                   <li key={m.id} className="module">
@@ -136,11 +155,11 @@ function CoursesShow({ history, location }) {
                     {m.lessons.length > 0 &&
                       <ul className={`module-lessons${isModuleActive(m.id) ? ' active' : ''}`}>
                         {m.lessons.map((value, i) => (
-                          <li key={value.id} className={`lesson name-wraper${value === lesson ? ' active' : ''}`}>
+                          <li key={value.id} className={`lesson name-wraper${value === lesson ? ' active' : ''}${value.progress === 'done' ? ' finished' : ''}`}>
                             <span className="lesson-number number">{i+1}</span>
                             <button className="lesson-name name" onClick={e => changeActiveLesson(value)} href="#">{value.name}</button>
-                            <span className="lesson-view-status finished">
-                              <i className="mi">clear</i>
+                            <span className="lesson-view-status">
+                              <i className="mi">{value.progress === 'done' ? 'done' : 'clear'}</i>
                             </span>
                           </li>
                         ))}

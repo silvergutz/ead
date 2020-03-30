@@ -42,27 +42,40 @@ Route.group(() => {
     .validator('ProfileUpdate')
     .as('profile.update')
 
+
   Route.resource('schools', 'SchoolController').apiOnly()
+
   Route.resource('users', 'UserController')
     .validator(new Map([
       [['users.store'], ['UserStore']],
       [['users.update'], ['UserUpdate']]
     ]))
     .apiOnly()
+
   Route.resource('modules', 'ModuleController').apiOnly()
+
   Route.resource('categories', 'CategoryController').apiOnly()
+
   Route.resource('courses', 'CourseController')
     .validator(new Map([
       [['courses.store'], ['CourseStore']],
       [['courses.update'], ['CourseUpdate']]
     ]))
     .apiOnly()
-  Route.resource('lessons', 'LessonController')
+  Route.get('courses/:id/progress/:user', 'CourseController.progress')
+    .as('courses.progress')
+
+    Route.resource('lessons', 'LessonController')
     .validator(new Map([
       [['lessons.store'], ['LessonStore']],
       [['lessons.update'], ['LessonUpdate']]
     ]))
     .apiOnly()
+  Route.post('lessons/:id/action', 'LessonController.action')
+    .as('lessons.action')
+  Route.get('lessons/:id/progress/:user', 'LessonController.progress')
+    .as('lessons.progress')
+
   Route.resource('comments', 'CommentController')
     .validator(new Map([
       [['comments.store'], ['CommentStore']],

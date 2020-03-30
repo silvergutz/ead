@@ -132,6 +132,39 @@ class CourseService
       throw new Error(e)
     }
   }
+
+  static async getProgress(course, user) {
+    let progress = 0
+
+    const lessons = await course.lessons().fetch()
+
+    if (lessons.rows.length) {
+      const lessonValue = 100 / lessons.rows.length
+
+      const promisses = lessons.rows.map(async (lesson) => {
+        const history = await lesson
+          .history()
+          .select('action')
+          .where('user_id', user.id)
+          .groupBy('action')
+          .fetch()
+
+        if (history.rows.length) {
+          if (history.rows.some(row => row.action === 'done')) {
+            progress += lessonValue
+          }
+        }
+      })
+
+      await Promise.all(promisses)
+    }
+
+    if (progress > 0) {
+      return Math.min(100, progress)
+    }
+
+    return progress
+  }
 }
 
 module.exports = CourseService

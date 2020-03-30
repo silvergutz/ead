@@ -158,6 +158,32 @@ class CourseController {
 
     await course.delete()
   }
+
+  /**
+   * Display the percentage of lessons of a course that some user was done
+   * GET courses/:id/progress/:user
+   *
+   * @param {object} ctx
+   * @param {Parameters} ctx.params
+   * @param {Response} ctx.response
+   * @param {View} ctx.view
+   */
+  async progress ({ params, response, auth }) {
+    // Students are not allowed to view progress of other users
+    if (auth.user.level === User.LEVEL_STUDENT && params.user !== auth.user.id) {
+      response.status(403)
+      return { error: 'forbidden' }
+    }
+
+    const course = await Course.findOrFail(params.id)
+    const user = await User.findOrFail(params.user)
+
+    const progress = await CourseService.getProgress(course, user)
+
+    return {
+      progress
+    }
+  }
 }
 
 module.exports = CourseController

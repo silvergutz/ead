@@ -3,7 +3,9 @@
 const { duration } = require('moment')
 const { google } = require('googleapis')
 const Env = use('Env')
+
 const Lesson = use('App/Models/Lesson')
+const LessonHistory = use('App/Models/LessonHistory')
 
 class LessonService
 {
@@ -90,6 +92,42 @@ class LessonService
     }
 
     return null
+  }
+
+  static async storeAction(lesson, user, action) {
+    if (Lesson.availableActions().indexOf(action) < 0) {
+      throw new Error(`Lesson action "${action}" is not valid`)
+    }
+
+    const history = await LessonHistory.create({
+      lesson_id: lesson,
+      user_id: user,
+      action,
+    })
+
+    return history
+  }
+
+  static async getProgress(lesson, user) {
+    const history = await lesson.history()
+      .select('action')
+      .where('user_id', user.id)
+      .groupBy('action')
+      .fetch()
+
+    if (history.rows && history.rows.length) {
+      if (history.rows.some(row => row.action === Lesson.ACTION_DONE)) {
+        return Lesson.ACTION_DONE
+      }
+      if (history.rows.some(row => row.action === Lesson.ACTION_START)) {
+        return Lesson.ACTION_START
+      }
+      if (history.rows.some(row => row.action === Lesson.ACTION_OPEN)) {
+        return Lesson.ACTION_OPEN
+      }
+    }
+
+    return null;
   }
 }
 

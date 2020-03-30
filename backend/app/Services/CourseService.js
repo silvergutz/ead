@@ -145,7 +145,7 @@ class CourseService
         const history = await lesson
           .history()
           .select('action')
-          .where('user_id', user.id)
+          .where('user_id', user)
           .groupBy('action')
           .fetch()
 

@@ -74,6 +74,9 @@
 .CourseShow .lesson.active {
   background-color: #777;
 }
+.CourseShow .lesson.finished.active {
+  background-color: #029f02 !important;
+}
 .CourseShow .lesson button {
   display: block;
   width: 100%;

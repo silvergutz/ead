@@ -53,6 +53,16 @@ export async function deleteLesson(id) {
   }
 }
 
+export async function storeLessonAction(id, action) {
+  try {
+    const response = await api.post(`/lessons/${id}/action`, { action });
+
+    return response.data;
+  } catch(e) {
+    return handleError(e);
+  }
+}
+
 export default {
   getLessons,
   findLesson,

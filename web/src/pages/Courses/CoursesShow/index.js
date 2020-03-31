@@ -10,6 +10,7 @@ import ProgressBar from '../../../components/ProgressBar';
 
 import './styles.css';
 import PageNotFound from '../../PageNotFound';
+import { storeLessonAction } from '../../../services/lessons';
 
 function CoursesShow({ history, location }) {
   const { id, lessonId } = useParams();
@@ -20,71 +21,15 @@ function CoursesShow({ history, location }) {
   const [ lesson, setLesson ] = useState({});
   const [ video, setVideo ] = useState('');
 
+  // Course or Location changed
   useEffect(() => {
-    async function loadCourse() {
-      globalNotifications.clearMessages();
-
-      const course = await findCourse(id, true);
-
-      if (course.error) {
-        if (course.response.status === 404) {
-          globalNotifications.sendErrorMessage(course.error);
-          setCourse(false);
-        } else {
-          globalNotifications.sendErrorMessage(`Não foi posível carregar o curso. Erro: ${course.error.message}`);
-        }
-      } else {
-        setCourse(course);
-        if (course.modules) {
-          setModules(course.modules);
-
-          if (course.modules.length > 0) {
-            const formatedModules = course.modules.map(m => {
-              if (!m.lessons.length) return m;
-
-              m.lessons = m.lessons.map(l => {
-                // Set the actual progress of every lesson
-                if (l.history && l.history.length) {
-                  const actions = l.history.reduce((p, c) => {
-                    p && p.push(c.action);
-                    return p;
-                  }, []);
-
-                  if (actions.indexOf('done') >= 0) l.progress = 'done';
-                  else if (actions.indexOf('start') >= 0) l.progress = 'start';
-                  else if (actions.indexOf('open') >= 0) l.progress = 'open';
-                  else l.progress = 'nothing';
-                }
-
-                // Set active Lesson based on URL
-                if (lessonId) {
-                  if (l.id === parseInt(lessonId)) {
-                    setLesson(l);
-                    setActiveModules([m.id]);
-                  }
-                }
-
-                return l;
-              });
-
-              return m;
-            });
-
-            setModules(formatedModules);
-
-            if (!lessonId) {
-              setLesson(course.modules[0].lessons[0]);
-              setActiveModules([course.modules[0].id]);
-            }
-          }
-        }
-      }
-    }
-
     loadCourse();
   }, [id, location]);
 
+  // Lesson changed
   useEffect(() => {
+    (async () => await storeLessonAction(lesson.id, 'open'))();
+
     if (lesson.video === video) {
       setVideo('');
     }
@@ -92,8 +37,72 @@ function CoursesShow({ history, location }) {
     setVideo(lesson.video);
   }, [lesson])
 
+  async function loadCourse() {
+    globalNotifications.clearMessages();
+
+    const course = await findCourse(id, true);
+
+    if (course.error) {
+      if (course.response.status === 404) {
+        globalNotifications.sendErrorMessage(course.error);
+        setCourse(false);
+      } else {
+        globalNotifications.sendErrorMessage(`Não foi posível carregar o curso. Erro: ${course.error.message}`);
+      }
+    } else {
+      setCourse(course);
+
+      // If not has anyone module
+      if (!course.modules || !course.modules.length) {
+        setModules([]);
+      } else {
+
+        // find lesson passed on URL
+        const formatedModules = course.modules.map(m => {
+          if (!m.lessons.length) return m;
+
+          m.lessons = m.lessons.map(l => {
+            // Set the current progress of every lesson
+            if (l.history && l.history.length) {
+              const actions = l.history.reduce((p, c) => {
+                p && p.push(c.action);
+                return p;
+              }, []);
+
+              if (actions.indexOf('done') >= 0) l.progress = 'done';
+              else if (actions.indexOf('start') >= 0) l.progress = 'start';
+              else if (actions.indexOf('open') >= 0) l.progress = 'open';
+              else l.progress = 'nothing';
+            }
+
+            // Set active Lesson based on URL
+            if (lessonId) {
+              if (l.id === parseInt(lessonId)) {
+                setLesson(l);
+                setActiveModules([m.id]);
+              }
+            }
+
+            return l;
+          });
+
+          return m;
+        });
+
+        // if not passed a lesson on URL
+        if (!lessonId) {
+          // move to the next that was not finished
+          moveToNextLesson(formatedModules);
+          return;
+        }
+
+        setModules(formatedModules);
+      }
+    }
+  }
+
   function isModuleActive(id) {
-    return activeModules.indexOf(id) >= 0 ? true : false;
+    return (activeModules.length && activeModules.indexOf(id) >= 0) ? true : false;
   }
 
   function toggleActiveModule(id) {
@@ -105,8 +114,70 @@ function CoursesShow({ history, location }) {
   }
 
   function changeActiveLesson(lesson) {
-    history.push(`/cursos/${course.id}/aula/${lesson.id}`);
+    history.push(`/cursos/${id}/aula/${lesson.id}`);
     setLesson(lesson);
+    setActiveModules([lesson.module_id]);
+  }
+
+  async function handleVideoPlaying(event) {
+    await storeLessonAction(lesson.id, 'start');
+  }
+
+  async function handleVideoEnded(event) {
+    const response = await storeLessonAction(lesson.id, 'done');
+
+    if (response.error) {
+      console.error(response.error);
+    } else {
+      globalNotifications.sendSuccessMessage('Parabéns, você concluiu mais uma aula!');
+
+      // move to next lesson if has or refresh course to update the progress
+      moveToNextLesson(modules, lesson) || loadCourse();
+    }
+  }
+
+  function moveToNextLesson(modules, current) {
+    if (modules && modules.length) {
+      let currentIndex;
+
+      for (let m of modules) {
+        if (!m.lessons || !m.lessons.length) continue;
+
+        for (let i in m.lessons) {
+          if (currentIndex) {
+            changeActiveLesson(m.lessons[i]);
+            return m.lessons[i];
+          }
+
+          // if has set current lesson, get the next one
+          if (current) {
+            if (m.lessons[i].id === current.id) {
+              currentIndex = i;
+            }
+
+          // if not, get the next that was not finished yeat
+          } else {
+            if (m.lessons[i].progress !== 'done') {
+              changeActiveLesson(m.lessons[i]);
+              return m.lessons[i];
+            }
+          }
+        }
+      }
+
+      // if not has set current lesson yeat means that current is the last one
+      // ...or not passed lesson id on URL
+      if (!current) {
+        // then change to the first one
+        if (modules[0].lessons && modules[0].lessons.length) {
+          changeActiveLesson(modules[0].lessons[0]);
+          return modules[0].lessons[0];
+        }
+      }
+    }
+
+    // not has next lesson or modules are empty
+    return null;
   }
 
   if (course === false) {
@@ -131,7 +202,7 @@ function CoursesShow({ history, location }) {
           {lesson === false && 'Aula não encontrada'}
           {(!lesson.id || modules.length === 0) ? (lesson === false ? '' : 'Nenhum modulo cadastrado') :
             <>
-              <VideoPlayer video={video} />
+              <VideoPlayer video={video} onVideoEnded={handleVideoEnded} onVideoPlaying={handleVideoPlaying} />
 
               <LessonComments lesson={lesson} />
             </>

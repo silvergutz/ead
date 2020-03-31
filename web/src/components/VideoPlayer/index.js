@@ -4,7 +4,7 @@ import YouTube from 'react-youtube';
 
 import './styles.css';
 
-function VideoPlayer({ video }) {
+function VideoPlayer({ video, onVideoEnded, onVideoPlaying }) {
   const [ videoId, setVideoId ] = useState('');
   const [ videoType, setVideoType ] = useState('');
   const [ videoTitle, setVideoTitle ] = useState('');
@@ -73,25 +73,27 @@ function VideoPlayer({ video }) {
   function handlePlayerStateChange(event) {
     switch (event.data) {
       case -1:
-        console.log('Video not started');
+        // console.log('Video not started');
         break;
       case 0:
-        console.log('Video ended');
+        // console.log('Video ended');
+        onVideoEnded(event);
         break;
       case 1:
-        console.log('Video is playing');
+        // console.log('Video is playing');
+        onVideoPlaying(event);
         break;
       case 2:
-        console.log('Video is paused');
+        // console.log('Video is paused');
         break;
       case 3:
-        console.log('Video is storing buffer');
+        // console.log('Video is storing buffer');
         break;
       case 5:
-        console.log('Video cued');
+        // console.log('Video cued');
         break;
       default:
-        console.log(event.data);
+        // console.log(event.data);
         break;
     }
   }

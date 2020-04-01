@@ -35,23 +35,24 @@ function Login({ history, location }) {
   }
 
   return (
-    <div className="Login">
+    <div className="BoxLogin">
+      <div className="Login">
+        <div className="login-box">
+          <form onSubmit={handleSubmit}>
+            <div className="field">
+              <label htmlFor="email"></label>
+              <input id="email" type="text" onChange={e => setEmail(e.target.value)} value={email} placeholder="Email" />
+            </div>
+            <div className="field">
+              <input id="password" type="password" onChange={e => setPassword(e.target.value)} placeholder="Senha" />
+            </div>
+            <div className="field">
+              <button type="submit">Fazer Login</button>
+            </div>
+          </form>
 
-      <div className="login-box">
-        <form onSubmit={handleSubmit}>
-          <div className="field">
-            <label htmlFor="email"></label>
-            <input id="email" type="text" onChange={e => setEmail(e.target.value)} value={email} placeholder="Email" />
-          </div>
-          <div className="field">
-            <input id="password" type="password" onChange={e => setPassword(e.target.value)} placeholder="Senha" />
-          </div>
-          <div className="field">
-            <button type="submit">Fazer Login</button>
-          </div>
-        </form>
-
-        <Link to="/recuperar-senha" className="lost-password">esqueceu a senha?</Link>
+          <Link to="/recuperar-senha" className="lost-password">esqueceu a senha?</Link>
+        </div>
       </div>
     </div>
   );

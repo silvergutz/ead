@@ -6,12 +6,16 @@ import ImgProtected from '../ImgProtected';
 
 import './styles.css';
 
+
+
 function Header({ logout, currentUser }) {
   if (!currentUser) return null;
 
   return (
     <header className="Header">
-      <Link className="logo" to="/">EaD</Link>
+      <Link className="logo" to="/">
+        <img src='/images/logo-academy-preto.png' />
+      </Link>
 
       <nav className="menu">
         <ul>

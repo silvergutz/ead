@@ -12,13 +12,25 @@
 }
 .CoursesCarrossel .Course {
   margin: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 0 30px 0px rgba(0,0,0,0.3);
+  border-radius: 10px;  
   text-align: center;
   max-width: 16rem;
   min-height: 19.9rem;
   font-size: 14px;
+  transition: all .3s;
+  border: #f1f1f5 solid 1px;
+  box-shadow: 0 0 10px 0px rgba(0,0,0,0.1);
 }
+
+.CoursesCarrossel .Course:hover{
+  box-shadow: 0 0 20px 0px rgba(0,0,0,0.2);
+}
+
+.CoursesCarrossel .Course:hover .course-cover img{
+  transform: scale(1.1);
+}
+
+
 .CoursesCarrossel .Course .course-cover {
   text-align: center;
   margin: 0 0 1rem;
@@ -26,11 +38,23 @@
   overflow: hidden;
   border-radius: 10px;
 }
+
+.course-name{
+  font-weight: bold;
+}
+
 .CoursesCarrossel .Course .course-cover img {
   margin: 0 auto;
   max-width: 100%;
   border-radius: 10px;
+  transition: all .7s;
 }
+
+.CoursesCarrossel .Course:hover .course-button{
+  background: #B41219;
+}
+
+
 .CoursesCarrossel .Course > div, .CoursesCarrossel .Course > a {
   margin-bottom: .5rem;
 }
@@ -45,4 +69,9 @@
   padding: 0.2em 2.3em;
   font-size: 13px;
   border-radius: 5px;
+  transition: all .7s;
+}
+
+.CoursesCarrossel .Course .course-button:hover{
+  opacity: .8;
 }

@@ -13,7 +13,7 @@ html, body, #root {
 }
 
 body {
-  background: #eaeaea url('/images/bg.jpg');
+  background: #eaeaea url('/images/bg-custom.jpg');
   -webkit-font-smoothing: antialiased;
 }
 
@@ -36,6 +36,20 @@ a {
   display: flex;
   justify-content: center;
 }
+
+::-webkit-scrollbar{
+  width: 5px;
+  height: 5px;-webkit-border-radius: 16px;}
+
+::-webkit-scrollbar-track-piece { background-color: #f1f1f1; 
+border: #fff thin solid; 
+    }
+
+::-webkit-scrollbar-thumb:vertical { height: 5px; 
+  background-color: #B41219;  
+  }
+
+::-webkit-scrollbar-thumb:horizontal { width: 5px; background-color: #666;  }
 
 .material-icons, .mi {
   font-family: 'Material Icons';

@@ -43,7 +43,7 @@ class CourseController {
    * @param {object} ctx
    */
   async index ({ request, auth }) {
-    const { s } = request.get();
+    const { s, in_progress } = request.get();
 
     const query = Course.query()
       .with('schools')
@@ -57,6 +57,14 @@ class CourseController {
       const searchTerm = '%' + s.replace(/\s/g, '%') + '%'
       query.where('name', 'like', searchTerm)
     }
+
+    // Filter by courses that has been started by student
+    if (in_progress) {
+      query.whereHas('lessons.history', (builder) => {
+        builder.where('user_id', in_progress)
+      });
+    }
+
 
     // For students show only published
     if (auth.user.level === User.LEVEL_STUDENT) {

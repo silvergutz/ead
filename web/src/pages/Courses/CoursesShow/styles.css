@@ -33,6 +33,7 @@
 .CourseShow .module-name-wraper .toggle {
   flex: 1 0 auto;
   text-align: right;
+  margin-right: .3rem;
 }
 .CourseShow .name-wraper {
   display: flex;

@@ -8,12 +8,14 @@ function ProgressBar({ className, progress }) {
   const [ currentProgress, setCurrentProgress ] = useState(0);
 
   useEffect(() => {
-    setCurrentProgress(progress || 0);
+    setCurrentProgress(parseInt(progress) || 0);
   }, [progress]);
 
   return (
     <div className={classNameAttr}>
-      <div className="progress" style={{ width: currentProgress + '%' }}>{currentProgress}%</div>
+      <div className="progress" style={{ width: currentProgress + '%', textIndent: currentProgress < 10 ? '0.5em' : 0 }}>
+        {currentProgress}%
+      </div>
     </div>
   );
 }

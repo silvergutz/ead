@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import PrivateRoute from './components/PrivateRoute';
+import PageNotFound from './pages/PageNotFound';
 
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -35,6 +36,7 @@ function Routes() {
 
         <PrivateRoute path="/cursos" exact component={CoursesList} />
         <PrivateRoute path="/cursos/:id" exact component={CoursesShow} />
+        <PrivateRoute path="/cursos/:id/aula/:lessonId" exact component={CoursesShow} />
 
         <PrivateRoute path="/admin/lojas" exact component={SchoolsList} onlyAdmin={true} />
         <PrivateRoute path="/admin/lojas/novo" exact component={SchoolsSave} onlyAdmin={true} />
@@ -52,7 +54,7 @@ function Routes() {
         <PrivateRoute path="/admin/alunos/novo" exact component={UsersSave} onlyAdmin={true} />
         <PrivateRoute path="/admin/alunos/:id/editar" exact component={UsersSave} onlyAdmin={true} />
 
-        <Route path="*" component={() => <h1 className="page-title">Página não encontrada</h1>} />
+        <Route path="*" component={PageNotFound} />
       </Switch>
     </BrowserRouter>
   );

@@ -18,6 +18,11 @@ function LessonComments({ lesson }) {
   }, [lesson])
 
   async function loadComments() {
+    if (!lesson.id) {
+      setComments([]);
+      return;
+    }
+
     const response = await getComments(lesson.id);
 
     if (response.error) {

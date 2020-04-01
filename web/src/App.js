@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { auth } from './services';
-import { history } from './helpers/history';
 import Routes from './routes';
 import Header from './components/Header';
 
@@ -17,16 +16,11 @@ function App() {
     auth.currentUser.subscribe(setCurrentUser);
   }, []);
 
-  function logout() {
-    auth.logout();
-    history.push('/login');
-  }
-
   return (
     <BrowserRouter forceRefresh={true}>
       <div className="App">
         <ErrorBoundary>
-          <Header currentUser={currentUser} logout={logout} />
+          <Header currentUser={currentUser} />
         </ErrorBoundary>
         <main>
           <GlobalNotifications />

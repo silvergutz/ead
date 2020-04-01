@@ -19,6 +19,23 @@ const coverRules = {
  * Resourceful controller for interacting with courses
  */
 class CourseController {
+
+  /**
+   * Check if a current user has permission to se the progress of other
+   *
+   * @param integer currentUser Current User id
+   * @param integer target      Target User id
+   * @return boolean
+   */
+  _canUserSeeProgress(currentUser, target) {
+    // Students are not allowed to view progress of other users
+    if (currentUser.level !== User.LEVEL_STUDENT || target === currentUser.id) {
+      return true;
+    }
+
+    return false;
+  }
+
   /**
    * Show a list of all courses.
    * GET courses
@@ -87,10 +104,13 @@ class CourseController {
    *
    * @param {object} ctx
    * @param {Parameters} ctx.params
+   * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, response, auth }) {
+  async show ({ params, request, response, auth }) {
+    const { progress } = request.get()
+
     const query = Course
       .query()
       .with('schools')
@@ -111,14 +131,31 @@ class CourseController {
       query.with('modules.lessons')
     }
 
-    const course = await query.fetch()
+    // Lessons history
+    if (progress) {
+      // Check permission
+      if (this._canUserSeeProgress(auth.user, progress)) {
+        query.with('modules.lessons.history', (builder) => {
+          builder.where('user_id', progress)
+        })
+      }
+    }
+
+    let course = await query.fetch()
 
     if (!course.rows.length) {
       response.status(404)
       return { error: 'Not found' }
     }
 
-    return course.first()
+    course = course.first()
+
+    // Calculate total Course progress
+    if (progress && this._canUserSeeProgress(auth.user, progress)) {
+      course.progress = await CourseService.getProgress(course, progress)
+    }
+
+    return course
   }
 
   /**
@@ -157,6 +194,32 @@ class CourseController {
     const course = await Course.findOrFail(params.id)
 
     await course.delete()
+  }
+
+  /**
+   * Display the percentage of lessons of a course that some user was done
+   * GET courses/:id/progress/:user
+   *
+   * @param {object} ctx
+   * @param {Parameters} ctx.params
+   * @param {Response} ctx.response
+   * @param {View} ctx.view
+   */
+  async progress ({ params, response, auth }) {
+    // Students are not allowed to view progress of other users
+    if (auth.user.level === User.LEVEL_STUDENT && params.user !== auth.user.id) {
+      response.status(403)
+      return { error: 'forbidden' }
+    }
+
+    const course = await Course.findOrFail(params.id)
+    const user = await User.findOrFail(params.user)
+
+    const progress = await CourseService.getProgress(course, user.id)
+
+    return {
+      progress
+    }
   }
 }
 

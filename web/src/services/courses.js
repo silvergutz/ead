@@ -4,6 +4,7 @@ import * as moment from 'moment';
 
 import { api } from '../services';
 import { handleError } from '../helpers';
+import auth from './auth';
 
 export async function getCourses(searchTerm) {
   try {
@@ -59,9 +60,18 @@ export async function getCoursesCarrossel() {
   return courses;
 }
 
-export async function findCourse(id) {
+export async function findCourse(id, progress) {
   try {
-    const response = await api.get(`/courses/${id}`)
+    let user;
+    if (progress) {
+      if (progress === true) {
+        user = auth.currentUserValue.id;
+      } else {
+        user = parseInt(progress);
+      }
+    }
+    const qs = querystring.stringify({ progress: user });
+    const response = await api.get(`/courses/${id}${(qs ? `?${qs}` : '')}`);
 
     return response.data;
   } catch(e) {

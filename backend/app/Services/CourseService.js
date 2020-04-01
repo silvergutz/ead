@@ -6,6 +6,7 @@ const Drive = use('Drive')
 const Config = use('Config')
 
 const Course = use('App/Models/Course')
+const Lesson = use('App/Models/Lesson')
 const School = use('App/Models/School')
 const Category = use('App/Models/Category')
 const User = use('App/Models/User')
@@ -136,7 +137,9 @@ class CourseService
   static async getProgress(course, user) {
     let progress = 0
 
-    const lessons = await course.lessons().fetch()
+    const lessons = await course.lessons()
+      .where('status', Lesson.STATUS_PUBLISHED)
+      .fetch()
 
     if (lessons.rows.length) {
       const lessonValue = 100 / lessons.rows.length

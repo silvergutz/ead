@@ -17,11 +17,31 @@ export async function getCourses(searchTerm) {
   }
 }
 
+export async function getCoursesInProgress(userId) {
+  try {
+    let user;
+    if (userId) {
+      user = parseInt(userId);
+    } else {
+      user = auth.currentUserValue.id;
+    }
+    const qs = querystring.stringify({ in_progress: user });
+    const response = await api.get('/courses/' + (qs ? `?${qs}` : ''));
+
+    return response.data;
+  } catch(e) {
+    return handleError(e);
+  }
+}
+
 export async function getCoursesCarrossel() {
   const response = await getCourses();
   if (response.error) return response;
 
+  const inProgressResponse = await getCoursesInProgress();
+
   let courses = {
+    inProgress: !inProgressResponse.error ? inProgressResponse : [],
     recent: [],
     categories: [],
   };

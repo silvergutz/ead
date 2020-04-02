@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 
 import ImgProtected from '../ImgProtected';
-import { getCourses, calcDuration, getCoursesCarrossel } from '../../services/courses';
+import { calcDuration, getCoursesCarrossel } from '../../services/courses';
 import globalNotifications from '../../services/globalNotifications';
 import { auth } from '../../services';
 
@@ -49,12 +49,12 @@ function CoursesCarrossel() {
         }
 
         <div className="courses-carrossels">
-          {(courses && courses.recent) &&
-            <div className="courses-recents">
+          {(courses && courses.inProgress) &&
+            <div className="courses-inProgresss">
               <h1 className="section-title">Treinamentos em andamento</h1>
 
-              <Slider {...sliderSettings} slidesToShow={Math.min(courses.recent.length, 4)} className="courses">
-                {courses.recent.map(course => (
+              <Slider {...sliderSettings} slidesToShow={Math.min(courses.inProgress.length, 4)} className="courses">
+                {courses.inProgress.map(course => (
                   <div key={course.id} className={`Course ${course.status}`}>
                     <div className="course-cover">
                       {course.cover &&
@@ -107,7 +107,12 @@ function CoursesCarrossel() {
                     {category.courses.map(course => (
                       <div key={course.id} className={`Course ${course.status}`}>
                         <div className="course-cover">
-                          <ImgProtected file={course.cover} alt={course.name} />
+                          {course.cover &&
+                            <ImgProtected file={course.cover} alt={course.name} />
+                          }
+                          {!course.cover &&
+                            <img src="/images/default-course-cover.jpg" alt={course.name} />
+                          }
                         </div>
                         <div className="course-name">{course.name}</div>
 

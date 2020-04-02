@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, withRouter, useLocation } from 'react-router-dom';
+import { useParams, Link, withRouter } from 'react-router-dom';
 
 import globalNotifications from '../../../services/globalNotifications';
 import auth from '../../../services/auth';
@@ -15,6 +15,7 @@ import { storeLessonAction } from '../../../services/lessons';
 function CoursesShow({ history, location }) {
   const { id, lessonId } = useParams();
 
+  const [ loading, setLoading ] = useState([]);
   const [ activeModules, setActiveModules ] = useState([]);
   const [ course, setCourse ] = useState({});
   const [ modules, setModules ] = useState([]);
@@ -23,6 +24,7 @@ function CoursesShow({ history, location }) {
 
   // Course or Location changed
   useEffect(() => {
+    setLoading(true);
     loadCourse();
   }, [id, location]);
 
@@ -43,11 +45,13 @@ function CoursesShow({ history, location }) {
     const course = await findCourse(id, true);
 
     if (course.error) {
-      if (course.response.status === 404) {
+      if (course.response && course.response.status === 404) {
         globalNotifications.sendErrorMessage(course.error);
-        setCourse(false);
+        setCourse(null);
       } else {
-        globalNotifications.sendErrorMessage(`Não foi posível carregar o curso. Erro: ${course.error.message}`);
+        const errorDetails = course.error.message ? ` Erro: ${course.error.message}` : '';
+        globalNotifications.sendErrorMessage(`Não foi posível carregar o curso.${errorDetails}`);
+        setCourse(false);
       }
     } else {
       setCourse(course);
@@ -99,6 +103,8 @@ function CoursesShow({ history, location }) {
         setModules(formatedModules);
       }
     }
+
+    setLoading(false);
   }
 
   function isModuleActive(id) {
@@ -180,69 +186,81 @@ function CoursesShow({ history, location }) {
     return null;
   }
 
-  if (course === false) {
+  if (course === null) {
     return (
       <PageNotFound />
     )
   }
 
+  if (course === false) {
+    return (
+      <div className="error">Ocorreu um erro ao carregar o curso</div>
+    )
+  }
+
   return (
     <div className="CourseShow">
-      <h1 className="page-title">{course.name}</h1>
+      {loading ? (
+        <h1 className="page-title">Carregando...</h1>
+      ) : (
+        <>
+          <h1 className="page-title">{course.name}</h1>
 
-      {auth.isAdmin() &&
-        <Link className="course edit button center-content" to={`/admin/cursos/${course.id}/editar`}>
-          Editar
-          <i className="mi">edit</i>
-        </Link>
-      }
-
-      <div className="course-container">
-        <div className="lesson-content">
-          {lesson === false && 'Aula não encontrada'}
-          {(!lesson.id || modules.length === 0) ? (lesson === false ? '' : 'Nenhum modulo cadastrado') :
-            <>
-              <VideoPlayer video={video} onVideoEnded={handleVideoEnded} onVideoPlaying={handleVideoPlaying} />
-
-              <LessonComments lesson={lesson} />
-            </>
+          {auth.isAdmin() &&
+            <Link className="course edit button center-content" to={`/admin/cursos/${course.id}/editar`}>
+              Editar
+              <i className="mi">edit</i>
+            </Link>
           }
-        </div>
-        <div className="course-lessons">
-          {modules.length > 0 &&
-            <>
-              <ProgressBar progress={course.progress || 0} />
-              <ul>
-                {modules.map((m, i) => (
-                  <li key={m.id} className="module">
-                    <div className="module-name-wraper name-wraper" onClick={e => toggleActiveModule(m.id)}>
-                      <span className="module-number number">{i+1}</span>
-                      <span className="module-name name">{m.name}</span>
-                      <i className="mi toggle">
-                        {isModuleActive(m.id) ? 'arrow_drop_up' : 'arrow_drop_down'}
-                      </i>
-                    </div>
 
-                    {m.lessons.length > 0 &&
-                      <ul className={`module-lessons${isModuleActive(m.id) ? ' active' : ''}`}>
-                        {m.lessons.map((value, i) => (
-                          <li key={value.id} className={`lesson name-wraper${value === lesson ? ' active' : ''}${value.progress === 'done' ? ' finished' : ''}`}>
-                            <span className="lesson-number number">{i+1}</span>
-                            <button className="lesson-name name" onClick={e => changeActiveLesson(value)} href="#">{value.name}</button>
-                            <span className="lesson-view-status">
-                              <i className="mi">{value.progress === 'done' ? 'done' : 'clear'}</i>
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    }
-                  </li>
-                ))}
-              </ul>
-            </>
-          }
-        </div>
-      </div>
+          <div className="course-container">
+            <div className="lesson-content">
+              {lesson === false && 'Aula não encontrada'}
+              {(!lesson.id || modules.length === 0) ? (lesson === false ? '' : 'Nenhum modulo cadastrado') :
+                <>
+                  <VideoPlayer video={video} onVideoEnded={handleVideoEnded} onVideoPlaying={handleVideoPlaying} />
+
+                  <LessonComments lesson={lesson} />
+                </>
+              }
+            </div>
+            <div className="course-lessons">
+              {modules.length > 0 &&
+                <>
+                  <ProgressBar progress={course.progress || 0} />
+                  <ul>
+                    {modules.map((m, i) => (
+                      <li key={m.id} className="module">
+                        <div className="module-name-wraper name-wraper" onClick={e => toggleActiveModule(m.id)}>
+                          <span className="module-number number">{i+1}</span>
+                          <span className="module-name name">{m.name}</span>
+                          <i className="mi toggle">
+                            {isModuleActive(m.id) ? 'arrow_drop_up' : 'arrow_drop_down'}
+                          </i>
+                        </div>
+
+                        {m.lessons.length > 0 &&
+                          <ul className={`module-lessons${isModuleActive(m.id) ? ' active' : ''}`}>
+                            {m.lessons.map((value, i) => (
+                              <li key={value.id} className={`lesson name-wraper${value === lesson ? ' active' : ''}${value.progress === 'done' ? ' finished' : ''}`}>
+                                <span className="lesson-number number">{i+1}</span>
+                                <button className="lesson-name name" onClick={e => changeActiveLesson(value)} href="#">{value.name}</button>
+                                <span className="lesson-view-status">
+                                  <i className="mi">{value.progress === 'done' ? 'done' : 'clear'}</i>
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        }
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              }
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

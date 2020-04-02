@@ -5,7 +5,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Lesson = use('App/Models/Lesson')
-const Module = use('App/Models/Module')
+const User = use('App/Models/User')
 const LessonService = use('App/Services/LessonService')
 
 /**
@@ -84,6 +84,53 @@ class LessonController {
     const lesson = await Lesson.findOrFail(params.id)
 
     await lesson.delete()
+  }
+
+  /**
+   * Store lesson action made by user.
+   * POST lessons/:id/action
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   * @param {Parameters} ctx.params
+   */
+  async action ({ request, response, params, auth }) {
+    const lesson = await Lesson.findOrFail(params.id)
+    const { action } = request.only(['action']);
+
+    const result = await LessonService.storeAction(lesson.id, auth.user.id, action)
+
+    if (result.action == action) {
+      response.status(201)
+    }
+
+    return result
+  }
+
+  /**
+   * Display how much user progressed with some lesson, can be (open, start, done)
+   * GET courses/:id/progress/:user
+   *
+   * @param {object} ctx
+   * @param {Parameters} ctx.params
+   * @param {Response} ctx.response
+   * @param {View} ctx.view
+   */
+  async progress ({ params, response, auth }) {
+    // Students are not allowed to view progress of other users
+    if (auth.user.level === User.LEVEL_STUDENT && params.user !== auth.user.id) {
+      response.status(403)
+      return { error: 'forbidden' }
+    }
+
+    const lesson = await Lesson.findOrFail(params.id)
+    const user = await User.findOrFail(params.user)
+
+    const action = await LessonService.getProgress(lesson, user)
+    return {
+      action: action || 'nothing'
+    }
   }
 }
 

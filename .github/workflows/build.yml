@@ -1,0 +1,21 @@
+name: Build
+
+on: 
+  push:
+    branches: 
+      - master
+
+jobs:
+  build:    
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Frontend - install dependencies    
+      run: yarn install
+      working-directory: ./web
+    - name: Frontend - build
+      run: yarn run build
+      working-directory: ./web
+    
+    - name: Backend - install dependencies
+      run: yarn install

@@ -6,10 +6,17 @@
 }
 .CourseShow .lesson-content {
   flex-grow: 1;
+  padding-right: 3rem;
+}
+.CourseShow .lesson-content .VideoPlayer {
+  margin-bottom: 1.8rem;
+}
+.CourseShow .LessonComments > .CommentsForm {
+  margin-bottom: 1.8rem;
 }
 
 .CourseShow .course-lessons {
-  flex-shrink: 1;
+  flex-shrink: 0;
   width: 300px;
 }
 .CourseShow .course-lessons .progress-bar {
@@ -19,6 +26,14 @@
 }
 .CourseShow .course-lessons ul {
   list-style: none;
+}
+.CourseShow .module-name-wraper {
+  cursor: pointer;
+}
+.CourseShow .module-name-wraper .toggle {
+  flex: 1 0 auto;
+  text-align: right;
+  margin-right: .3rem;
 }
 .CourseShow .name-wraper {
   display: flex;
@@ -42,7 +57,14 @@
   line-height: 1.1;
 }
 .CourseShow .module-lessons {
+  overflow: hidden;
+  max-height: 0;
   padding: 0 1rem;
+  transition: max-height .15s ease-out;
+}
+.CourseShow .module-lessons.active {
+  max-height: 999px;
+  transition: max-height .25s ease-in;
 }
 .CourseShow .lesson {
   background-color: #8f8f8f;
@@ -52,6 +74,9 @@
 }
 .CourseShow .lesson.active {
   background-color: #777;
+}
+.CourseShow .lesson.finished.active {
+  background-color: #029f02 !important;
 }
 .CourseShow .lesson button {
   display: block;

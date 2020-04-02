@@ -1,20 +1,23 @@
 .Header {
   display: flex;
   justify-content: space-between;
-  background-color: #00000063;
   color: #fff;
-  padding: 2.5rem 3rem;
+  padding: 1.5rem 2rem;
+  background: #fff;
+  border-bottom: #000 solid;
 }
 
 .logo {
-  background: #fff;
-  align-self: center;
   border-radius: 7px;
-  padding: 1em 3em;
   font-size: 20px;
   text-decoration: none;
-  color: #222;
 }
+
+.logo img{
+  max-width: 150px;
+}
+
+
 .menu {
   flex-grow: 1;
   max-width: 700px;
@@ -36,11 +39,23 @@
 }
 .menu li:hover > ul {
   display: block;
+  background-color: #000;
+  border-radius: 4px;
+  text-align: center;
+  height: 170px;
+  width: 130px;
+  left: -30px;
+  top: 29px;
 }
+.menu li:hover > ul li a{
+  color: #fff;
+}
+
 .menu li ul li {
-  background-color: #969696;
+  
   border-radius: 0;
   display: block;
+  padding: 5px;
 }
 .menu li ul li a {
   border: none;
@@ -54,13 +69,14 @@
   border-radius: 3px;
   padding: 5px 7px;
   font-size: 18px;
+  color: #000;
 }
 .menu li a {
   display: block;
   padding-bottom: .5em;
   border-bottom: 1px solid transparent;
   text-decoration: none;
-  color: #fff;
+  color: #000;
   transition: all .3s;
 }
 .menu li a:hover {
@@ -71,6 +87,7 @@
   display: flex;
   align-items: center;
   font-size: 15px;
+  color: #000;
 }
 .Header .user-photo {
   background: #f3f3f3;
@@ -80,7 +97,11 @@
   margin-right: 1rem;
   width: 60px;
   height: 60px;
+  font-size: 9px;
+  text-align: center;
 }
+
+
 .Header .user-photo img {
   max-width: 100%;
 }
@@ -94,12 +115,15 @@
 }
 
 .logout-button {
-  background: none;
+  background: #B41219;
   border: 0;
   font-size: 15px;
   cursor: pointer;
   color: #fff;
+  border-radius: 50px;
+  transition: all .3s;
+  padding: 5px 10px;
 }
 .logout-button:hover {
-  color: #d70808;
+  opacity: .8;
 }

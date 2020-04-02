@@ -6,6 +6,7 @@ const Drive = use('Drive')
 const Config = use('Config')
 
 const Course = use('App/Models/Course')
+const Lesson = use('App/Models/Lesson')
 const School = use('App/Models/School')
 const Category = use('App/Models/Category')
 const User = use('App/Models/User')
@@ -131,6 +132,41 @@ class CourseService
       }
       throw new Error(e)
     }
+  }
+
+  static async getProgress(course, user) {
+    let progress = 0
+
+    const lessons = await course.lessons()
+      .where('status', Lesson.STATUS_PUBLISHED)
+      .fetch()
+
+    if (lessons.rows.length) {
+      const lessonValue = 100 / lessons.rows.length
+
+      const promisses = lessons.rows.map(async (lesson) => {
+        const history = await lesson
+          .history()
+          .select('action')
+          .where('user_id', user)
+          .groupBy('action')
+          .fetch()
+
+        if (history.rows.length) {
+          if (history.rows.some(row => row.action === 'done')) {
+            progress += lessonValue
+          }
+        }
+      })
+
+      await Promise.all(promisses)
+    }
+
+    if (progress > 0) {
+      return Math.min(100, progress)
+    }
+
+    return progress
   }
 }
 

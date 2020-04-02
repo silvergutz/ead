@@ -6,12 +6,16 @@ import ImgProtected from '../ImgProtected';
 
 import './styles.css';
 
+
+
 function Header({ logout, currentUser }) {
   if (!currentUser) return null;
 
   return (
     <header className="Header">
-      <Link className="logo" to="/">EaD</Link>
+      <Link className="logo" to="/">
+        <img src='/images/logo-academy-preto.png' />
+      </Link>
 
       <nav className="menu">
         <ul>
@@ -56,7 +60,7 @@ function Header({ logout, currentUser }) {
           <div className="user-name">
             Olá, <span className="name">{currentUser.name}</span>
           </div>
-          <button className="logout-button" onClick={logout}>Sair</button>
+          <button className="logout-button" onClick={e => auth.logout()}>Sair</button>
         </div>
       }
     </header>

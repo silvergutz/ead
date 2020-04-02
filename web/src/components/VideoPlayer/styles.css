@@ -1,6 +1,4 @@
-.VideoPlayer {
-  padding-right: 3rem;
-}
 .VideoPlayer iframe {
   width: 100%;
+  border-radius: 10px;
 }

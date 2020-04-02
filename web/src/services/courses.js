@@ -4,6 +4,7 @@ import * as moment from 'moment';
 
 import { api } from '../services';
 import { handleError } from '../helpers';
+import auth from './auth';
 
 export async function getCourses(searchTerm) {
   try {
@@ -16,11 +17,31 @@ export async function getCourses(searchTerm) {
   }
 }
 
+export async function getCoursesInProgress(userId) {
+  try {
+    let user;
+    if (userId) {
+      user = parseInt(userId);
+    } else {
+      user = auth.currentUserValue.id;
+    }
+    const qs = querystring.stringify({ in_progress: user });
+    const response = await api.get('/courses/' + (qs ? `?${qs}` : ''));
+
+    return response.data;
+  } catch(e) {
+    return handleError(e);
+  }
+}
+
 export async function getCoursesCarrossel() {
   const response = await getCourses();
   if (response.error) return response;
 
+  const inProgressResponse = await getCoursesInProgress();
+
   let courses = {
+    inProgress: !inProgressResponse.error ? inProgressResponse : [],
     recent: [],
     categories: [],
   };
@@ -59,9 +80,18 @@ export async function getCoursesCarrossel() {
   return courses;
 }
 
-export async function findCourse(id) {
+export async function findCourse(id, progress) {
   try {
-    const response = await api.get(`/courses/${id}`)
+    let user;
+    if (progress) {
+      if (progress === true) {
+        user = auth.currentUserValue.id;
+      } else {
+        user = parseInt(progress);
+      }
+    }
+    const qs = querystring.stringify({ progress: user });
+    const response = await api.get(`/courses/${id}${(qs ? `?${qs}` : '')}`);
 
     return response.data;
   } catch(e) {

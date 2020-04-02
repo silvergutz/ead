@@ -10,6 +10,9 @@ tmp
 # The development sqlite file
 database/*.sqlite
 
+# uploads dir
 storage/uploads
+
+# public dir
 public/*
 !public/.gitkeep

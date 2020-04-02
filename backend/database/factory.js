@@ -22,6 +22,7 @@ const Category = use('App/Models/Category')
 const Course = use('App/Models/Course')
 const Module = use('App/Models/Module')
 const Lesson = use('App/Models/Lesson')
+const Comment = use('App/Models/Comment')
 
 Factory.blueprint('App/Models/School', async (faker) => {
   return {
@@ -61,7 +62,6 @@ Factory.blueprint('App/Models/Course', async (faker) => {
     name: faker.name(),
     description: faker.paragraph({ sentences: 1 }),
     cover: faker.avatar({ protocol: 'https' }),
-    school_id: id,
     status: faker.shuffle(Course.availableStatus())[0],
   }
 })
@@ -99,6 +99,24 @@ Factory.blueprint('App/Models/Lesson', async (faker) => {
     module_id,
     order: faker.integer({ min: 1, max: 20 }),
     status: faker.shuffle(Lesson.availableStatus())[0],
+  }
+})
+
+Factory.blueprint('App/Models/Comment', async (faker) => {
+  const [ lesson_id ] = await Lesson.query().limit(1).orderByRaw('RAND(id)').pluck('id')
+  const [ user_id ] = await User.query().limit(1).orderByRaw('RAND(id)').pluck('id')
+
+  let parent_id = null;
+  if (Math.random()) {
+    [ parent_id ] = await Comment.query().limit(1).orderByRaw('RAND(id)').pluck('id')
+  }
+
+  return {
+    content: faker.paragraph({ sentences: faker.integer({ min: 1, max: 10 }) }),
+    lesson_id,
+    user_id,
+    parent_id,
+    status: faker.shuffle(Comment.availableStatus())[0],
   }
 })
 

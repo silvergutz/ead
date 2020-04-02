@@ -1,0 +1,64 @@
+.CommentsList .comment-body {
+  position: relative;
+  border: 1px solid #333;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+.CommentsList .comment-body-inner {
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  padding: 1rem .8rem;
+}
+.comment-body-inner .comment-user-photo {
+  flex: 0 0 auto;
+  width: 4rem;
+  text-align: center;
+  border-radius: 50%;
+  border: 1px solid #c5c5c5;
+  height: 4rem;
+  overflow: hidden;
+}
+.comment-body-inner .comment-user-photo img {
+  max-width: 100%;
+}
+.comment-body-inner .comment-user-photo .image-load-error {
+  font-size: 8px;
+  line-height: 1;
+}
+.comment-body-inner .comment-data {
+  flex: 1 0 auto;
+  padding: 0 4.5rem 1em 1rem;
+  max-width: 100%;
+  font-size: 14px;
+  color: #000;
+}
+.comment-body-inner .comment-data .comment-user {
+  font-weight: 600;
+}
+.CommentsList .comment-date, .CommentsList .comment-reply-button {
+  position: absolute;
+  right: -1px;
+  padding: 0.2em 0.6em 0.3em;
+  font-size: 11px;
+  font-weight: 600;
+}
+.CommentsList .comment-date {
+  top: -1px;
+  cursor: default;
+}
+.CommentsList .comment-reply-button {
+  bottom: -1px;
+  background: #46c132;
+}
+.CommentsList .comment-children {
+  position: relative;
+  padding: 0 4rem 0 7rem;
+}
+.CommentsList .comment-children .mi {
+  position: absolute;
+  top: -0.5rem;
+  left: 4rem;
+  transform: rotateZ(180deg);
+  font-size: 35px;
+}

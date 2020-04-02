@@ -12,7 +12,7 @@ class Comment extends Model {
   static get STATUS_APPROVED() { return 'approved' }
   static get STATUS_REJECTED() { return 'rejected' }
 
-  static status() {
+  static availableStatus() {
     return [
       Comment.STATUS_PENDING,
       Comment.STATUS_APPROVED,
@@ -30,6 +30,10 @@ class Comment extends Model {
 
   parent() {
     return this.belongsTo('App/Models/Comment', 'parent_id', 'id')
+  }
+
+  children() {
+    return this.hasMany('App/Models/Comment', 'id', 'parent_id')
   }
 
   attachments() {

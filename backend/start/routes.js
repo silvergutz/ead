@@ -51,6 +51,8 @@ Route.group(() => {
       [['users.update'], ['UserUpdate']]
     ]))
     .apiOnly()
+  Route.get('users/:id/progress/:course?', 'UserController.progress')
+    .as('users.progress')
 
   Route.resource('modules', 'ModuleController').apiOnly()
 

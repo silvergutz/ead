@@ -13,6 +13,7 @@ const photoRules = {
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const User = use('App/Models/User')
+const Course = use('App/Models/Course')
 
 /**
  * Resourceful controller for interacting with users
@@ -120,6 +121,32 @@ class UserController {
     const user = await User.findOrFail(params.id)
 
     await user.delete();
+  }
+
+  /**
+   * Display the percentage of lessons completed by an user
+   * GET users/:id/progress/:course?
+   *
+   * @param {object} ctx
+   * @param {Parameters} ctx.params
+   * @param {Response} ctx.response
+   * @param {View} ctx.view
+   */
+  async progress ({ params, response, auth }) {
+    // Students are not allowed to view progress of other users
+    if (auth.user.level === User.LEVEL_STUDENT && params.id !== auth.user.id) {
+      response.status(403)
+      return { error: 'forbidden' }
+    }
+
+    const course = params.course ? await Course.findOrFail(params.course) : null
+    const user = await User.findOrFail(params.id)
+
+    const progress = await UserService.getProgress(user, course)
+
+    return {
+      progress
+    }
   }
 }
 

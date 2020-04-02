@@ -1,5 +1,4 @@
 .Login {
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,7 +8,21 @@
 .Login .login-box {
   flex: 1;
   padding: 3rem;
-  background: #ffffff80;
+  background: rgba(255,255,255,.7);
+  border-radius: 10px;
+  margin-top: 6rem;
+}
+
+.BoxLogin{
+  background: url('/images/bgLogin.jpg');
+  min-height: 570px;
+  background-position: center;
+  background-size: contain;
+  border-radius: 10px;
+}
+
+main{
+  padding: 0px ;
 }
 
 .Login form input {
@@ -34,8 +47,13 @@
 }
 
 .lost-password {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 200;
-  color: #82817f;
+  color: #000;
   text-decoration: none;
+  font-weight: bold;
 }
+
+
+
+

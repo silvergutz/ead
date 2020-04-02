@@ -13,7 +13,7 @@
     "adonis-app"
   ],
   "author": "",
-  "license": "UNLICENSED",
+  "license": "AGPL-3.0-only",
   "private": true,
   "dependencies": {
     "@adonisjs/ace": "^5.0.8",

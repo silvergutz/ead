@@ -29,7 +29,7 @@ class UserController {
    */
   _canUserSeeProgress(currentUser, target) {
     // Students are not allowed to view progress of other users
-    if (currentUser.level !== User.LEVEL_STUDENT || target === currentUser.id) {
+    if (currentUser.level !== User.LEVEL_STUDENT || target == currentUser.id) {
       return true;
     }
 

@@ -59,6 +59,9 @@ class LessonService
 
       if (videoId) {
         const youtube = google.youtube({
+          headers: {
+            referer: process.env.APP_URL,
+          },
           version: 'v3',
           auth: Env.get('GOOGLE_API_KEY')
         })

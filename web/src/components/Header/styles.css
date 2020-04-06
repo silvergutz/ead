@@ -101,7 +101,6 @@
   text-align: center;
 }
 
-
 .Header .user-photo img {
   max-width: 100%;
 }
@@ -126,4 +125,30 @@
 }
 .logout-button:hover {
   opacity: .8;
+}
+
+
+@media (max-width: 768px) {
+  .logo img{
+    max-width: 100px;
+  }
+
+  .Header{
+    display: flex;
+    justify-content: center
+  }
+
+  .menu{
+    display: flex;
+    justify-content: center;
+  }
+
+  .menu a{
+    font-size: 12px;
+  }
+
+  .Header .user-photo, .Header .user-name{
+    display: none;
+  }
+
 }

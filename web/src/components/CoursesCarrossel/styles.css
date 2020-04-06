@@ -7,6 +7,9 @@
   justify-content: center;
   text-align: center;
 }
+
+
+
 .CoursesCarrossel .slick-slider {
   margin-bottom: 4rem;
 }
@@ -29,7 +32,6 @@
 .CoursesCarrossel .Course:hover .course-cover img{
   transform: scale(1.1);
 }
-
 
 .CoursesCarrossel .Course .course-cover {
   text-align: center;
@@ -74,4 +76,11 @@
 
 .CoursesCarrossel .Course .course-button:hover{
   opacity: .8;
+}
+
+@media (max-width: 768px){
+
+    
+
+
 }

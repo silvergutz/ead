@@ -4,6 +4,28 @@
 .CourseShow .course-container {
   display: flex;
 }
+
+@media (max-width: 768px){
+
+    .CourseShow .course-container{
+      display: block;
+    }
+
+    .CourseShow .lesson-content{
+      padding-right: 0px !important; 
+    }
+
+    .CourseShow .course-lessons{
+      width: 100% !important;
+    }
+
+    .VideoPlayer iframe{
+      max-height: 200px;
+    }
+
+  
+}
+
 .CourseShow .lesson-content {
   flex-grow: 1;
   padding-right: 3rem;

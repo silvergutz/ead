@@ -23,9 +23,9 @@ function UsersList() {
   async function loadUsers() {
     globalNotifications.clearMessages();
 
-    const response = await getUsers(searchTerm);
+    const response = await getUsers(searchTerm, true);
 
-    if (response.errors) {
+    if (response.error) {
       globalNotifications.sendErrorMessage(response.error);
       setUsers([]);
     } else {
@@ -60,7 +60,7 @@ function UsersList() {
       </Link>
 
       <div className="users">
-        {users.map(user => (
+        {(!users || users.length <= 0) ? 'Nenhum usuário encontrado' : users.map(user => (
           <div key={user.id} className="User">
             <div className="user-photo">
               {user.photo &&
@@ -94,7 +94,7 @@ function UsersList() {
                   delete
                 </button>
               </div>
-              <ProgressBar className="user-progress-bar" progress="70" />
+              <ProgressBar className="user-progress-bar" progress={user.progress || 0} />
             </div>
           </div>
         ))}

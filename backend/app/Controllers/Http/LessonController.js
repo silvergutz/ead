@@ -119,7 +119,7 @@ class LessonController {
    */
   async progress ({ params, response, auth }) {
     // Students are not allowed to view progress of other users
-    if (auth.user.level === User.LEVEL_STUDENT && params.user !== auth.user.id) {
+    if (auth.user.level === User.LEVEL_STUDENT && params.user != auth.user.id) {
       response.status(403)
       return { error: 'forbidden' }
     }

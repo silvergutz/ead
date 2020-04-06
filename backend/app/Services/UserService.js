@@ -6,6 +6,8 @@ const Drive = use('Drive')
 const Config = use('Config')
 
 const User = use('App/Models/User')
+const Lesson = use('App/Models/Lesson')
+const CourseService = require('./CourseService')
 
 class UserService
 {
@@ -70,6 +72,46 @@ class UserService
       console.log(e)
       throw new Error(e)
     }
+  }
+
+  static async getProgress(user, course) {
+    if (course) {
+      return CourseService.getProgress(course, user.id)
+    }
+
+    let progress = 0
+
+    const lessons = await Lesson
+      .query()
+      .where('status', Lesson.STATUS_PUBLISHED)
+      .fetch()
+
+    if (lessons.rows.length) {
+      const lessonValue = 100 / lessons.rows.length
+
+      const promisses = lessons.rows.map(async (lesson) => {
+        const history = await lesson
+          .history()
+          .select('action')
+          .where('user_id', user.id)
+          .groupBy('action')
+          .fetch()
+
+        if (history.rows.length) {
+          if (history.rows.some(row => (lesson.video ? row.action === 'done' : row.action === 'open'))) {
+            progress += lessonValue
+          }
+        }
+      })
+
+      await Promise.all(promisses)
+    }
+
+    if (progress > 0) {
+      return Math.min(100, progress)
+    }
+
+    return progress
   }
 }
 

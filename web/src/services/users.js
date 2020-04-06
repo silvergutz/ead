@@ -2,9 +2,14 @@ import querystring from 'querystring';
 import { api } from '../services';
 import { handleError } from '../helpers';
 
-export async function getUsers(searchTerm) {
+export async function getUsers(searchTerm, progress) {
   try {
-    let qs = querystring.stringify({ s: searchTerm || '' });
+    let qsData = { s: searchTerm || '' }
+    if (progress) {
+      qsData.progress = true;
+    }
+
+    const qs = querystring.stringify(qsData);
     const response = await api.get('/users' + (qs ? `?${qs}` : ''));
 
     return response.data;

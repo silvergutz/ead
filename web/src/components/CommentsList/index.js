@@ -12,7 +12,7 @@ function CommentsList(props) {
   return (
     <div className="CommentsList">
       {comments.map(comment => (
-        <div key={comment.id} className="comment">
+        <div key={comment.id} id={`comment-${comment.id}`} className="comment">
           <div className="comment-body">
             <div className="comment-body-inner">
               <div className="comment-user-photo">

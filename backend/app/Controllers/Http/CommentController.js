@@ -23,6 +23,7 @@ class CommentController {
 
     const query = Comment.query()
       .with('lesson')
+      .with('lesson.module.course')
       .with('user')
       .orderBy('created_at', 'desc')
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, withRouter, NavLink } from 'react-router-dom';
 
 import { auth } from '../../services';
 import ImgProtected from '../ImgProtected';
@@ -24,25 +24,28 @@ function Header({ logout, currentUser }) {
               <span>Admin</span>
               <ul>
                 <li className="nav-item">
-                  <Link to={'/admin/lojas'}>Lojas</Link>
+                  <NavLink to={'/admin/lojas'}>Lojas</NavLink>
                 </li>
                 <li className="nav-item">
-                  <Link to={'/admin/alunos'}>Alunos</Link>
+                  <NavLink to={'/admin/alunos'}>Alunos</NavLink>
                 </li>
                 <li className="nav-item">
-                  <Link to={'/admin/cursos'}>Cursos</Link>
+                  <NavLink to={'/admin/cursos'}>Cursos</NavLink>
                 </li>
                 <li className="nav-item">
-                  <Link to={'/admin/categorias'}>Categorias</Link>
+                  <NavLink to={'/admin/perguntas'}>Perguntas</NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink to={'/admin/categorias'}>Categorias</NavLink>
                 </li>
               </ul>
             </li>
           }
           <li>
-            <Link to="/cursos">Cursos</Link>
+            <NavLink to="/cursos">Cursos</NavLink>
           </li>
           <li>
-            <Link to="/perfil">Meus Dados</Link>
+            <NavLink to="/perfil">Meus Dados</NavLink>
           </li>
         </ul>
       </nav>

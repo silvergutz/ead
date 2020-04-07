@@ -88,6 +88,9 @@
 .menu li a:hover {
   border-bottom-color: #fff;
 }
+.menu > li a.active {
+	border-bottom: 1px solid #acacac;
+}
 
 .Header .user {
   display: flex;

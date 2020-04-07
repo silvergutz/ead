@@ -4,8 +4,9 @@ import { globalNotifications } from '../../services';
 import { getComments } from '../../services/comments';
 import CommentsForm from '../CommentsForm';
 import CommentsList from '../CommentsList';
+import { withRouter } from 'react-router-dom';
 
-function LessonComments({ lesson }) {
+function LessonComments({ lesson, location }) {
   const [ enabledReplyForm, setEnabledReplyForm ] = useState([]);
   const [ comments, setComments ] = useState([]);
 
@@ -42,6 +43,13 @@ function LessonComments({ lesson }) {
       }).filter(e => !e.parent_id)
 
       setComments(data);
+
+      if (location.hash) {
+        const elm = document.getElementById(location.hash.substr(1));
+        if (elm) {
+          window.scrollTo(0, elm.offsetTop);
+        }
+      }
     }
   }
 
@@ -62,4 +70,4 @@ function LessonComments({ lesson }) {
   )
 }
 
-export default LessonComments;
+export default withRouter(LessonComments);

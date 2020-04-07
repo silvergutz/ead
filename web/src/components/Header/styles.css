@@ -42,7 +42,7 @@
   background-color: #000;
   border-radius: 4px;
   text-align: center;
-  height: 170px;
+  height: auto;
   width: 130px;
   left: -30px;
   top: 29px;
@@ -52,13 +52,19 @@
 }
 
 .menu li ul li {
-  
   border-radius: 0;
   display: block;
-  padding: 5px;
+  padding: 0;
 }
 .menu li ul li a {
+  padding: .3em 0;
   border: none;
+}
+.menu li ul li:first-child a {
+  padding-top: .6em;
+}
+.menu li ul li:last-child a {
+  padding-bottom: .6em;
 }
 .menu li ul li a:hover {
   border: none;

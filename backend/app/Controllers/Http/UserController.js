@@ -107,11 +107,23 @@ class UserController {
    * @param {Parameters} ctx.params
    */
   async show ({ request, response, params, auth }) {
-    const user = await User.findOrFail(params.id)
     const { progress } = request.get()
 
-    if (progress) {
-      user.progress = await UserService.getProgress(user)
+    const user = await User.query()
+      .with('comments.lesson.module.course')
+      .with('school')
+      .where('id', params.id)
+      .first()
+
+    if (!user) {
+      response.status(404)
+      return { error: 'Not found' }
+    }
+
+    if (progress && this._canUserSeeProgress(auth.user, user.id)) {
+      const resultProgress = await UserService.getProgress(user, null, true)
+      const { courses, progress } = resultProgress
+      return { ...user.toJSON(), courses, progress }
     }
 
     return user

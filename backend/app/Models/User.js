@@ -46,6 +46,10 @@ class User extends Model {
     return this.hasMany('App/Models/Comment')
   }
 
+  school() {
+    return this.belongsTo('App/Models/School')
+  }
+
   courses() {
     return this
       .belongsToMany('App/Models/Course', 'user_id', 'course_id')

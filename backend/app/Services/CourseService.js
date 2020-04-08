@@ -137,7 +137,11 @@ class CourseService
   static async getProgress(course, user) {
     let progress = 0
 
-    const lessons = await course.lessons()
+    const lessons = await Lesson
+      .query()
+      .whereHas('module.course', (builder) => {
+        builder.where('id', course.id)
+      })
       .where('status', Lesson.STATUS_PUBLISHED)
       .fetch()
 

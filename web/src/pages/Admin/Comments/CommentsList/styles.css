@@ -1,0 +1,15 @@
+.comments-filter {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+}
+.comments-filter .form-field {
+  flex: 0 1 content;
+  min-width: 300px;
+  margin-right: 1rem;
+}
+.comments-filter .button {
+  flex: 0 1 content;
+  margin-bottom: .3em;
+}

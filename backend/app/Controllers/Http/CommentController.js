@@ -19,7 +19,7 @@ class CommentController {
    * @param {object} ctx
    */
   async index ({ auth, request }) {
-    const { status, lesson } = request.get();
+    const { status, lesson, user } = request.get();
 
     const query = Comment.query()
       .with('lesson')
@@ -37,8 +37,13 @@ class CommentController {
     }
 
     // Filter by lesson
-    if (lesson) {
-      query.where('lesson_id', lesson)
+    if (parseInt(lesson)) {
+      query.where('lesson_id', parseInt(lesson))
+    }
+
+    // Filter by user
+    if (parseInt(user)) {
+      query.where('user_id', parseInt(user))
     }
 
     const comments = await query.fetch();

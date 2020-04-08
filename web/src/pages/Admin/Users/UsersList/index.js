@@ -71,19 +71,21 @@ function UsersList() {
               }
             </div>
             <div className="user-details">
-              <div className="user-name">{user.name}</div>
-              <div className="user-courses">
-                <div className="key">Cursos feitos:</div>
-                <div className="value">nome dos cursos</div>
-              </div>
-              <div className="user-questions">
-                <div className="key">Perguntas:</div>
-                <div className="value">aula 1, aula 3</div>
-              </div>
-              <div className="user-answers">
-                <div className="key">Respostas:</div>
-                <div className="value">aula 4, aula 5</div>
-              </div>
+              <Link to={`/admin/alunos/${user.id}`}>
+                <div className="user-name">{user.name}</div>
+                <div className="user-courses">
+                  <div className="key">Cursos feitos:</div>
+                  <div className="value">nome dos cursos</div>
+                </div>
+                <div className="user-questions">
+                  <div className="key">Perguntas:</div>
+                  <div className="value">aula 1, aula 3</div>
+                </div>
+                <div className="user-answers">
+                  <div className="key">Respostas:</div>
+                  <div className="value">aula 4, aula 5</div>
+                </div>
+              </Link>
             </div>
             <div className="user-progress">
               <div className="button-group">

@@ -17,6 +17,7 @@ import CommentsList from './pages/Admin/Comments/CommentsList';
 
 import UsersList from './pages/Admin/Users/UsersList';
 import UsersSave from './pages/Admin/Users/UsersSave';
+import UsersShow from './pages/Admin/Users/UsersShow';
 
 import SchoolsList from './pages/Admin/Schools/SchoolsList';
 import SchoolsShow from './pages/Admin/Schools/SchoolsShow';
@@ -57,6 +58,7 @@ function Routes() {
 
         <PrivateRoute path="/admin/alunos" exact component={UsersList} onlyAdmin={true} />
         <PrivateRoute path="/admin/alunos/novo" exact component={UsersSave} onlyAdmin={true} />
+        <PrivateRoute path="/admin/alunos/:id" exact component={UsersShow} onlyAdmin={true} />
         <PrivateRoute path="/admin/alunos/:id/editar" exact component={UsersSave} onlyAdmin={true} />
 
         <Route path="*" component={PageNotFound} />

@@ -18,9 +18,13 @@ export async function getUsers(searchTerm, progress) {
   }
 }
 
-export async function findUser(id) {
+export async function findUser(id, progress) {
   try {
-    const response = await api.get(`/users/${id}`)
+    let qs;
+    if (progress) {
+      qs = querystring.stringify({ progress: 1 });
+    }
+    const response = await api.get(`/users/${id}` + (qs ? `?${qs}` : ''))
 
     return response.data;
   } catch(e) {

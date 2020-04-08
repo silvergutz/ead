@@ -296,6 +296,7 @@ button.send, .button.send {
 }
 
 .item .item-details {
+  position: relative;
   flex: 1;
   margin: 0 1rem;
   line-height: 1.3;

@@ -84,9 +84,9 @@ function UsersShow({ history }) {
           {!user.courses || user.courses.length <= 0 ? 'Nenhum curso em progresso' :
             user.courses.map(course => (
               <div key={course.id} className="course">
-                <div className="course-name">
+                <Link className="course-name" to={`/cursos/${course.id}`} target="_blank">
                   {course.name}
-                </div>
+                </Link>
                 <div className="course-progress">
                   <ProgressBar progress={course.progress} />
                 </div>

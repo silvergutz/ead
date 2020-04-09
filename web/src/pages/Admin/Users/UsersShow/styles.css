@@ -31,6 +31,7 @@
   border-radius: 50%;
   border: 1px solid #ccc;
   background: #f5f5f5;
+  overflow: hidden;
 }
 .UsersShow .photo-field img {
   max-width: 100%;
@@ -55,8 +56,15 @@
 .courses-list .course .course-name {
   flex: 1 0 auto;
   font-weight: 500;
+  color: inherit;
+}
+.courses-list .course .course-name:hover {
+	font-weight: 900;
 }
 
+.UsersShow .comments-list {
+  margin-top: 1rem;
+}
 .UsersShow .user-comments .comment-user-date {
   display: flex;
 }

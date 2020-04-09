@@ -8,13 +8,18 @@ function VideoPlayer({ video, onVideoEnded, onVideoPlaying }) {
   const [ videoId, setVideoId ] = useState('');
   const [ videoType, setVideoType ] = useState('');
   const [ videoTitle, setVideoTitle ] = useState('');
-  const [ youtubePlayer, setYoutubePlayer ] = useState(null);
+  // const [ youtubePlayer, setYoutubePlayer ] = useState(null);
 
   const youtubeOpts = {
     width: '750',
     height: '400',
     playerVars: { // https://developers.google.com/youtube/player_parameters
-      autoplay: 0
+      autoplay: 1,
+      rel: 0,
+      showinfo: 0,
+      controls: 2,
+      modestbranding: 1,
+      iv_load_policy: 3,
     }
   };
 
@@ -65,7 +70,8 @@ function VideoPlayer({ video, onVideoEnded, onVideoPlaying }) {
 
   function handleVideoReady(event) {
     if (videoType === 'youtube') {
-      setYoutubePlayer(event.target);
+      // setYoutubePlayer(event.target);
+      event.target.setVolume(100);
       event.target.playVideo();
     }
   }

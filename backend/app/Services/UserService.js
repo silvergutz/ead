@@ -114,10 +114,10 @@ class UserService
           }
 
           if (perCourse) {
-            const course = lesson.toJSON().module.course
-            if (course) {
-              if (!courses.some(v => v.id == course.id)) {
-                courses.push(course);
+            const lessonJson = lesson.toJSON()
+            if (lessonJson.module && lessonJson.module.course) {
+              if (!courses.some(v => v.id == lessonJson.module.course.id)) {
+                courses.push(lessonJson.module.course);
               }
             }
           }

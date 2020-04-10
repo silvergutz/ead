@@ -21,8 +21,20 @@ class AttachmentController {
    *
    * @param {object} ctx
    */
-  async index () {
-    const attachments = await Attachment.all();
+  async index ({ request }) {
+    const { pid, ptype } = request.only(['pid', 'ptype'])
+
+    const query = Attachment
+      .query()
+
+    if (pid) {
+      query.where('attachmentable_id', parseInt(pid))
+    }
+    if (ptype) {
+      query.where('attachmentable_type', ptype)
+    }
+
+    const attachments = await query.fetch()
 
     return attachments;
   }

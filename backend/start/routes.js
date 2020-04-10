@@ -67,7 +67,7 @@ Route.group(() => {
   Route.get('courses/:id/progress/:user', 'CourseController.progress')
     .as('courses.progress')
 
-    Route.resource('lessons', 'LessonController')
+  Route.resource('lessons', 'LessonController')
     .validator(new Map([
       [['lessons.store'], ['LessonStore']],
       [['lessons.update'], ['LessonUpdate']]
@@ -77,6 +77,9 @@ Route.group(() => {
     .as('lessons.action')
   Route.get('lessons/:id/progress/:user', 'LessonController.progress')
     .as('lessons.progress')
+
+  Route.resource('attachments', 'AttachmentController')
+    .apiOnly()
 
   Route.resource('comments', 'CommentController')
     .validator(new Map([

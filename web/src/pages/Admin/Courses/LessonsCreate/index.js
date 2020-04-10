@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
+import Dropzone from 'react-dropzone';
 
+import AttachmentsList from '../../../../components/AttachmentsList';
 import { updateLesson, storeLesson, findLesson } from '../../../../services/lessons';
+import { deleteAttachment, storeAttachment } from '../../../../services/attachments';
 import { globalNotifications } from '../../../../services';
 
 function LessonsCreate({ id, type, moduleObj, refreshModules }) {
@@ -98,6 +101,47 @@ function LessonsCreate({ id, type, moduleObj, refreshModules }) {
     }
   }
 
+  async function handleFileDrop(acceptedFiles) {
+    if (acceptedFiles.length) {
+      var reader = new FileReader();
+
+      const promisses = acceptedFiles.map(async (file) => {
+        reader.readAsDataURL(file)
+
+        const data = new FormData();
+        data.append('file', file);
+        data.append('attachmentable_type', 'lessons');
+        data.append('attachmentable_id', lesson.id);
+
+        const response = await storeAttachment(data);
+
+        if (response.error) {
+          globalNotifications.sendErrorMessage('Ocorreu um erro ao enviar o anexo');
+          console.error(response.error);
+        } else {
+          setLesson({ ...lesson, attachments: [...lesson.attachments, response] });
+          globalNotifications.sendSuccessMessage('Anexo gravado com sucesso');
+        }
+
+        return response;
+      })
+
+      await Promise.all(promisses);
+    }
+  }
+
+  async function handleRemoveFile(id) {
+    const response = await deleteAttachment(id)
+
+    if (response.error) {
+      globalNotifications.sendErrorMessage('Não foi possível remove o anexo');
+      console.log(response.error)
+    } else {
+      setLesson({ ...lesson, attachments: lesson.attachments.filter(v => v.id !== id) });
+      globalNotifications.sendSuccessMessage('Anexo removido');
+    }
+  }
+
   return (
     <div id="LessonsCreate" className="LessonsCreate">
       <hgroup className="lesson-form-title">
@@ -135,6 +179,33 @@ function LessonsCreate({ id, type, moduleObj, refreshModules }) {
             </select>
           </div>
         </div>
+
+        <div className="form-field">
+          <label htmlFor="attachments">Anexos:</label>
+
+          <div className="field">
+            {type !== 'update' ? 'Para enviar anexos você deve primeiro salvar a aula' :
+              <div className="attachments">
+                {(lesson && lesson.id) &&
+                  <AttachmentsList attachmentable={lesson} type="lessons" handleRemoveFile={handleRemoveFile} />
+                }
+                <div className="attachment-field upload-field field">
+                  <Dropzone onDrop={handleFileDrop} multiple={true}>
+                    {({getRootProps, getInputProps}) => (
+                      <section>
+                        <div {...getRootProps()}>
+                          <input {...getInputProps()} />
+                          <p>Arraste e solte um arquivo aqui ou clique para selecionar</p>
+                        </div>
+                      </section>
+                    )}
+                  </Dropzone>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
         <div className="form-field submit">
           <button type="submit">Gravar</button>
         </div>

@@ -1,0 +1,23 @@
+.AttachmentsList {
+  display: flex;
+  flex-wrap: wrap;
+}
+.AttachmentsList .attachment {
+  flex: 0 1 content;
+  display: flex;
+  align-items: center;
+  border: 1px solid transparent;
+  cursor: pointer;
+  padding: .2rem .15rem;
+}
+.AttachmentsList .attachment:hover {
+  border-color: #ccc;
+  border-radius: 5px;
+}
+.AttachmentsList .attachment .attachment-icon {
+  transform: rotateZ(-90deg);
+}
+
+.AttachmentsList .attachment .attachment-remove-icon {
+  color: #ff2c2c;
+}

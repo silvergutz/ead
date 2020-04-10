@@ -10,9 +10,11 @@ const Helpers = use('Helpers');
 class UploadController
 {
   async download({ request, response }) {
-    const { file } = request.get()
+    const { file, force } = request.get()
     if (Drive.exists(file)) {
       let fileContent;
+      const paths = file.split('/');
+      const fileName = paths.pop();
 
       if (Config.get('drive.default') === 'gcs') {
         // try to get from tmp, previously downloaded
@@ -21,8 +23,7 @@ class UploadController
             keyFilename: Config.get('drive.disks.gcs.keyFilename'),
           });
           const rootDir = Helpers.tmpPath();
-          const paths = file.split('/');
-          const fileName = paths.pop();
+
           const folders = paths.join('/');
           const dir = `${rootDir}/${folders}`;
           const dest = `${dir}/${fileName}`;
@@ -42,8 +43,17 @@ class UploadController
         fileContent = await Drive.get(file)
       }
 
-      const { mime } = await FileType.fromBuffer(fileContent)
-      response.header('Content-type', mime)
+      // Set Content-Type header
+      const type = await FileType.fromBuffer(fileContent)
+      const contentType = (type && type.mime) ? type.mime : 'application/octet-stream'
+      response.header('Content-Type', contentType)
+
+      // If marked to force download, set Content-Dispositon header
+      if (force) {
+        response.header('Content-Disposition', `attachment; filename=${fileName}`)
+      }
+
+
       return response.send(fileContent)
     } else {
       response.notFound('file not found')

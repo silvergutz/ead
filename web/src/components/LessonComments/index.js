@@ -9,6 +9,7 @@ import { withRouter } from 'react-router-dom';
 function LessonComments({ lesson, location }) {
   const [ enabledReplyForm, setEnabledReplyForm ] = useState([]);
   const [ comments, setComments ] = useState([]);
+  const [ loading, setLoading ] = useState(false);
 
   useEffect(() => {
     if (lesson.comments && lesson.comments.length) {
@@ -19,6 +20,8 @@ function LessonComments({ lesson, location }) {
   }, [lesson])
 
   async function loadComments() {
+    setLoading(true);
+
     if (!lesson.id) {
       setComments([]);
       return;
@@ -51,6 +54,12 @@ function LessonComments({ lesson, location }) {
         }
       }
     }
+
+    setLoading(false);
+  }
+
+  if (loading) {
+    return (<div className="loading comments-loading">Carregando perguntas...</div>);
   }
 
   return (

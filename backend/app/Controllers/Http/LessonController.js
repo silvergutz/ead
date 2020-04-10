@@ -51,8 +51,17 @@ class LessonController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params }) {
-    const lesson = await Lesson.findOrFail(params.id)
+  async show ({ params, response }) {
+    const lesson = await Lesson
+      .query()
+      .with('attachments')
+      .where('id', params.id)
+      .first()
+
+    if (!lesson) {
+      response.status(404)
+      return { error: 'Not Found' }
+    }
 
     return lesson
   }

@@ -42,8 +42,10 @@ class UploadController
         fileContent = await Drive.get(file)
       }
 
-      const { mime } = await FileType.fromBuffer(fileContent)
-      response.header('Content-type', mime)
+      const type = await FileType.fromBuffer(fileContent)
+      if (type && type.mime) {
+        response.header('Content-type', type.mime)
+      }
       return response.send(fileContent)
     } else {
       response.notFound('file not found')

@@ -4,6 +4,8 @@ import { getAttachments } from '../../services/attachments';
 import { globalNotifications } from '../../services';
 import { download } from '../../services/uploads';
 
+import './styles.css';
+
 function AttachmentsList({ attachmentable, type, handleRemoveFile }) {
   const [ attachments, setAttachments ] = useState([]);
   const [ loading, setLoading ] = useState(false);

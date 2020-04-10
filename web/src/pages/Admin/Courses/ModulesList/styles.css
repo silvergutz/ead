@@ -20,9 +20,13 @@
 }
 .current-lesson {
   flex: 1;
+  padding-right: 1rem;
 }
 .current-lesson .lesson-form-title {
   margin-bottom: 2em;
+}
+.current-lesson .attachment-field {
+  margin-top: 1rem;
 }
 .CoursesEdit .model-form .form-field > label {
   flex: 0;

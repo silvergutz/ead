@@ -12,7 +12,7 @@
     }
 
     .CourseShow .lesson-content{
-      padding-right: 0px !important; 
+      padding-right: 0px !important;
     }
 
     .CourseShow .course-lessons{
@@ -23,7 +23,7 @@
       max-height: 200px;
     }
 
-  
+
 }
 
 .CourseShow .lesson-content {
@@ -31,7 +31,13 @@
   padding-right: 3rem;
 }
 .CourseShow .lesson-content .VideoPlayer {
+  margin-bottom: 1rem;
+}
+.CourseShow .lesson-content .lesson-attachments {
   margin-bottom: 1.8rem;
+}
+.CourseShow .lesson-content .lesson-attachments .lesson-attachments-label {
+  font-weight: 500;
 }
 .CourseShow .LessonComments > .CommentsForm {
   margin-bottom: 1.8rem;

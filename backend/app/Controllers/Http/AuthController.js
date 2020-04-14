@@ -48,7 +48,7 @@ class AuthController {
       .tokens()
       .create({ token, type: 'forgotpassword' })
 
-    const resetPasswordUrl = `${Env.get('FRONT_URL')}/reset?token=${token}`
+    const resetPasswordUrl = `${Env.get('FRONT_URL')}/reset/${token}`
 
     const data = {
       user,
@@ -57,9 +57,9 @@ class AuthController {
 
     await Mail.send('emails.forgotpassword', data, (message) => {
       message
-        .to(user.email)
-        .from('silver.yep@gmail.com')
-        .subject('Recuperação de Senha - ' + Config.get('app.name'))
+      .to(user.email)
+      .from('silver.yep@gmail.com')
+      .subject('Recuperação de Senha - ' + Config.get('app.name'))
     })
   }
 
@@ -68,15 +68,23 @@ class AuthController {
 
     const userToken = await Token.findByOrFail('token', token)
 
-    if (isBefore(userToken.created_at, subHours(new Date(), 2))) {
-      return response.status(400).json({ error: 'Invalid date range, please try again.' })
+    // Not allow change password if token has more than 2h
+    if (userToken.is_revoked || isBefore(userToken.created_at, subHours(new Date(), 2))) {
+      userToken.is_revoked = true
+      await userToken.save()
+      return response.status(400).json({ error: 'Token Expired' })
     }
 
     const user = await userToken.user().fetch()
 
     user.password = password
 
+    // save password change
     await user.save()
+
+    // revoke token
+    userToken.is_revoked = true
+    await userToken.save()
   }
 }
 

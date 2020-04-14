@@ -28,6 +28,10 @@ Route.group(() => {
 
   // Route.post('register', 'AuthController.register')
   Route.post('authenticate', 'AuthController.authenticate')
+  Route.post('forgot', 'AuthController.forgot')
+    .as('auth.forgot')
+  Route.post('reset', 'AuthController.reset')
+    .as('auth.reset')
 }).prefix('/api/v1')
 
 // protected routes

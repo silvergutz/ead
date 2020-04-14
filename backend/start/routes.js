@@ -31,6 +31,7 @@ Route.group(() => {
   Route.post('forgot', 'AuthController.forgot')
     .as('auth.forgot')
   Route.post('reset', 'AuthController.reset')
+    .validator('ResetPassword')
     .as('auth.reset')
 }).prefix('/api/v1')
 

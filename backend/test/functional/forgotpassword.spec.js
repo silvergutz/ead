@@ -18,21 +18,6 @@ afterEach(() => {
   Mail.restore()
 })
 
-async function generateForgotPasswordToken(client, email) {
-  const user = await Factory
-    .model('App/Models/User')
-    .create({ email })
-
-  await client
-    .post(Route.url('auth.forgot'))
-    .send({ email })
-    .end()
-
-  const token = await user.tokens().first()
-
-  return token
-}
-
 test('it should send an email with reset password instructions', async ({ assert, client }) => {
   const email = 'silver.yep@gmail.com'
 
@@ -120,6 +105,33 @@ test('if cannot reset password after 2h of forgot password request', async ({ cl
       token: userToken.token,
       password: '123456',
       password_confirmation: '123456',
+    })
+    .end()
+
+  response.assertStatus(400)
+})
+
+test('it cannot reset password if password is not equal their confirmation', async ({ client }) => {
+  const email = 'silver.yep@gmail.com'
+
+  const user = await Factory
+    .model('App/Models/User')
+    .create({ email })
+
+  const userToken = await Factory
+    .model('App/Models/Token')
+    .create({
+      user_id: user.id,
+      type: 'forgotpassword',
+      is_revoked: false,
+    })
+
+  const response = await client
+    .post(Route.url('auth.reset'))
+    .send({
+      token: userToken.token,
+      password: '123456',
+      password_confirmation: '1234567',
     })
     .end()
 

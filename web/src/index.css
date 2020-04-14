@@ -22,6 +22,12 @@ body, input, textarea, button {
   font-size: 16px;
   color: #222;
 }
+input, textarea {
+  border: 1px solid #959595;
+  border-radius: 5px;
+  padding: .25em .5em;
+  margin-bottom: 0;
+}
 button {
   border-radius: 5px;
   border: 1px solid #999;

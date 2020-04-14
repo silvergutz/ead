@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import auth from '../../services/auth';
 import globalNotifications from '../../services/globalNotifications';
 
+import './styles.css';
+
 function ForgotPassword() {
   const [ email, setEmail ] = useState('');
   const [ sending, setSending ] = useState(false);
@@ -34,7 +36,7 @@ function ForgotPassword() {
 
   return (
     <div className="ForgotPassword">
-      <h1>Esqueci a minha senha</h1>
+      <h1 className="page-title">Esqueci a minha senha</h1>
 
       <form onSubmit={handleSubmit}>
         {success ? (

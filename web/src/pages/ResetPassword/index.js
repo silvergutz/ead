@@ -5,6 +5,8 @@ import auth from '../../services/auth';
 import globalNotifications from '../../services/globalNotifications';
 import { clearErrors, setupErrorMessages } from '../../helpers/handleFormFieldsError';
 
+import './styles.css';
+
 function ResetPassword() {
   const { token } = useParams();
 
@@ -53,7 +55,7 @@ function ResetPassword() {
 
   return (
     <div className="ResetPassword">
-      <h1>Redefinir a Senha</h1>
+      <h1 className="page-title">Redefinir a Senha</h1>
 
       {expired &&
         <div className="expired">

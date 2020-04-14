@@ -1,0 +1,7 @@
+.ResetPassword .form-field {
+  margin-bottom: 1rem;
+}
+.ResetPassword .form-field label {
+  display: block;
+  margin-bottom: .5em;
+}

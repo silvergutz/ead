@@ -33,6 +33,7 @@ class BaseValidator {
 
       "password.min": Antl.formatMessage('validations.min', {field: 'senha', length: 6}),
       "password.max": Antl.formatMessage('validations.max', {field: 'senha', length: 30}),
+      "password.confirmed": Antl.formatMessage('validations.confirmed', {field: 'senha'}),
 
       "email.email": Antl.formatMessage('validations.email', {field: 'e-mail'}),
 

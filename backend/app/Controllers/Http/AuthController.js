@@ -53,12 +53,13 @@ class AuthController {
     const data = {
       user,
       resetPasswordUrl,
+      appName: Config.get('app.name'),
     }
 
     await Mail.send('emails.forgotpassword', data, (message) => {
       message
       .to(user.email)
-      .from('silver.yep@gmail.com')
+      .from(Env.get('MAIL_FROM'))
       .subject('Recuperação de Senha - ' + Config.get('app.name'))
     })
   }

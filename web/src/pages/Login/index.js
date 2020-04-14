@@ -51,7 +51,7 @@ function Login({ history, location }) {
             </div>
           </form>
 
-          <Link to="/recuperar-senha" className="lost-password">esqueceu a senha?</Link>
+          <Link to="/esqueci-minha-senha" className="lost-password">esqueceu a senha?</Link>
         </div>
       </div>
     </div>

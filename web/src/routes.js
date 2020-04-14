@@ -4,6 +4,9 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute';
 import PageNotFound from './pages/PageNotFound';
 
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
@@ -32,8 +35,10 @@ function Routes() {
   return (
     <BrowserRouter>
       <Switch>
+        <Route path="/esqueci-minha-senha" component={ForgotPassword} />
+        <Route path="/reset/:token" component={ResetPassword} />
+
         <Route path="/login" component={Login} />
-        <Route path="/recuperar-senha" component={() => <h1>Recuperar Senha</h1>} />
         <PrivateRoute path="/" exact component={Home} />
 
         <PrivateRoute path="/perfil" component={Profile} />

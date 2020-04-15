@@ -19,7 +19,7 @@ function CommentsForm({ lesson, parent, refreshComments }) {
       content,
       lesson_id: lesson,
       parent_id: parent,
-      status: (auth.isAdmin() ? 'approved' : 'pending'),
+      status: 'approved',
     }
 
     const response = await storeComment(data);

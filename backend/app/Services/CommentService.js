@@ -17,13 +17,6 @@ class CommentService
       comment.merge(data)
       await comment.save()
     } else {
-      if (data.status !== Comment.STATUS_PENDING) {
-        const user = User.findOrFail(data.user_id)
-        if (user.level === User.LEVEL_STUDENT) {
-          data.status = Comment.STATUS_PENDING
-        }
-      }
-
       comment = await Comment.create(data)
     }
 

@@ -1,3 +1,17 @@
 .CoursesEdit .show.button {
-  margin-bottom: 3rem;
+  width: 100%;
+  height: 41px;
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  text-align: center;
+}
+
+.CoursesEdit .page-title{
+  margin-bottom: 0px;
+}
+
+.react-tabs{
+  background: #fff;
+  padding: 1em;
 }

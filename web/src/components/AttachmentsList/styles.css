@@ -11,8 +11,8 @@
   padding: .2rem .15rem;
 }
 .AttachmentsList .attachment:hover {
-  border-color: #ccc;
-  border-radius: 5px;
+  border-color: #fff;
+  border-radius: opx;
 }
 .AttachmentsList .attachment .attachment-icon {
   transform: rotateZ(-90deg);

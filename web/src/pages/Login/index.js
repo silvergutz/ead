@@ -5,6 +5,7 @@ import { withRouter, Link } from 'react-router-dom';
 import './styles.css';
 import globalNotifications from '../../services/globalNotifications';
 
+
 function Login({ history, location }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -38,13 +39,16 @@ function Login({ history, location }) {
     <div className="BoxLogin">
       <div className="Login">
         <div className="login-box">
+
+          <img src='/images/logo-simetria-branco.png' className="LogoSimetriaLogin"/>
+
           <form onSubmit={handleSubmit}>
             <div className="field">
               <label htmlFor="email"></label>
-              <input id="email" type="text" onChange={e => setEmail(e.target.value)} value={email} placeholder="Email" />
+              <input id="email" type="text" onChange={e => setEmail(e.target.value)} value={email} placeholder="Digite seu e-mail" />
             </div>
             <div className="field">
-              <input id="password" type="password" onChange={e => setPassword(e.target.value)} placeholder="Senha" />
+              <input id="password" type="password" onChange={e => setPassword(e.target.value)} placeholder="Digite sua senha" />
             </div>
             <div className="field">
               <button type="submit">Fazer Login</button>

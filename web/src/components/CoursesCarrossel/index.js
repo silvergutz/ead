@@ -7,6 +7,8 @@ import { calcDuration, getCoursesCarrossel } from '../../services/courses';
 import globalNotifications from '../../services/globalNotifications';
 import { auth } from '../../services';
 
+import { ICON_NAME } from "react-icons/fi";
+
 import '../slick/slick.css';
 import '../slick/slick-theme.css';
 import './styles.css';

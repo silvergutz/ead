@@ -1,11 +1,10 @@
 .App {
-  width: 85vw;
+  width: 1111px;
   max-width: 100%;
-  box-shadow: 0 0 30px rgba(000,000,000,.3);
-  background-color: rgba(255, 255, 255, 1);
 }
+
 main {
-  padding: 3rem 2rem 1rem;
+  padding: 1em;
 }
 
 @media (max-width: 768px){

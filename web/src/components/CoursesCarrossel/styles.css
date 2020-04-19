@@ -15,18 +15,22 @@
 }
 .CoursesCarrossel .Course {
   margin: 2rem;
-  border-radius: 10px;  
+  border-radius: 0px;  
   text-align: center;
   max-width: 16rem;
-  min-height: 19.9rem;
+  min-height: 350px;
   font-size: 14px;
   transition: all .3s;
   border: #f1f1f5 solid 1px;
   box-shadow: 0 0 10px 0px rgba(0,0,0,0.1);
+  background: rgba(37, 158, 142,.1);
+  display: grid !important;
 }
 
 .CoursesCarrossel .Course:hover{
-  box-shadow: 0 0 20px 0px rgba(0,0,0,0.2);
+  box-shadow: 0 0 20px 0px rgba(0,0,0,0.8);
+  border-color: #259E8E;
+  background: rgba(37, 158, 142,.4);
 }
 
 .CoursesCarrossel .Course:hover .course-cover img{
@@ -38,40 +42,49 @@
   margin: 0 0 1rem;
   height: 10rem;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 0px;
 }
 
 .course-name{
   font-weight: bold;
+  color: #fff;
 }
 
 .CoursesCarrossel .Course .course-cover img {
   margin: 0 auto;
   max-width: 100%;
-  border-radius: 10px;
+  border-radius: 0px;
   transition: all .7s;
 }
 
 .CoursesCarrossel .Course:hover .course-button{
-  background: #B41219;
+  background: #259E8E;
 }
-
 
 .CoursesCarrossel .Course > div, .CoursesCarrossel .Course > a {
   margin-bottom: .5rem;
+  color: #fff;
 }
 .CoursesCarrossel .Course .key {
   margin-right: .2em;
 }
 .CoursesCarrossel .Course .course-button {
   display: inline-block;
-  background: #000;
   color: #fff;
   text-decoration: none;
   padding: 0.2em 2.3em;
   font-size: 13px;
-  border-radius: 5px;
+  border-radius: 0px;
   transition: all .7s;
+  font-weight: bold;
+  align-self: center;
+}
+
+body{
+  background: url('/images/bg-internas.jpg');
+  background-size: cover;
+  background-position: top;
+  background-attachment: fixed;
 }
 
 .CoursesCarrossel .Course .course-button:hover{

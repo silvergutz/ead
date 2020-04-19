@@ -3,8 +3,7 @@
   justify-content: space-between;
   color: #fff;
   padding: 1.5rem 2rem;
-  background: #fff;
-  border-bottom: #000 solid;
+  border-bottom: thin #2CB49F solid;
 }
 
 .logo {
@@ -14,7 +13,7 @@
 }
 
 .logo img{
-  max-width: 150px;
+  max-width: 190px;
 }
 
 
@@ -39,7 +38,7 @@
 }
 .menu li:hover > ul {
   display: block;
-  background-color: #000;
+  background-color: #fff;
   border-radius: 4px;
   text-align: center;
   height: auto;
@@ -48,7 +47,7 @@
   top: 29px;
 }
 .menu li:hover > ul li a{
-  color: #fff;
+  color: #000;
 }
 
 .menu li ul li {
@@ -75,14 +74,14 @@
   border-radius: 3px;
   padding: 5px 7px;
   font-size: 18px;
-  color: #000;
+  color: #fff;
 }
 .menu li a {
   display: block;
   padding-bottom: .5em;
   border-bottom: 1px solid transparent;
   text-decoration: none;
-  color: #000;
+  color: #fff;
   transition: all .3s;
 }
 .menu li a:hover {
@@ -96,10 +95,10 @@
   display: flex;
   align-items: center;
   font-size: 15px;
-  color: #000;
+  color: #fff;
 }
 .Header .user-photo {
-  background: #f3f3f3;
+  background: #259E8E;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -123,7 +122,7 @@
 }
 
 .logout-button {
-  background: #B41219;
+  background: #2CB49F;
   border: 0;
   font-size: 15px;
   cursor: pointer;

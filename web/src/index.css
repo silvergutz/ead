@@ -13,8 +13,11 @@ html, body, #root {
 }
 
 body {
-  background: #eaeaea url('/images/bg-custom.jpg');
   -webkit-font-smoothing: antialiased;
+  background: url('/images/bg-internas.jpg');
+  background-size: contain;
+  background-position: top;
+  background-attachment: fixed;
 }
 
 body, input, textarea, button {
@@ -52,7 +55,7 @@ border: #fff thin solid;
     }
 
 ::-webkit-scrollbar-thumb:vertical { height: 5px;
-  background-color: #B41219;
+  background-color: #259E8E;
   }
 
 ::-webkit-scrollbar-thumb:horizontal { width: 5px; background-color: #666;  }
@@ -115,28 +118,30 @@ button.link {
 
 .page-title {
   margin-bottom: 1em;
-  font-size: 35px;
+  font-size: 45px;
   font-weight: 200;
   text-align: center;
-  color: #303030;
+  color: #fff;
 }
+
 .section-title {
-  font-size: 20px;
+  font-size: 30px;
   text-align: center;
+  margin-top: 1em;
   margin-bottom: 1em;
-  color: #303030;
+  color: #fff;
 }
 
 .button {
   display: inline-block;
-  background: #000;
+  background: #259E8E;
   color: #fff;
   text-decoration: none;
   padding: 0.5em 1.8em;
   font-size: 14px;
   font-weight: 500;
   border: 0;
-  border-radius: 5px;
+  border-radius: 0px;
   cursor: pointer;
 }
 .button:hover {
@@ -154,11 +159,15 @@ button {
   max-width: 40rem;
   margin: 1rem auto 0;
   padding: 2rem 1rem 3rem;
-  border: 1px solid #7f7f7f;
-  border-radius: 5px;
 }
 .model-form.content-box {
+  background: #fff;
   max-width: 60rem;
+}
+
+.model-form{
+  background: #fff;
+  padding: 1em;
 }
 
 .datatable {
@@ -178,7 +187,9 @@ button {
 .model-field {
   display: flex;
   justify-content: space-between;
+  background: #fff;
 }
+
 .model-form .form-field {
   display: flex;
   justify-content: flex-end;
@@ -247,18 +258,45 @@ button.send, .button.send {
   align-items: center;
 }
 
+.datatable{
+  background: #fff;;
+}
+
+.new-school.button-add.button,
+.new-category.button-add.button,
+.add-user.button.center-content{
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  text-align: center;
+  height: 41px;
+}
+
+.add-course.button.center-content{
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+}
+
 .button {
   cursor: pointer;
+  transition: all ease .7s;
+  border-radius: 0px;
+  z-index: 10;
 }
+
 .button i {
   margin-left: .5em;
 }
-.button.center-content {
-  width: 150px;
+
+.button {
   font-size: 17px;
-  line-height: 1;
-  margin-bottom: 1rem;
+  line-height: 1; 
 }
+
+
 
 .search-form {
   display: flex;

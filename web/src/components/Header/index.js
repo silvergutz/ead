@@ -14,7 +14,7 @@ function Header({ logout, currentUser }) {
   return (
     <header className="Header">
       <Link className="logo" to="/">
-        <img src='/images/logo-academy-preto.png' />
+        <img src='/images/logo-simetria-branco.png' />
       </Link>
 
       <nav className="menu">
@@ -24,7 +24,7 @@ function Header({ logout, currentUser }) {
               <span>Admin</span>
               <ul>
                 <li className="nav-item">
-                  <NavLink to={'/admin/lojas'}>Lojas</NavLink>
+                  <NavLink to={'/admin/lojas'}>Grupos de usuários</NavLink>
                 </li>
                 <li className="nav-item">
                   <NavLink to={'/admin/alunos'}>Alunos</NavLink>

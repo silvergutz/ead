@@ -37,9 +37,9 @@ function SchoolsList() {
 
   return (
     <div className="SchoolsList">
-      <h1 className="page-title">Lojas</h1>
+      <h1 className="page-title">Grupos de Usuários</h1>
 
-      <Link to="/admin/lojas/novo" className="new-school button-add button">Nova Loja</Link>
+      <Link to="/admin/lojas/novo" className="new-school button-add button">Novo Grupo</Link>
 
       <table className="datatable">
         <thead>

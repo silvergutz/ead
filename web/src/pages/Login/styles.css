@@ -1,55 +1,78 @@
 .Login {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  display: grid;
+  height: 100%;
 }
 
 .Login .login-box {
-  flex: 1;
-  padding: 3rem;
-  background: rgba(255,255,255,.7);
-  border-radius: 10px;
-  margin-top: 6rem;
+  align-self: center;
+  justify-self: center;
+  display: grid;
+  width: 230px;
 }
 
-.BoxLogin{
-  background: url('/images/bgLogin.jpg');
-  min-height: 570px;
-  background-position: center;
-  background-size: contain;
+.BoxLogin{  
   border-radius: 10px;
+  align-self: center;
+  height: 100%;
+}
+
+img.LogoSimetriaLogin{
+  width: 190px;
+  margin-bottom: 2em;
+  justify-self: center;
+}
+
+body{
+  padding: 0px ;
+  background: url('/images/bg-simetria-marketing.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 main{
-  padding: 0px ;
+  height: 100%;
 }
 
 .Login form input {
-  background: none;
-  border: 1px solid #000;
-  border-radius: 10px;
+  background: transparent;
+  border: 1px solid #2CB49F;
   margin-bottom: .75rem;
   padding: .5em .75em;
   font-size: 16px;
+  border-radius: 0px;
+  color: #fff;
+  width: 100%;
+  text-align: center;
 }
+
+.Login form input::placeholder{
+  color: #fff;
+  text-align: center;
+}
+
 .Login form button {
   display: block;
   width: 100%;
   margin-bottom: .5rem;
   padding: .6em 0;
-  border-radius: 10px;
+  border-radius: 0px;
   font-size: 16px;
   cursor: pointer;
-  background: #000;
+  background: #2CB49F;
   border: 0;
   color: #fff;
+  transition: all ease .3s;
+}
+
+.Login form button:hover{
+  opacity: .8;
 }
 
 .lost-password {
   font-size: 12px;
   font-weight: 200;
-  color: #000;
+  color: #fff;
   text-decoration: none;
   font-weight: bold;
 }

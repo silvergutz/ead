@@ -4,7 +4,7 @@
 }
 .CommentsForm .content-field {
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: 0px;
   font-size: 17px;
   width: 100%;
   padding: .8em .5em;
@@ -16,4 +16,5 @@
   right: 0;
   padding: .5em 3em;
   transition: all .3s;
+  border-radius: 0px;
 }

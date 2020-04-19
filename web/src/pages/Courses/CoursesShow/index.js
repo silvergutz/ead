@@ -206,7 +206,7 @@ function CoursesShow({ history, location }) {
         <h1 className="page-title">Carregando...</h1>
       ) : (
         <>
-          <h1 className="page-title">{course.name}</h1>
+          <h1 className="page-title OpenCourse">{course.name}</h1>
 
           {auth.isAdmin() &&
             <Link className="course edit button center-content" to={`/admin/cursos/${course.id}/editar`}>

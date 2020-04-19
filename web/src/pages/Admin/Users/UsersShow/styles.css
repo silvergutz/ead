@@ -1,7 +1,18 @@
 .UsersShow {
   max-width: 40rem;
   margin: 0 auto;
+  padding: 1em;
+  background: #fff;
 }
+
+.UsersShow .page-title{
+  color: #000;
+}
+
+.UsersShow .list-items .item{
+  border-radius: 0px;;
+}
+
 .UsersShow .user-fields {
   display: flex;
   justify-content: flex-start;

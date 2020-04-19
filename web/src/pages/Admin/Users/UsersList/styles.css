@@ -5,20 +5,23 @@
 }
 .UsersList .search-form input {
   background: none;
-  width: 80%;
+  width: 60%;
   padding: .5em;
   border: 0;
-  border-bottom: 1px solid #555;
+  border-bottom: 1px solid #fff;
   font-size: 18px;
   text-align: center;
+  color: #fff;
+  border-radius: 0px;
 }
 
 .UsersList .User {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #777;
-  border-radius: 5px;
+  border: 1px solid #fff;
+  background: #fff;
+  border-radius: 0px;
   padding: 1rem;
   margin: 1rem 0;
 }

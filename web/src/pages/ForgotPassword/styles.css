@@ -1,0 +1,7 @@
+.ForgotPassword .form-field {
+  margin-bottom: 1rem;
+}
+.ForgotPassword .form-field label {
+  display: block;
+  margin-bottom: .5em;
+}

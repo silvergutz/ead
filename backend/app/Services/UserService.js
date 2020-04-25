@@ -6,6 +6,9 @@ const Drive = use('Drive')
 const Config = use('Config')
 
 const User = use('App/Models/User')
+const Lesson = use('App/Models/Lesson')
+const LessonHistory = use('App/Models/LessonHistory')
+const CourseService = require('./CourseService')
 
 class UserService
 {
@@ -70,6 +73,80 @@ class UserService
       console.log(e)
       throw new Error(e)
     }
+  }
+
+  static async getProgress(user, course, perCourse) {
+    if (course) {
+      return CourseService.getProgress(course, user.id)
+    }
+
+    if (typeof(perCourse) === undefined) {
+      perCourse = false
+    }
+
+    let progress = 0
+    let courses = []
+
+    const query = Lesson
+      .query()
+      .where('status', Lesson.STATUS_PUBLISHED)
+
+    if (perCourse) {
+      query.with('module.course')
+    }
+
+    const lessons = await query.fetch()
+
+    if (lessons.rows.length) {
+      const lessonValue = 100 / lessons.rows.length
+
+      const promisses = lessons.rows.map(async (lesson) => {
+        const history = await lesson
+          .history()
+          .select('action')
+          .where('user_id', user.id)
+          .groupBy('action')
+          .fetch()
+
+        if (history.rows.length) {
+          if (history.rows.some(row => (lesson.video ? row.action === Lesson.ACTION_DONE : row.action === Lesson.ACTION_OPEN))) {
+            progress += lessonValue
+          }
+
+          if (perCourse) {
+            const lessonJson = lesson.toJSON()
+            if (lessonJson.module && lessonJson.module.course) {
+              if (!courses.some(v => v.id == lessonJson.module.course.id)) {
+                courses.push(lessonJson.module.course);
+              }
+            }
+          }
+        }
+      })
+
+      await Promise.all(promisses)
+
+      if (perCourse) {
+        const coursesPromises = courses.map(async (course) => {
+          course.progress = await CourseService.getProgress(course, user.id)
+          return course
+        })
+        courses = await Promise.all(coursesPromises)
+      }
+    }
+
+    if (progress > 0) {
+      progress = Math.min(100, progress)
+    }
+
+    if (perCourse) {
+      return {
+        progress,
+        courses,
+      }
+    }
+
+    return progress
   }
 }
 

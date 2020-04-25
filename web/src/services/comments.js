@@ -2,9 +2,12 @@ import querystring from 'querystring';
 import { api } from '.';
 import { handleError } from '../helpers';
 
-export async function getComments(lessonId) {
+export async function getComments(lessonId, userId) {
   try {
-    const qs = querystring.stringify({ lesson: lessonId || '' });
+    let qsData = {};
+    if (lessonId) qsData.lesson = lessonId;
+    if (userId) qsData.user = userId;
+    const qs = querystring.stringify(qsData);
     const response = await api.get('/comments' + (qs ? `?${qs}` : ''));
 
     return response.data;

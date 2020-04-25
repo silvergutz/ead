@@ -4,10 +4,12 @@ import { globalNotifications } from '../../services';
 import { getComments } from '../../services/comments';
 import CommentsForm from '../CommentsForm';
 import CommentsList from '../CommentsList';
+import { withRouter } from 'react-router-dom';
 
-function LessonComments({ lesson }) {
+function LessonComments({ lesson, location }) {
   const [ enabledReplyForm, setEnabledReplyForm ] = useState([]);
   const [ comments, setComments ] = useState([]);
+  const [ loading, setLoading ] = useState(false);
 
   useEffect(() => {
     if (lesson.comments && lesson.comments.length) {
@@ -18,6 +20,8 @@ function LessonComments({ lesson }) {
   }, [lesson])
 
   async function loadComments() {
+    setLoading(true);
+
     if (!lesson.id) {
       setComments([]);
       return;
@@ -42,7 +46,20 @@ function LessonComments({ lesson }) {
       }).filter(e => !e.parent_id)
 
       setComments(data);
+
+      if (location.hash) {
+        const elm = document.getElementById(location.hash.substr(1));
+        if (elm) {
+          window.scrollTo(0, elm.offsetTop);
+        }
+      }
     }
+
+    setLoading(false);
+  }
+
+  if (loading) {
+    return (<div className="loading comments-loading">Carregando perguntas...</div>);
   }
 
   return (
@@ -62,4 +79,4 @@ function LessonComments({ lesson }) {
   )
 }
 
-export default LessonComments;
+export default withRouter(LessonComments);

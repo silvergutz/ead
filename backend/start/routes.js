@@ -28,6 +28,11 @@ Route.group(() => {
 
   // Route.post('register', 'AuthController.register')
   Route.post('authenticate', 'AuthController.authenticate')
+  Route.post('forgot', 'AuthController.forgot')
+    .as('auth.forgot')
+  Route.post('reset', 'AuthController.reset')
+    .validator('ResetPassword')
+    .as('auth.reset')
 }).prefix('/api/v1')
 
 // protected routes
@@ -51,6 +56,8 @@ Route.group(() => {
       [['users.update'], ['UserUpdate']]
     ]))
     .apiOnly()
+  Route.get('users/:id/progress/:course?', 'UserController.progress')
+    .as('users.progress')
 
   Route.resource('modules', 'ModuleController').apiOnly()
 
@@ -65,7 +72,7 @@ Route.group(() => {
   Route.get('courses/:id/progress/:user', 'CourseController.progress')
     .as('courses.progress')
 
-    Route.resource('lessons', 'LessonController')
+  Route.resource('lessons', 'LessonController')
     .validator(new Map([
       [['lessons.store'], ['LessonStore']],
       [['lessons.update'], ['LessonUpdate']]
@@ -75,6 +82,9 @@ Route.group(() => {
     .as('lessons.action')
   Route.get('lessons/:id/progress/:user', 'LessonController.progress')
     .as('lessons.progress')
+
+  Route.resource('attachments', 'AttachmentController')
+    .apiOnly()
 
   Route.resource('comments', 'CommentController')
     .validator(new Map([

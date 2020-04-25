@@ -30,7 +30,7 @@ Factory.blueprint('App/Models/School', async (faker) => {
   }
 })
 
-Factory.blueprint('App/Models/User', async (faker) => {
+Factory.blueprint('App/Models/User', async (faker, i, data) => {
   const [ id ] = await School.query().limit(1).pluck('id')
 
   return {
@@ -40,7 +40,20 @@ Factory.blueprint('App/Models/User', async (faker) => {
     photo: faker.avatar(),
     school_id: id,
     level: faker.shuffle(User.availableLevels())[0],
-    is_teacher: faker.bool()
+    is_teacher: faker.bool(),
+    ...data
+  }
+})
+
+Factory.blueprint('App/Models/Token', async (faker, i, data) => {
+  const [ id ] = await User.query().limit(1).pluck('id')
+
+  return {
+    user_id: id,
+    type: faker.shuffle(['forgotpassword', 'refresh'])[0],
+    token: faker.string({ length: 20 }),
+    is_revoked: faker.bool(),
+    ...data
   }
 })
 

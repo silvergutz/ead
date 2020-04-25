@@ -23,9 +23,9 @@ function UsersList() {
   async function loadUsers() {
     globalNotifications.clearMessages();
 
-    const response = await getUsers(searchTerm);
+    const response = await getUsers(searchTerm, true);
 
-    if (response.errors) {
+    if (response.error) {
       globalNotifications.sendErrorMessage(response.error);
       setUsers([]);
     } else {
@@ -60,7 +60,7 @@ function UsersList() {
       </Link>
 
       <div className="users">
-        {users.map(user => (
+        {(!users || users.length <= 0) ? 'Nenhum usuário encontrado' : users.map(user => (
           <div key={user.id} className="User">
             <div className="user-photo">
               {user.photo &&
@@ -71,19 +71,21 @@ function UsersList() {
               }
             </div>
             <div className="user-details">
-              <div className="user-name">{user.name}</div>
-              <div className="user-courses">
-                <div className="key">Cursos feitos:</div>
-                <div className="value">nome dos cursos</div>
-              </div>
-              <div className="user-questions">
-                <div className="key">Perguntas:</div>
-                <div className="value">aula 1, aula 3</div>
-              </div>
-              <div className="user-answers">
-                <div className="key">Respostas:</div>
-                <div className="value">aula 4, aula 5</div>
-              </div>
+              <Link to={`/admin/alunos/${user.id}`}>
+                <div className="user-name">{user.name}</div>
+                <div className="user-courses">
+                  <div className="key">Cursos feitos:</div>
+                  <div className="value">nome dos cursos</div>
+                </div>
+                <div className="user-questions">
+                  <div className="key">Perguntas:</div>
+                  <div className="value">aula 1, aula 3</div>
+                </div>
+                <div className="user-answers">
+                  <div className="key">Respostas:</div>
+                  <div className="value">aula 4, aula 5</div>
+                </div>
+              </Link>
             </div>
             <div className="user-progress">
               <div className="button-group">
@@ -94,7 +96,7 @@ function UsersList() {
                   delete
                 </button>
               </div>
-              <ProgressBar className="user-progress-bar" progress="70" />
+              <ProgressBar className="user-progress-bar" progress={user.progress || 0} />
             </div>
           </div>
         ))}

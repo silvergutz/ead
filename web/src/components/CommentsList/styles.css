@@ -6,7 +6,7 @@
 }
 .CommentsList .comment-body-inner {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   justify-content: start;
   padding: 1rem .8rem;
 }

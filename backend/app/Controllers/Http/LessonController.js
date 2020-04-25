@@ -51,8 +51,17 @@ class LessonController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params }) {
-    const lesson = await Lesson.findOrFail(params.id)
+  async show ({ params, response }) {
+    const lesson = await Lesson
+      .query()
+      .with('attachments')
+      .where('id', params.id)
+      .first()
+
+    if (!lesson) {
+      response.status(404)
+      return { error: 'Not Found' }
+    }
 
     return lesson
   }
@@ -119,7 +128,7 @@ class LessonController {
    */
   async progress ({ params, response, auth }) {
     // Students are not allowed to view progress of other users
-    if (auth.user.level === User.LEVEL_STUDENT && params.user !== auth.user.id) {
+    if (auth.user.level === User.LEVEL_STUDENT && params.user != auth.user.id) {
       response.status(403)
       return { error: 'forbidden' }
     }

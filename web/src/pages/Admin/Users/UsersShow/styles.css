@@ -1,0 +1,81 @@
+.UsersShow {
+  max-width: 40rem;
+  margin: 0 auto;
+}
+.UsersShow .user-fields {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 4rem;
+}
+.UsersShow .user-field {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: .5em;
+}
+.UsersShow .user-field > .label {
+  flex: 0 1 content;
+	text-align: right;
+  min-width: 5rem;
+  margin-right: .5rem;
+  font-weight: 500;
+}
+.UsersShow .photo-field {
+  flex: 0 1 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 150px;
+  margin-right: 2rem;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+.UsersShow .photo-field img {
+  max-width: 100%;
+}
+
+.UsersShow .user-detais {
+  flex: 1;
+}
+
+.UsersShow .user-courses {
+  margin-bottom: 4rem;
+}
+.UsersShow .courses-list {
+  margin-top: 1rem;
+}
+.UsersShow .courses-list .course {
+  display: flex;
+  margin-bottom: 1rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid #ccc;
+}
+.courses-list .course .course-name {
+  flex: 1 0 auto;
+  font-weight: 500;
+  color: inherit;
+}
+.courses-list .course .course-name:hover {
+	font-weight: 900;
+}
+
+.UsersShow .comments-list {
+  margin-top: 1rem;
+}
+.UsersShow .user-comments .comment-user-date {
+  display: flex;
+}
+.comment-user-date .comment-date {
+  flex: 1 0 auto;
+  text-align: right;
+  font-size: 14px
+}
+.UsersShow .user-comments .comment-lesson {
+  font-size: 14px;
+}
+.UsersShow .user-comments .comment-header {
+  margin-bottom: .5rem;
+}

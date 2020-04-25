@@ -2,12 +2,15 @@ import { BehaviorSubject } from 'rxjs';
 
 import api from './api';
 import { findUser } from './users';
+import { handleError } from '../helpers';
 
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 
 const auth = {
   login,
   logout,
+  requestForgotPasswordToken,
+  resetPassword,
   isAdmin,
   refreshUserData,
   currentUser: currentUserSubject.asObservable(),
@@ -61,6 +64,27 @@ async function refreshUserData() {
   }
 
   return true;
+}
+
+async function requestForgotPasswordToken(email) {
+  console.log('email', email);
+  try {
+    const response = await api.post('/forgot', { email });
+
+    return response.data;
+  } catch(e) {
+    return handleError(e);
+  }
+}
+
+async function resetPassword(data) {
+  try {
+    const response = await api.post('/reset', data);
+
+    return response.data;
+  } catch(e) {
+    return handleError(e);
+  }
 }
 
 export default auth;

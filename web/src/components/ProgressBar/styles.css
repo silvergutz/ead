@@ -1,5 +1,6 @@
 .progress-bar {
   display: inline-block;
+  overflow: hidden;
   background: #777;
   border-radius: 9px;
   min-width: 10rem;

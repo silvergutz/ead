@@ -23,13 +23,13 @@ class CourseController {
   /**
    * Check if a current user has permission to se the progress of other
    *
-   * @param integer currentUser Current User id
-   * @param integer target      Target User id
+   * @param object currentUser Current User
+   * @param integer target     Target User id
    * @return boolean
    */
   _canUserSeeProgress(currentUser, target) {
     // Students are not allowed to view progress of other users
-    if (currentUser.level !== User.LEVEL_STUDENT || target === currentUser.id) {
+    if (currentUser.level !== User.LEVEL_STUDENT || target == currentUser.id) {
       return true;
     }
 
@@ -215,7 +215,7 @@ class CourseController {
    */
   async progress ({ params, response, auth }) {
     // Students are not allowed to view progress of other users
-    if (auth.user.level === User.LEVEL_STUDENT && params.user !== auth.user.id) {
+    if (!this._canUserSeeProgress(auth.user, params.user)) {
       response.status(403)
       return { error: 'forbidden' }
     }

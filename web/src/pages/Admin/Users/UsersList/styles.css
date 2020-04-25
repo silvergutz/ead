@@ -46,6 +46,12 @@
   margin: 0 1rem;
   line-height: 1.3;
 }
+.UsersList .User .user-details > a {
+  color: inherit;
+}
+.UsersList .User .user-details > a:hover {
+  opacity: .7;
+}
 .UsersList .user-details .key, .user-details .value {
   display: inline-block;
 }

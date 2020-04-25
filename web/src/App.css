@@ -7,3 +7,14 @@
 main {
   padding: 3rem 2rem 1rem;
 }
+
+@media (max-width: 768px){
+  .App{
+    width: 100vw;
+  }
+
+  main {
+    padding: 1rem;
+  }
+
+}

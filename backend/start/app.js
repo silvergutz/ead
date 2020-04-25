@@ -20,6 +20,8 @@ const providers = [
   '@adonisjs/drive/providers/DriveProvider',
   '@adonisjs/validator/providers/ValidatorProvider',
   '@adonisjs/antl/providers/AntlProvider',
+  '@adonisjs/mail/providers/MailProvider',
+  '@adonisjs/framework/providers/ViewProvider',
 
   'adonis-lucid-polymorphic/providers/PolymorphicProvider',
   '@radmen/adonis-lucid-soft-deletes/providers/SoftDeletesProvider',

@@ -42,7 +42,7 @@
   background-color: #000;
   border-radius: 4px;
   text-align: center;
-  height: 170px;
+  height: auto;
   width: 130px;
   left: -30px;
   top: 29px;
@@ -52,13 +52,19 @@
 }
 
 .menu li ul li {
-  
   border-radius: 0;
   display: block;
-  padding: 5px;
+  padding: 0;
 }
 .menu li ul li a {
+  padding: .3em 0;
   border: none;
+}
+.menu li ul li:first-child a {
+  padding-top: .6em;
+}
+.menu li ul li:last-child a {
+  padding-bottom: .6em;
 }
 .menu li ul li a:hover {
   border: none;
@@ -82,6 +88,9 @@
 .menu li a:hover {
   border-bottom-color: #fff;
 }
+.menu > li a.active {
+	border-bottom: 1px solid #acacac;
+}
 
 .Header .user {
   display: flex;
@@ -100,7 +109,6 @@
   font-size: 9px;
   text-align: center;
 }
-
 
 .Header .user-photo img {
   max-width: 100%;
@@ -126,4 +134,30 @@
 }
 .logout-button:hover {
   opacity: .8;
+}
+
+
+@media (max-width: 768px) {
+  .logo img{
+    max-width: 100px;
+  }
+
+  .Header{
+    display: flex;
+    justify-content: center
+  }
+
+  .menu{
+    display: flex;
+    justify-content: center;
+  }
+
+  .menu a{
+    font-size: 12px;
+  }
+
+  .Header .user-photo, .Header .user-name{
+    display: none;
+  }
+
 }

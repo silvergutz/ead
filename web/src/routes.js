@@ -4,6 +4,9 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute';
 import PageNotFound from './pages/PageNotFound';
 
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
@@ -13,8 +16,11 @@ import CoursesList from './components/CoursesList';
 import CoursesSave from './pages/Admin/Courses/CoursesSave';
 import CoursesEdit from './pages/Admin/Courses/CoursesEdit';
 
+import CommentsList from './pages/Admin/Comments/CommentsList';
+
 import UsersList from './pages/Admin/Users/UsersList';
 import UsersSave from './pages/Admin/Users/UsersSave';
+import UsersShow from './pages/Admin/Users/UsersShow';
 
 import SchoolsList from './pages/Admin/Schools/SchoolsList';
 import SchoolsShow from './pages/Admin/Schools/SchoolsShow';
@@ -24,12 +30,15 @@ import CategoriesList from './pages/Admin/Categories/CategoriesList';
 import CategoriesSave from './pages/Admin/Categories/CategoriesSave';
 import CategoriesShow from './pages/Admin/Categories/CategoriesShow';
 
+
 function Routes() {
   return (
     <BrowserRouter>
       <Switch>
+        <Route path="/esqueci-minha-senha" component={ForgotPassword} />
+        <Route path="/reset/:token" component={ResetPassword} />
+
         <Route path="/login" component={Login} />
-        <Route path="/recuperar-senha" component={() => <h1>Recuperar Senha</h1>} />
         <PrivateRoute path="/" exact component={Home} />
 
         <PrivateRoute path="/perfil" component={Profile} />
@@ -50,8 +59,11 @@ function Routes() {
         <PrivateRoute path="/admin/cursos/novo" exact component={CoursesSave} onlyAdmin={true} />
         <PrivateRoute path="/admin/cursos/:id/editar" component={CoursesEdit} onlyAdmin={true} />
 
+        <PrivateRoute path="/admin/perguntas" exact component={CommentsList} onlyAdmin={true} />
+
         <PrivateRoute path="/admin/alunos" exact component={UsersList} onlyAdmin={true} />
         <PrivateRoute path="/admin/alunos/novo" exact component={UsersSave} onlyAdmin={true} />
+        <PrivateRoute path="/admin/alunos/:id" exact component={UsersShow} onlyAdmin={true} />
         <PrivateRoute path="/admin/alunos/:id/editar" exact component={UsersSave} onlyAdmin={true} />
 
         <Route path="*" component={PageNotFound} />

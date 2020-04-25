@@ -2,9 +2,14 @@ import querystring from 'querystring';
 import { api } from '../services';
 import { handleError } from '../helpers';
 
-export async function getUsers(searchTerm) {
+export async function getUsers(searchTerm, progress) {
   try {
-    let qs = querystring.stringify({ s: searchTerm || '' });
+    let qsData = { s: searchTerm || '' }
+    if (progress) {
+      qsData.progress = true;
+    }
+
+    const qs = querystring.stringify(qsData);
     const response = await api.get('/users' + (qs ? `?${qs}` : ''));
 
     return response.data;
@@ -13,9 +18,13 @@ export async function getUsers(searchTerm) {
   }
 }
 
-export async function findUser(id) {
+export async function findUser(id, progress) {
   try {
-    const response = await api.get(`/users/${id}`)
+    let qs;
+    if (progress) {
+      qs = querystring.stringify({ progress: 1 });
+    }
+    const response = await api.get(`/users/${id}` + (qs ? `?${qs}` : ''))
 
     return response.data;
   } catch(e) {

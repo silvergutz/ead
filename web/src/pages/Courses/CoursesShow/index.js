@@ -8,9 +8,11 @@ import VideoPlayer from '../../../components/VideoPlayer';
 import LessonComments from '../../../components/LessonComments';
 import ProgressBar from '../../../components/ProgressBar';
 
-import './styles.css';
+import AttachmentsList from '../../../components/AttachmentsList';
 import PageNotFound from '../../PageNotFound';
 import { storeLessonAction } from '../../../services/lessons';
+
+import './styles.css';
 
 function CoursesShow({ history, location }) {
   const { id, lessonId } = useParams();
@@ -219,6 +221,11 @@ function CoursesShow({ history, location }) {
               {(!lesson.id || modules.length === 0) ? (lesson === false ? '' : 'Nenhum modulo cadastrado') :
                 <>
                   <VideoPlayer video={video} onVideoEnded={handleVideoEnded} onVideoPlaying={handleVideoPlaying} />
+
+                  <div className="lesson-attachments">
+                    <span className="lesson-attachments-label">Anexos: </span>
+                    <AttachmentsList attachmentable={lesson} type="lessons" />
+                  </div>
 
                   <LessonComments lesson={lesson} />
                 </>

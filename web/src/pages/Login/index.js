@@ -38,6 +38,9 @@ function Login({ history, location }) {
     <div className="BoxLogin">
       <div className="Login">
         <div className="login-box">
+
+          <img src="/images/logo-benova-academy-branco.png" class="ImgLogin"></img>
+
           <form onSubmit={handleSubmit}>
             <div className="field">
               <label htmlFor="email"></label>

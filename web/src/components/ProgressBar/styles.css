@@ -1,19 +1,19 @@
 .progress-bar {
   display: inline-block;
   overflow: hidden;
-  background: #777;
-  border-radius: 9px;
+  background: #fff;
+  border-radius: 0px;
   min-width: 10rem;
   height: 1.7em;
   font-size: 12px;
   font-weight: 500;
   line-height: 1;
+  color: #ccc;
 }
 .progress-bar .progress {
   display: inline-block;
-  background-color: #3c3c3c;
+  background-color: #5EBCA4;
   padding: .3em 0 .4em;
-  border-radius: 9px;
   text-align: center;
   color: #fff;
 }

@@ -4,11 +4,11 @@
 }
 .CommentsForm .content-field {
   background-color: #fff;
-  border-radius: 10px;
   font-size: 17px;
   width: 100%;
   padding: .8em .5em;
-  border: thin solid #ccc
+  border: thin solid #ccc;
+  border-radius: 0px;
 }
 .CommentsForm .submit .button {
   position: absolute;

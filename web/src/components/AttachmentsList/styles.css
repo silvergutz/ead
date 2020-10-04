@@ -8,12 +8,22 @@
   align-items: center;
   border: 1px solid transparent;
   cursor: pointer;
-  padding: .2rem .15rem;
+  padding: .5rem .35rem;
+  background: #fff;
 }
 .AttachmentsList .attachment:hover {
-  border-color: #ccc;
-  border-radius: 5px;
+  border-color: #fff;
 }
+
+.lesson-attachments-label{
+  margin-bottom: 1em;
+  font-weight: bold !important;
+  color: #fff;
+  text-transform: uppercase;
+  display: block;
+  margin-top: 2em;
+}
+
 .AttachmentsList .attachment .attachment-icon {
   transform: rotateZ(-90deg);
 }

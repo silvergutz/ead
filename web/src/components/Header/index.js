@@ -7,14 +7,13 @@ import ImgProtected from '../ImgProtected';
 import './styles.css';
 
 
-
 function Header({ logout, currentUser }) {
   if (!currentUser) return null;
 
   return (
     <header className="Header">
       <Link className="logo" to="/">
-        <img src='/images/logo-academy-preto.png' />
+        <img src='/images/logo-benova-academy-branco.png' />
       </Link>
 
       <nav className="menu">

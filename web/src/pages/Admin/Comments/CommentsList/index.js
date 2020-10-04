@@ -106,7 +106,7 @@ function CommentsList({ location }) {
                   <div className="comment-user item-title">{comment.user && comment.user.name}</div>
                   <div className="comment-lesson">
                     <Link to={`/cursos/${comment.lesson.module.course_id}/aula/${comment.lesson.id}/#comment-${comment.id}`} target="_blank">
-                      {comment.lesson.module.course.name} &rsaquo; {comment.lesson.name}
+                      {comment?.lesson?.module?.course?.name} &rsaquo; {comment?.lesson?.name}
                     </Link>
                   </div>
                   <div className="comment-date button">{moment(comment.created_at).format('DD/MM/YYYY')}</div>

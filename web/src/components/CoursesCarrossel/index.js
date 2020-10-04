@@ -99,7 +99,7 @@ function CoursesCarrossel() {
                       </div>
                     }
 
-                    <Link to={`cursos/${course.id}`} className="course-button">Ver Curso</Link>
+                    <Link to={`cursos/${course.id}`} className="course-button">Ver Mais</Link>
                   </div>
                 ))}
               </Slider>

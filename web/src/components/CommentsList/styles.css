@@ -1,8 +1,9 @@
 .CommentsList .comment-body {
   position: relative;
-  border: 1px solid #333;
-  border-radius: 5px;
+  border: 1px solid #fff;
+  border-radius: 0px;
   margin-bottom: 1rem;
+  background: #fff;
 }
 .CommentsList .comment-body-inner {
   display: flex;

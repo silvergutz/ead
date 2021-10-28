@@ -54,6 +54,8 @@ function Login({ history, location }) {
             </div>
           </form>
 
+          <p>teste</p>
+
           <Link to="/esqueci-minha-senha" className="lost-password">esqueceu a senha?</Link>
         </div>
       </div>

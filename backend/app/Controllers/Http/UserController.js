@@ -44,7 +44,7 @@ class UserController {
    * @param {Request} ctx.request
    */
   async index ({ request, auth }) {
-    const { s, progress } = request.get();
+    const { s, progress, page, limit } = request.get();
 
     const query = User.query()
 
@@ -53,7 +53,7 @@ class UserController {
       query.where('name', 'like', searchTerm)
     }
 
-    const users = await query.fetch()
+    const users = await query.paginate(page || 1, limit || 25)
 
     if (!progress || !users.rows.length) {
       return users

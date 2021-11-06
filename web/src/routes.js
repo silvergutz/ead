@@ -19,6 +19,7 @@ import CoursesEdit from './pages/Admin/Courses/CoursesEdit';
 import CommentsList from './pages/Admin/Comments/CommentsList';
 
 import UsersList from './pages/Admin/Users/UsersList';
+import UsersNovo from './pages/Admin/Users/UsersList/users';
 import UsersSave from './pages/Admin/Users/UsersSave';
 import UsersShow from './pages/Admin/Users/UsersShow';
 
@@ -62,6 +63,7 @@ function Routes() {
         <PrivateRoute path="/admin/perguntas" exact component={CommentsList} onlyAdmin={true} />
 
         <PrivateRoute path="/admin/alunos" exact component={UsersList} onlyAdmin={true} />
+        <PrivateRoute path="/admin/users" exact component={UsersNovo} onlyAdmin={true} />
         <PrivateRoute path="/admin/alunos/novo" exact component={UsersSave} onlyAdmin={true} />
         <PrivateRoute path="/admin/alunos/:id" exact component={UsersShow} onlyAdmin={true} />
         <PrivateRoute path="/admin/alunos/:id/editar" exact component={UsersSave} onlyAdmin={true} />

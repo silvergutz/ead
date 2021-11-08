@@ -27,7 +27,7 @@ function Header({ logout, currentUser }) {
                   <NavLink to={'/admin/lojas'}>Lojas</NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink to={'/admin/alunos'}>Alunos</NavLink>
+                  <NavLink to={'/admin/users'}>Alunos</NavLink>
                 </li>
                 <li className="nav-item">
                   <NavLink to={'/admin/cursos'}>Cursos</NavLink>

@@ -22,10 +22,6 @@ function UsersList() {
     loadUsers();
   }, []);
 
-  useEffect(() => {
-    loadUsers();
-  }, [searchTerm]);
-
   async function loadUsers() {
     let config = {
       headers: {
@@ -33,12 +29,17 @@ function UsersList() {
       }
     }
 
-    console.log('irei executar a função')
     const res = await axios.get(`${process.env.REACT_APP_API_URL}users?limit=25&page=1`, config)
     const usersList = await res.data
     console.log(usersList)
     setUsers(usersList)
     
+  }
+
+  function filterUsers(e) {
+    if (e.target.value.length < 1) { loadUsers() }
+    const filter = users.filter( (item) => item.name.toLowerCase().includes(e.target.value.toLowerCase()) )
+    setUsers(filter)
   }
 
   async function handleDestroyUser(user) {
@@ -59,7 +60,7 @@ function UsersList() {
       <h1 className="page-title">Lista de Users</h1>
 
       <div className="search-form">
-        <input className="search-input" onChange={e => setSearchTerm(e.target.value)} value={searchTerm} type="search" placeholder="Buscar nome do aluno" />
+        <input className="search-input" onChange={filterUsers} type="search" placeholder="Buscar nome do aluno" />
       </div>
 
       <Link to="/admin/alunos/novo" className="add-user button center-content">
